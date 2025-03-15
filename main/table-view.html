@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Value Tables</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .table-section {
+            margin-bottom: 40px;
+        }
+
+        .building-value-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .building-value-table th,
+        .building-value-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .building-value-table th {
+            background-color: #f4f4f4;
+        }
+
+        .table-input {
+            width: 100%;
+            padding: 4px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .add-row-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .delete-row-btn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .submit-btn {
+            background-color: #4169E1;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .section-title {
+            color: #4169E1;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <form id="buildingValueForm">
+        <!-- AS PER ACTUALS Table -->
+        <div class="table-section">
+            <h3 class="section-title"><b>Building Value - AS PER ACTUALS</b></h3>
+            <div class="table-container">
+                <table id="actualsTable" class="building-value-table">
+                    <thead>
+                        <tr>
+                            <th>SL No.</th>
+                            <th>PARTICULARS</th>
+                            <th>ROOF</th>
+                            <th>AREA IN SFT</th>
+                            <th>RATE IN Rs</th>
+                            <th>AMOUNT IN Rs</th>
+                            <th>DEPRN IN %</th>
+                            <th>DEPRN AMOUNT</th>
+                            <th>NET AMOUNT</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="actualsTableBody">
+                        <!-- Rows will be added here -->
+                    </tbody>
+                </table>
+                <button type="button" onclick="addNewRow('actualsTableBody')" class="add-row-btn">Add Row</button>
+            </div>
+        </div>
+
+        <!-- AS PER PLAN Table -->
+        <div class="table-section">
+            <h3 class="section-title"><b>Building Value - AS PER PLAN</b></h3>
+            <div class="table-container">
+                <table id="planTable" class="building-value-table">
+                    <thead>
+                        <tr>
+                            <th>SL No.</th>
+                            <th>PARTICULARS</th>
+                            <th>ROOF</th>
+                            <th>AREA IN SFT</th>
+                            <th>RATE IN Rs</th>
+                            <th>AMOUNT IN Rs</th>
+                            <th>DEPRN IN %</th>
+                            <th>DEPRN AMOUNT</th>
+                            <th>NET AMOUNT</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="planTableBody">
+                        <!-- Rows will be added here -->
+                    </tbody>
+                </table>
+                <button type="button" onclick="addNewRow('planTableBody')" class="add-row-btn">Add Row</button>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Data</button>
+    </form>
+    <!-- <script src="../page_4.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+        const tableCounters = {
+            actualsTableBody: 1,
+            planTableBody: 1
+        };
+
+        function addNewRow(tableId) {
+            const tbody = document.getElementById(tableId);
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${tableCounters[tableId]}</td>
+                <td><input type="text" class="table-input particulars" required></td>
+                <td><input type="text" class="table-input roof" required></td>
+                <td><input type="number" class="table-input area" required onchange="calculateAmount(this)"></td>
+                <td><input type="number" class="table-input rate" required onchange="calculateAmount(this)"></td>
+                <td><input type="number" class="table-input amount" required readonly></td>
+                <td><input type="number" class="table-input deprn" required onchange="calculateDeprnAmount(this)"></td>
+                <td><input type="number" class="table-input deprnAmount" required readonly></td>
+                <td><input type="number" class="table-input netAmount" required readonly></td>
+                <td><button type="button" onclick="deleteRow(this)" class="delete-row-btn">Delete</button></td>
+            `;
+            tbody.appendChild(newRow);
+            tableCounters[tableId]++;
+        }
+
+        function deleteRow(button) {
+            const row = button.parentNode.parentNode;
+            const tableBody = row.parentNode;
+            tableBody.removeChild(row);
+            updateRowNumbers(tableBody.id);
+        }
+
+        function updateRowNumbers(tableId) {
+            const rows = document.getElementById(tableId).getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].cells[0].textContent = i + 1;
+            }
+            tableCounters[tableId] = rows.length + 1;
+        }
+
+        function calculateAmount(input) {
+            const row = input.parentNode.parentNode;
+            const area = parseFloat(row.querySelector('.area').value) || 0;
+            const rate = parseFloat(row.querySelector('.rate').value) || 0;
+            const amount = area * rate;
+            row.querySelector('.amount').value = amount.toFixed(2);
+            calculateDeprnAmount(row.querySelector('.deprn'));
+        }
+
+        function calculateDeprnAmount(input) {
+            const row = input.parentNode.parentNode;
+            const amount = parseFloat(row.querySelector('.amount').value) || 0;
+            const deprn = parseFloat(row.querySelector('.deprn').value) || 0;
+            const deprnAmount = (amount * deprn) / 100;
+            const netAmount = amount - deprnAmount;
+            
+            row.querySelector('.deprnAmount').value = deprnAmount.toFixed(2);
+            row.querySelector('.netAmount').value = netAmount.toFixed(2);
+        }
+
+        function generateDynamicPDF(formData) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+        
+            // Header function
+            function header(doc, page=2) {
+                const margin = 10;
+                const pageWidth = doc.internal.pageSize.getWidth();
+                let yPosition = margin;
+                
+                // Add company name
+                doc.setFontSize(16);
+                doc.setTextColor(65, 105, 225);
+                doc.setFont('helvetica', 'bold');
+                doc.text('TRUE PEAK HOUSE LLP', pageWidth / 3, yPosition, { align: 'center' });
+                
+                // Add company details
+                yPosition += 5;
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'normal');
+                const address = 'GSTIN: 29AAUFT3926A1ZW, #240/C, FIRST FLOOR, 3RD BLOCK, NAGARABHAVI 2ND STAGE,';
+                doc.text(address, pageWidth / 2.4, yPosition, { align: 'center' });
+                
+                // Add contact details
+                yPosition += 5;
+                doc.setFontSize(11);
+                const contact = 'Bengaluru: 560072. MOB: +91 9743142447 | balakrishna@truepeak.in | www.truepeak.in';
+                doc.text(contact, pageWidth / 2.3, yPosition, { align: 'center' });
+                doc.setTextColor(0, 0, 0);
+        
+                // Add horizontal line
+                yPosition += 2;
+                doc.setLineWidth(0.1);
+                doc.line(margin, yPosition, pageWidth - margin, yPosition);
+            }
+        
+            // Building Value Table function
+            function buildingValueTable(doc, data) {
+                const startY = 30;
+                const leftMargin = 10;
+                const rightMargin = 15;
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const tableWidth = pageWidth - (leftMargin + rightMargin);
+                
+                let yPosition = startY;
+                
+                // Add title
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(10);
+                doc.text('BUILDING VALUE:', leftMargin, yPosition);
+                yPosition += 8;
+        
+                // Define column widths
+                const colWidths = {
+                    slNo: 12,
+                    particulars: 29,
+                    roof: 13,
+                    area: 19,
+                    rate: 20,
+                    amountIn: 30,
+                    deprnIn: 20,
+                    deprnAmount: 25,
+                    netAmount: 25
+                };
+        
+                // Header row
+                doc.setFontSize(7);
+                
+                // Draw header cells
+                let xPos = leftMargin;
+                doc.rect(xPos, yPosition, colWidths.slNo, 10);
+                doc.text('SL\nNo.', xPos + 1, yPosition + 4);
+                
+                xPos += colWidths.slNo;
+                doc.rect(xPos, yPosition, colWidths.particulars, 10);
+                doc.text('PARTICULARS', xPos + 2, yPosition + 6);
+                
+                xPos += colWidths.particulars;
+                doc.rect(xPos, yPosition, colWidths.roof, 10);
+                doc.text('ROOF', xPos + 2, yPosition + 6);
+                
+                xPos += colWidths.roof;
+                doc.rect(xPos, yPosition, colWidths.area, 10);
+                doc.text('AREA IN\nSFT', xPos + 2, yPosition + 4);
+                
+                xPos += colWidths.area;
+                doc.rect(xPos, yPosition, colWidths.rate, 10);
+                doc.text('RATE IN\nRs', xPos + 2, yPosition + 4);
+                
+                xPos += colWidths.rate;
+                doc.rect(xPos, yPosition, colWidths.amountIn, 10);
+                doc.text('AMOUNT IN\nRs', xPos + 2, yPosition + 4);
+                
+                xPos += colWidths.amountIn;
+                doc.rect(xPos, yPosition, colWidths.deprnIn, 10);
+                doc.text('DEPRN\nIN %', xPos + 2, yPosition + 4);
+                
+                xPos += colWidths.deprnIn;
+                doc.rect(xPos, yPosition, colWidths.deprnAmount, 10);
+                doc.text('DEPRN\nAMOUNT', xPos + 2, yPosition + 4);
+                
+                xPos += colWidths.deprnAmount;
+                doc.rect(xPos, yPosition, colWidths.netAmount, 10);
+                doc.text('NET\nAMOUNT', xPos + 2, yPosition + 4);
+        
+                yPosition += 10;
+        
+                // Function to add a row
+                function addRow(rowData, isHeader = false, isTotal = false) {
+                    doc.setFont('helvetica', isHeader || isTotal ? 'bold' : 'normal');
+                    doc.setFontSize(7);
+                    
+                    let xPos = leftMargin;
+                    
+                    // Draw cells and add data
+                    doc.rect(xPos, yPosition, colWidths.slNo, 7);
+                    if(rowData.slNo) doc.text(rowData.slNo.toString(), xPos + 1, yPosition + 4);
+                    
+                    xPos += colWidths.slNo;
+                    doc.rect(xPos, yPosition, colWidths.particulars, 7);
+                    doc.text(rowData.particulars || '', xPos + 1, yPosition + 4);
+                    
+                    xPos += colWidths.particulars;
+                    doc.rect(xPos, yPosition, colWidths.roof, 7);
+                    doc.text(rowData.roof || '', xPos + 1, yPosition + 4);
+                    
+                    xPos += colWidths.roof;
+                    doc.rect(xPos, yPosition, colWidths.area, 7);
+                    if(rowData.area) doc.text(rowData.area.toString(), xPos + 1, yPosition + 4);
+                    
+                    xPos += colWidths.area;
+                    doc.rect(xPos, yPosition, colWidths.rate, 7);
+                    if(rowData.rate) doc.text(rowData.rate.toString(), xPos + 1, yPosition + 4);
+                    
+                    xPos += colWidths.rate;
+                    doc.rect(xPos, yPosition, colWidths.amountIn, 7);
+                    if(rowData.amount) doc.text(rowData.amount.toString(), xPos + 1, yPosition + 4);
+                    
+                    xPos += colWidths.amountIn;
+                    doc.rect(xPos, yPosition, colWidths.deprnIn, 7);
+                    if(rowData.deprn) doc.text(rowData.deprn.toString(), xPos + 1, yPosition + 4);
+                    
+                    xPos += colWidths.deprnIn;
+                    doc.rect(xPos, yPosition, colWidths.deprnAmount, 7);
+                    if(rowData.deprnAmount) doc.text(rowData.deprnAmount.toString(), xPos + 1, yPosition + 4);
+                    
+                    xPos += colWidths.deprnAmount;
+                    doc.rect(xPos, yPosition, colWidths.netAmount, 7);
+                    if(rowData.netAmount) doc.text(rowData.netAmount.toString(), xPos + 1, yPosition + 4);
+                    
+                    yPosition += 7;
+                }
+        
+                // Add AS PER ACTUALS section
+                addRow({ particulars: 'AS PER ACTUALS' }, true);
+                let actualsTotal = {
+                    particulars: 'Total',
+                    area: 0,
+                    amount: 0,
+                    deprnAmount: 0,
+                    netAmount: 0
+                };
+        
+                data.actuals.forEach(row => {
+                    addRow(row);
+                    actualsTotal.area += parseFloat(row.area) || 0;
+                    actualsTotal.amount += parseFloat(row.amount) || 0;
+                    actualsTotal.deprnAmount += parseFloat(row.deprnAmount) || 0;
+                    actualsTotal.netAmount += parseFloat(row.netAmount) || 0;
+                });
+                addRow(actualsTotal, false, true);
+        
+                // Add AS PER PLAN section
+                addRow({ particulars: 'AS PER PLAN- For Present Stage Considered' }, true);
+                let planTotal = {
+                    particulars: 'Total',
+                    area: 0,
+                    amount: 0,
+                    deprnAmount: 0,
+                    netAmount: 0
+                };
+        
+                data.plan.forEach(row => {
+                    addRow(row);
+                    planTotal.area += parseFloat(row.area) || 0;
+                    planTotal.amount += parseFloat(row.amount) || 0;
+                    planTotal.deprnAmount += parseFloat(row.deprnAmount) || 0;
+                    planTotal.netAmount += parseFloat(row.netAmount) || 0;
+                });
+                addRow(planTotal, false, true);
+        
+                return yPosition;
+            }
+        
+            // Footer function
+            function addFooter(doc) {
+                const margin = 10;
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
+                
+                const footerY = pageHeight - 20;
+                doc.setLineWidth(0.1);
+                doc.line(margin, footerY + 4, pageWidth - margin, footerY + 4);
+                
+                doc.setFontSize(9);
+                doc.setTextColor(65, 105, 225);
+                doc.setFont('helvetica', 'bold');
+                doc.text('CHARTERED ENGINEERS | STRUCTURAL CONSULTANTS | N.D.T | R&R | VALUATION OF IMMOVABLE PROPERTIES.', 
+                    pageWidth / 2, footerY + 9, { align: 'center' });
+                
+                doc.setFontSize(9);
+                doc.setTextColor(0, 0, 0);
+                doc.text('TP/JCB/K-BKR/R-09/12/2024-25', margin + 5, footerY + 15);
+                doc.text('Page 1', pageWidth - margin - 20, footerY + 15);
+            }
+        
+            // Generate PDF
+            header(doc, 2);
+            buildingValueTable(doc, formData);
+            addFooter(doc);
+            
+            doc.save('building_value.pdf');
+        }
+
+        // Update the form submission handler
+        document.getElementById('buildingValueForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                actuals: [],
+                plan: []
+            };
+
+            // Collect data from Actuals table
+            const actualsRows = document.getElementById('actualsTableBody').getElementsByTagName('tr');
+            for (let row of actualsRows) {
+                formData.actuals.push({
+                    slNo: row.cells[0].textContent,
+                    particulars: row.querySelector('.particulars').value,
+                    roof: row.querySelector('.roof').value,
+                    area: row.querySelector('.area').value,
+                    rate: row.querySelector('.rate').value,
+                    amount: row.querySelector('.amount').value,
+                    deprn: row.querySelector('.deprn').value,
+                    deprnAmount: row.querySelector('.deprnAmount').value,
+                    netAmount: row.querySelector('.netAmount').value
+                });
+            }
+
+            // Collect data from Plan table
+            const planRows = document.getElementById('planTableBody').getElementsByTagName('tr');
+            for (let row of planRows) {
+                formData.plan.push({
+                    slNo: row.cells[0].textContent,
+                    particulars: row.querySelector('.particulars').value,
+                    roof: row.querySelector('.roof').value,
+                    area: row.querySelector('.area').value,
+                    rate: row.querySelector('.rate').value,
+                    amount: row.querySelector('.amount').value,
+                    deprn: row.querySelector('.deprn').value,
+                    deprnAmount: row.querySelector('.deprnAmount').value,
+                    netAmount: row.querySelector('.netAmount').value
+                });
+            }
+
+            generateDynamicPDF(formData);
+        });
+
+        // Add initial rows when page loads
+        window.onload = function() {
+            addNewRow('actualsTableBody');
+            addNewRow('planTableBody');
+        };
+    </script>
+</body>
+</html>

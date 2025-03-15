@@ -1,0 +1,1306 @@
+
+function header(doc, page=1){
+    // Set page margins and initial position
+   const margin = 10;
+   const pageWidth = doc.internal.pageSize.getWidth();
+   let yPosition = margin;
+   
+   // Add company name
+   doc.setFontSize(16);
+   doc.setTextColor(65, 105, 225);
+   doc.setFont('helvetica', 'bold');
+   doc.text('TRUE PEAK HOUSE LLP', pageWidth / 3, yPosition, { align: 'center' });
+   
+   // Add company details
+   yPosition += 5;
+   doc.setFontSize(9);
+   doc.setFont('helvetica', 'normal');
+   const address = 'GSTIN: 29AAUFT3926A1ZW, #240/C, FIRST FLOOR, 3RD BLOCK, NAGARABHAVI 2ND STAGE,';
+   doc.text(address, pageWidth / 2.4, yPosition, { align: 'center' });
+   
+   // Add contact details
+   yPosition += 5;
+   doc.setFontSize(11);
+   
+   const contact = 'Bengaluru: 560072. MOB: +91 9743142447 | balakrishna@truepeak.in | www.truepeak.in';
+   doc.text(contact, pageWidth / 2.3, yPosition, { align: 'center' });
+   doc.setTextColor(0, 0, 0); // Reset back to black for subsequent text
+
+   // Add horizontal line
+   yPosition += 2;
+   doc.setLineWidth(0.1);
+   doc.line(margin, yPosition, pageWidth - margin, yPosition);
+   
+   if(page==1){
+        // Add recipient details
+        yPosition += 11;
+        doc.setFont('helvetica', 'normal');
+        doc.text(bank_info.managerTitle, margin + 5, yPosition);
+        yPosition += 5;
+        doc.setFont('helvetica', 'bold');
+        doc.text(bank_info.managerDesignation, margin + 5, yPosition);
+        yPosition += 5;
+        doc.text(bank_info.bankName, margin + 5, yPosition);
+        yPosition += 5;
+        doc.text(bank_info.branchLocation, margin + 5, yPosition);
+    }
+
+   
+}
+
+function Container1(doc, formData) {
+    // Initial settings
+    const margin = 18;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const tableWidth = pageWidth - (margin * 1.55);
+    let yPosition = 10;
+
+    // Add logo on the right side
+    const img = new Image();
+    img.src = 'images/logo.png';
+
+    return new Promise((resolve) => {
+        img.onload = function() {
+            // Logo dimensions
+            const logoWidth = 30;
+            const logoHeight = 30;
+            const logoX = pageWidth - margin - logoWidth - 3;
+            doc.addImage(img, 'PNG', logoX + 8, yPosition - 2, logoWidth, logoHeight);
+
+            // Draw the main outer box
+            const pageHeight = doc.internal.pageSize.getHeight() - 30;
+            doc.rect(margin, yPosition, tableWidth, pageHeight - yPosition - 188);
+
+            // Company header
+            doc.setFontSize(16);
+            doc.setTextColor(65, 105, 225);
+            doc.setFont('helvetica', 'bold');
+            doc.text('TRUE PEAK HOUSE LLP', pageWidth / 9, yPosition + 10);
+
+            // Company details
+            yPosition += 15;
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            const address = 'GSTIN: 29AAUFT3926A1ZW, #240/C, FIRST FLOOR, 3RD BLOCK, NAGARABHAVI 2ND STAGE,';
+            doc.text(address, pageWidth / 9, yPosition);
+
+            // Contact details
+            yPosition += 5;
+            const contact = 'Bengaluru: 560072. MOB: +91 9743142447 | balakrishna@truepeak.in | www.truepeak.in';
+            doc.text(contact, pageWidth / 9, yPosition);
+
+            // Title section
+            yPosition += 6;
+            doc.setTextColor(0, 0, 0);
+            doc.rect(margin, yPosition, tableWidth, 8);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9);
+            doc.text('VALUATION REPORT - IMMOVABLE PROPERTY', pageWidth / 2, yPosition + 5.5, { align: 'center' });
+
+            // Bank details
+            doc.text('To,', margin + 5, yPosition + 5);
+            doc.setFont('helvetica', 'bold');
+            doc.text(formData.managerDesignation, margin + 5, yPosition + 12);
+            doc.text(formData.bankName, margin + 5, yPosition + 19);
+            doc.text(formData.branchLocation, margin + 5, yPosition + 26);
+
+            // Create table instance
+            yPosition += 28;
+            let table = createTable(doc, yPosition, null, `Type of Property – ${formData.propertyType}`);
+            let yPos = table.getPosition();
+            
+            doc.setFontSize(8);
+            
+            // Purpose of Valuation
+            yPos = table.addSplitColumnRow('1', 'Purpose of Valution', [
+                'Purpose',
+                'Type',
+                formData.mainPurpose,
+                formData.subPurpose
+            ]);
+
+            // Accompanying Person
+            yPos = table.addRow('2', 'Persons Accompanying / Contact No.', formData.personsAccompanying);
+
+            // Customer Details
+            yPos = table.addRow('3', 'Customer Details', '', null, true);
+            yPos = table.addRow('a', 'Name of Owner', formData.nameOfOwner);
+            yPos = table.addRow('b', 'Name of Purchaser', formData.nameOfPurchaser);
+            yPos = table.addRow('c', 'Application No', formData.applicationNo);
+
+            // Property Details with Address Array
+            yPos = table.addRow('4', 'Property Details', '', null, true);
+            const addressData = {
+                row1: ['PLOT/ SITE NO', formData.plotSiteNo, 'Survey.No', formData.surveyNo],
+                row2: ['LOCALITY', formData.locality, 'DISTRICT', formData.district],
+                row3: ['LAND MARK NEAR', formData.landmarkNear, 'DISTANCE', formData.distance],
+                row4: ['LEGAL ADDRESS', formData.legalAddress]
+            };
+            yPos = table.addAddressRow('a', 'Address', addressData);
+
+            yPos = table.addRow('b', 'Nearby Landmark/Google Map /\nIndependent access to the property', 
+                formData.nearbyLandmark);
+
+            // Document Details
+            yPos = table.addRow('5', 'Document Details', '', null, true);
+            yPos = table.addRow('a', 'Building Plan', formData.buildingPlan, null, true);
+            yPos = table.addRow('i)', 'Yes/No', 'Yes');
+            yPos = table.addRow('ii)', 'Name of Approving Authority', formData.approvingAuthority);
+            yPos = table.addRow('iii)', 'Approval No / Date / Details', formData.approvalDetails);
+            yPos = table.addRow('b', 'Legal & Other Documents', formData.legalDocuments, 16);
+                    
+            // Add Physical Details section
+            yPos = table.addRow('6', 'Physical Details', '', null, true);
+            
+
+            // Add header row
+            yPos = table.addAdjoiningPropertiesRow('a', 'Adjoining Properties:', 'As per Document', 'As per Actuals');
+            
+            // Add direction rows
+            yPos = table.addAdjoiningPropertiesRow('i', 'East', 'Road', '30 feet Road');
+            yPos = table.addAdjoiningPropertiesRow('ii', 'West', 'Site No.161', 'RCC Building');
+            yPos = table.addAdjoiningPropertiesRow('iii', 'North', 'Site No.197', 'RCC Building');
+            yPos = table.addAdjoiningPropertiesRow('iv', 'South', 'Site No.199', 'RCC Building');
+
+            resolve(yPos);
+        };
+
+        img.onerror = function() {
+            console.error('Error loading logo');
+            // resolve(yPos);
+        };
+    });
+}
+
+
+function Container2(doc, formData) {
+    let table = createTable(doc, 10, '', '');
+    let yPos = table.getPosition();
+    
+    yPos = table.addRow('6', 'Physical Details', '', 8, true);
+    
+    yPos = table.addRow('a', 'Adjoining Properties: ', '', 8, true);
+    yPos = table.addRow('i', 'East', formData.eastBoundary, 8);
+    yPos = table.addRow('ii', 'West', formData.westBoundary, 8);
+    yPos = table.addRow('iii', 'North', formData.northBoundary, 8);
+    yPos = table.addRow('iv', 'South', formData.southBoundary, 8);
+
+    yPos = table.addRow('b', 'Matching of Boundaries', formData.boundaryMatch, 8);
+    yPos = table.addRow('c', 'Plot Demarcated', formData.plotDemarcation, 8);
+    yPos = table.addRow('d)', 'Approved and Land Use', formData.landUse);
+    yPos = table.addRow('e)', 'Types of property', formData.propertyType);
+    yPos = table.addRow('f)', 'Details of Accommodations', 'As Per Actual');
+
+    yPos = table.addRow('i', 'Living/ Dinning', formData.livingStatus, 8);
+    yPos = table.addRow('ii', 'Bed Room & Pooja Room', formData.bedroomStatus, 8);
+    yPos = table.addRow('iii', 'Toilet', formData.toiletStatus, 8);
+    yPos = table.addRow('iv', 'Kitchen', formData.kitchenStatus, 8);
+
+    yPos = table.addRow('g', 'Total No of Floors', formData.totalFloors, 8);
+    yPos = table.addRow('h', 'Floor on which the property is located', formData.propertyFloor, 8);
+    yPos = table.addRow('i', 'Year of construction', formData.constructionYear, 8);
+    yPos = table.addRow('j', 'Approx. age of the Property', formData.propertyAge, 8);
+    yPos = table.addRow('h', 'Residual age of the Property ', formData.residualAge, 8);
+    
+    yPos = table.addRow('k', 'Type of structure', formData.structureType, 20);
+    yPos = table.addRow('', 'Amenities provided', formData.amenities, 8);
+
+    yPos = table.addRow('7', 'Tenure / Occupancy Details', '',8, true)
+    yPos = table.addRow('', 'Status of Tenure', '',8, true)
+    yPos = table.addRow('i', 'Owned /Rented ', 'UC', 8);
+    yPos = table.addRow('ii', 'No. of years of Occupancy', '-', 8);
+    yPos = table.addRow('iii', 'Relationship of tenant or owner ', '-', 8);
+
+    return yPos;
+}
+
+function Container3(doc, formData) {
+    let table = createTable(doc, 10, '', '');
+    let yPos = table.getPosition();
+    
+    yPos = table.addRow('8', 'Building Status', '', 8, true);
+    yPos = table.addRow('i', 'Existing building', formData.existingBuilding);
+    yPos = table.addRow('ii', 'Stage of construction', formData.constructionStage, 16);
+    yPos = table.addRow('iii', 'Work completion', formData.workCompletion);
+    
+    yPos = table.addRow('9', 'Violations if any observed', '', 8, true);
+    yPos = table.addRow('i', 'Nature and extent of violations', formData.violations, 16);
+
+    yPos = table.addRow('10', 'Area Details of the Property', '', 8, true);
+    yPos = table.addRow('i', 'Site Area', formData.siteArea);
+    yPos = table.addRow('ii', 'Plinth area', formData.plinthArea);
+    yPos = table.addRow('iii', 'Carpet area', formData.carpetArea);
+    yPos = table.addRow('iv', 'Saleable area', formData.saleableArea);
+    yPos = table.addRow('v', 'Remarks', formData.areaRemarks);
+   
+    yPos = table.addRow('11', 'Valuation Note', '', 8, true);
+    yPos = table.addRow('a (i)', 'Mention the value as per Government Approved Rates also', formData.govtValue, 16);
+    yPos = table.addRow('ii', 'Variation justification', formData.variationJustification, 30);
+    
+    yPos = table.addRow('b', 'Summary of Valuation', '', 8, true);
+    yPos = table.addRow('i', 'Guideline Rate', formData.guidelineRate);
+    yPos = table.addRow('ii', 'Market Rate', formData.marketRate, 20);
+    yPos = table.addRow('iii', 'Land Value', formData.landValue);
+    yPos = table.addRow('iv', 'Building Value', formData.buildingValue);
+    yPos = table.addRow('v', 'Extra items, Amenities & Services', formData.extraItems);
+    yPos = table.addRow('vi', 'Fair Market Value (SAY)', formData.fairMarketValue);
+    yPos = table.addRow('c(vii)', 'Expected Rental Value', formData.rentalValue);
+
+    return yPos;
+}
+
+function Container4(doc, formData) {
+    // First, call the building value table
+    let yPos = buildingValueTable(doc, formData);
+    yPos += 10; // Add some spacing between tables
+    
+    // Now create the second table
+    const leftMargin = 10;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const rightMargin = 15;
+    const tableWidth = pageWidth - (leftMargin + rightMargin);
+    
+    // Define column widths
+    const colWidths = {
+        serial: 15,
+        description: tableWidth - 85,
+        amount: 70
+    };
+    
+    // Function to add a row
+    function addRow(label, description, amount, isBold = false) {
+        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+        doc.setFontSize(8);
+        
+        // Draw cells
+        doc.rect(leftMargin, yPos, colWidths.serial, 7);
+        doc.rect(leftMargin + colWidths.serial, yPos, colWidths.description, 7);
+        doc.rect(leftMargin + colWidths.serial + colWidths.description, yPos, colWidths.amount, 7);
+        
+        // Add text
+        if (label) {
+            doc.text(label.toString(), leftMargin + 2, yPos + 5);
+        }
+        doc.text(description, leftMargin + colWidths.serial + 2, yPos + 5);
+        if (amount) {
+            doc.text(amount, leftMargin + colWidths.serial + colWidths.description + 2, yPos + 5);
+        }
+        
+        yPos += 7;
+    }
+    
+    // Add section B: EXTRA ITEM
+    addRow('B', 'EXTRA ITEM', 'Amount in Rs.', true);
+    addRow('1', 'Portico', formData.porticoStatus);
+    addRow('2', 'Ornamental front door', formData.frontDoorStatus);
+    addRow('3', 'Sit out / Verandah with steel grills', formData.verandahStatus);
+    addRow('4', 'Bore well / Overhead Tank / Sump / Solar', formData.boreWellStatus);
+    addRow('5', 'Extra steel / Collapsible gates', formData.gatesStatus);
+    addRow('', 'Total', formData.extraItemsTotal, true);
+    
+    // Add section C: AMENITIES
+    addRow('C', 'AMENITIES', '', true);
+    addRow('1', 'Wardrobes', formData.wardrobesStatus);
+    addRow('2', 'Glazed Tiles', formData.glazedTilesStatus);
+    addRow('3', 'Extra sinks & bath tubs', formData.bathTubsStatus);
+    addRow('4', 'Marble / Ceramic tiles flooring', formData.marbleFlooringStatus);
+    addRow('5', 'Interior decorations', formData.interiorStatus);
+    addRow('6', 'Architectural Elevation works', formData.architecturalStatus);
+    addRow('7', 'Paneling works', formData.panelingStatus);
+    addRow('8', 'Aluminium works', formData.aluminiumStatus);
+    addRow('9', 'Aluminium hand rails', formData.handRailsStatus);
+    addRow('10', 'False ceilings', formData.falseCeilingStatus);
+    addRow('', 'Total', formData.amenitiesTotal, true);
+    
+    return yPos;
+}
+
+function buildingValueTable(doc, formData) {
+    const startY = 10;
+    const leftMargin = 10;
+    const rightMargin = 15;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const tableWidth = pageWidth - (leftMargin + rightMargin);
+    
+    let yPosition = startY;
+    
+    // Add title
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text('BUILDING VALUE:', leftMargin, yPosition);
+    yPosition += 8;
+
+    // Define column widths
+    const colWidths = {
+        slNo: 12,
+        particulars: 29,
+        roof: 13,
+        area: 19,
+        rate: 20,
+        amountIn: 30,
+        deprnIn: 20,
+        deprnAmount: 25,
+        netAmount: 25
+    };
+
+    // Header row
+    doc.setFontSize(7);
+    doc.rect(leftMargin, yPosition, colWidths.slNo, 10);
+    doc.text('SL\nNo.', leftMargin + 1, yPosition + 4);
+    
+    let xPos = leftMargin + colWidths.slNo;
+    doc.rect(xPos, yPosition, colWidths.particulars, 10);
+    doc.text('PARTICULARS', xPos + 2, yPosition + 6);
+    
+    xPos += colWidths.particulars;
+    doc.rect(xPos, yPosition, colWidths.roof, 10);
+    doc.text('ROOF', xPos + 2, yPosition + 6);
+    
+    xPos += colWidths.roof;
+    doc.rect(xPos, yPosition, colWidths.area, 10);
+    doc.text('AREA IN\nSFT', xPos + 2, yPosition + 4);
+    
+    xPos += colWidths.area;
+    doc.rect(xPos, yPosition, colWidths.rate, 10);
+    doc.text('RATE IN\nRs', xPos + 2, yPosition + 4);
+    
+    xPos += colWidths.rate;
+    doc.rect(xPos, yPosition, colWidths.amountIn, 10);
+    doc.text('AMOUNT IN\nRs', xPos + 2, yPosition + 4);
+    
+    xPos += colWidths.amountIn;
+    doc.rect(xPos, yPosition, colWidths.deprnIn, 10);
+    doc.text('DEPRN\nIN %', xPos + 2, yPosition + 4);
+    
+    xPos += colWidths.deprnIn;
+    doc.rect(xPos, yPosition, colWidths.deprnAmount, 10);
+    doc.text('DEPRN\nAMOUNT', xPos + 2, yPosition + 4);
+    
+    xPos += colWidths.deprnAmount;
+    doc.rect(xPos, yPosition, colWidths.netAmount, 10);
+    doc.text('NET\nAMOUNT', xPos + 2, yPosition + 4);
+
+    yPosition += 10;
+
+    // Function to add a row
+    function addRow(slNo, particulars, roof, area, rate, amountIn, deprnIn, deprnAmount, netAmount) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        
+        let xPos = leftMargin;
+        doc.rect(xPos, yPosition, colWidths.slNo, 7);
+        if(slNo) doc.text(slNo.toString(), xPos + 1, yPosition + 4);
+        
+        xPos += colWidths.slNo;
+        doc.rect(xPos, yPosition, colWidths.particulars, 7);
+        doc.text(particulars, xPos + 1, yPosition + 4);
+        
+        xPos += colWidths.particulars;
+        doc.rect(xPos, yPosition, colWidths.roof, 7);
+        doc.text(roof, xPos + 1, yPosition + 4);
+        
+        xPos += colWidths.roof;
+        doc.rect(xPos, yPosition, colWidths.area, 7);
+        if(area) doc.text(area.toString(), xPos + 1, yPosition + 4);
+        
+        xPos += colWidths.area;
+        doc.rect(xPos, yPosition, colWidths.rate, 7);
+        if(rate) doc.text(rate.toString(), xPos + 1, yPosition + 4);
+        
+        xPos += colWidths.rate;
+        doc.rect(xPos, yPosition, colWidths.amountIn, 7);
+        if(amountIn) doc.text(amountIn.toString(), xPos + 1, yPosition + 4);
+        
+        xPos += colWidths.amountIn;
+        doc.rect(xPos, yPosition, colWidths.deprnIn, 7);
+        if(deprnIn) doc.text(deprnIn.toString(), xPos + 1, yPosition + 4);
+        
+        xPos += colWidths.deprnIn;
+        doc.rect(xPos, yPosition, colWidths.deprnAmount, 7);
+        if(deprnAmount) doc.text(deprnAmount.toString(), xPos + 1, yPosition + 4);
+        
+        xPos += colWidths.deprnAmount;
+        doc.rect(xPos, yPosition, colWidths.netAmount, 7);
+        if(netAmount) doc.text(netAmount.toString(), xPos + 1, yPosition + 4);
+        
+        yPosition += 7;
+    }
+
+    // Add data rows with all columns
+    addRow('', 'AS PER ACTUALS', '', '', '', '', '', '', '');
+    addRow('1', 'Stilt Floor', 'RCC', '2,000.00', '500.00', '10,00,000.00', '0.00', '0.00', '10,00,000.00');
+    addRow('2', 'Ground Floor', 'RCC', '2,000.00', '300.00', '6,00,000.00', '0.00', '0.00', '6,00,000.00');
+    addRow('', 'Total', '', '4,000.00', '', '16,00,000.00', '', '0.00', '16,00,000.00');
+    addRow('', 'AS PER PLAN- For Present Stage Considered', '', '', '', '', '', '', '');
+    addRow('1', 'Stilt Floor', 'RCC', '1,371.79', '500.00', '6,85,896.20', '0.00', '0.00', '6,85,896.20');
+    addRow('2', 'Ground Floor', 'RCC', '1,371.79', '300.00', '4,11,537.72', '0.00', '0.00', '4,11,537.72');
+    addRow('3', 'First Floor', 'RCC', '1,371.79', '0.00', '0.00', '0.00', '0.00', '0.00');
+    addRow('4', 'Second Floor', 'RCC', '1,371.79', '0.00', '0.00', '0.00', '0.00', '0.00');
+    addRow('5', 'Third Floor', 'RCC', '1,371.79', '0.00', '0.00', '0.00', '0.00', '0.00');
+    addRow('6', 'Terrace Floor', 'RCC', '265.56', '0.00', '0.00', '0.00', '0.00', '0.00');
+    addRow('', 'Total', '', '7,124.52', '', '10,97,433.92', '', '0.00', '10,97,433.92');
+
+    return yPosition;
+}
+
+function Container5(doc) {
+    let yPos = 30;
+    const leftMargin = 15;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const rightMargin = 15;
+    const tableWidth = pageWidth - (leftMargin + rightMargin);
+    
+    // Define column widths for first table
+    const colWidths = {
+        serial: 15,
+        description: tableWidth - 85,
+        amount: 70
+    };
+    
+    // Function to add a row for first table
+    function addRow(label, description, amount, isBold = false) {
+        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+        doc.setFontSize(8);
+        
+        doc.rect(leftMargin, yPos, colWidths.serial, 7);
+        doc.rect(leftMargin + colWidths.serial, yPos, colWidths.description, 7);
+        doc.rect(leftMargin + colWidths.serial + colWidths.description, yPos, colWidths.amount, 7);
+        
+        if (label) {
+            doc.text(label.toString(), leftMargin + 2, yPos + 5);
+        }
+        doc.text(description, leftMargin + colWidths.serial + 2, yPos + 5);
+        if (amount) {
+            doc.text(amount, leftMargin + colWidths.serial + colWidths.description + 2, yPos + 5);
+        }
+        
+        yPos += 7;
+    }
+    
+    // Add section D: MISCELLANEOUS
+    addRow('D', 'MISCELLANEOUS', '', true);
+    addRow('1', 'Separate toilet room', 'Under Construction');
+    addRow('2', 'Separate lumber room', '"');
+    addRow('', 'Total', 'Rs.0.00', true);
+    
+    // Add section E: SERVICES
+    addRow('E', 'SERVICES', '', true);
+    addRow('1', 'Water supply arrangements', 'Under Construction');
+    addRow('2', 'Drainage arrangements', '"');
+    addRow('3', 'Compound wall / gate', '"');
+    addRow('4', 'C.B. Deposits, Fittings, Power etc.,', '"');
+    addRow('5', 'Pavement', '"');
+    addRow('', 'Total', 'Rs.0.00', true);
+
+    // Add spacing between tables
+    yPos += 5;
+
+    // Define column widths for summary table
+    const summaryColWidths = {
+        serial: 15,
+        description: 50,
+        amount: 30,
+        deprn: 30,
+        deprnAmount: 30,
+        netAmount: 30
+    };
+
+    // Function to add a row for summary table
+    function addSummaryRow(serial, description, amount, deprn, deprnAmount, netAmount, isBold = false) {
+        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+        doc.setFontSize(8);
+        
+        let xPos = leftMargin;
+        
+        // Draw cells
+        doc.rect(xPos, yPos, summaryColWidths.serial, 7);
+        xPos += summaryColWidths.serial;
+        
+        doc.rect(xPos, yPos, summaryColWidths.description, 7);
+        xPos += summaryColWidths.description;
+        
+        doc.rect(xPos, yPos, summaryColWidths.amount, 7);
+        xPos += summaryColWidths.amount;
+        
+        doc.rect(xPos, yPos, summaryColWidths.deprn, 7);
+        xPos += summaryColWidths.deprn;
+        
+        doc.rect(xPos, yPos, summaryColWidths.deprnAmount, 7);
+        xPos += summaryColWidths.deprnAmount;
+        
+        doc.rect(xPos, yPos, summaryColWidths.netAmount, 7);
+        
+        // Add text
+        xPos = leftMargin;
+        if(serial) doc.text(serial.toString(), xPos + 2, yPos + 5);
+        
+        xPos += summaryColWidths.serial;
+        doc.text(description, xPos + 2, yPos + 5);
+        
+        xPos += summaryColWidths.description;
+        if(amount) doc.text(amount.toString(), xPos + 2, yPos + 5);
+        
+        xPos += summaryColWidths.amount;
+        if(deprn) doc.text(deprn.toString(), xPos + 2, yPos + 5);
+        
+        xPos += summaryColWidths.deprn;
+        if(deprnAmount) doc.text(deprnAmount.toString(), xPos + 2, yPos + 5);
+        
+        xPos += summaryColWidths.deprnAmount;
+        if(netAmount) doc.text(netAmount.toString(), xPos + 2, yPos + 5);
+        
+        yPos += 7;
+    }
+
+    // Add summary table rows
+    addSummaryRow('1', 'EXTRA ITEM', '250000.00', '0.00', '0.00', '250000.00');
+    addSummaryRow('2', 'AMENITIES', '0.00', '0.00', '0.00', '0.00');
+    addSummaryRow('3', 'MISCELLANEOUS', '0.00', '0.00', '0.00', '0.00');
+    addSummaryRow('4', 'SERVICES', '0.00', '0.00', '0.00', '0.00');
+    addSummaryRow('', 'TOTAL', '250000.00', '', '0.00', '250000.00', true);
+    
+    yPos += 7;
+
+    // Add title for the abstract table
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text('TOTAL ABSTRACT OF THE ENTIRE PROPERTY', leftMargin, yPos);
+    yPos += 5;
+
+    // Define column widths for abstract table
+    const abstractColWidths = {
+        slNo: 30,
+        particulars: pageWidth - (leftMargin + rightMargin) - 100,
+        amount: 70
+    };
+
+    // Function to add row for abstract table
+    function addAbstractRow(slNo, particulars, amount, isBold = false, indent = false) {
+        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+        doc.setFontSize(8);
+        
+        // Draw cells
+        doc.rect(leftMargin, yPos, abstractColWidths.slNo, 7);
+        doc.rect(leftMargin + abstractColWidths.slNo, yPos, abstractColWidths.particulars, 7);
+        doc.rect(leftMargin + abstractColWidths.slNo + abstractColWidths.particulars, yPos, abstractColWidths.amount, 7);
+        
+        // Add text
+        if(slNo) {
+            let xOffset = indent ? 5 : 2;
+            doc.text(slNo, leftMargin + xOffset, yPos + 5);
+        }
+        doc.text(particulars, leftMargin + abstractColWidths.slNo + 2, yPos + 5);
+        if(amount) {
+            doc.text(amount, leftMargin + abstractColWidths.slNo + abstractColWidths.particulars + 2, yPos + 5);
+        }
+        
+        yPos += 7;
+    }
+
+    // Add abstract table rows
+    addAbstractRow('I', 'MARKET VALUE OF THE PROPERTY', '', true);
+    addAbstractRow('A', 'LAND', '3,60,00,000.00', false, true);
+    addAbstractRow('B', 'BUILDING', '10,97,433.92', false, true);
+    addAbstractRow('C', 'EXTRA ITEM', '', false, true);
+    addAbstractRow('D', 'AMENITIES', '', false, true);
+    addAbstractRow('E', 'MISCELLANEOUS', '2,50,000.00', false, true);
+    addAbstractRow('F', 'SERVICES', '', false, true);
+    addAbstractRow('', 'TOTAL', '3,73,47,433.92', true);
+    addAbstractRow('', 'SAY', '3,73,00,000.00', true);
+    addAbstractRow('', 'REALISABLE SALE VALUE', '3,35,00,000.00');
+    addAbstractRow('', 'FORCED SALE VALUE', '2,90,00,000.00');
+    addAbstractRow('II', 'GUIDANCE VALUE OF THE PROPERTY', '', true);
+    addAbstractRow('A', 'LAND', '1,90,03,717.47', false, true);
+    addAbstractRow('B', 'BUILDING', '10,97,433.92', false, true);
+    addAbstractRow('', 'TOTAL', '2,01,01,151.39', true);
+    addAbstractRow('', 'SAY', '2,01,00,000.00', true);
+
+
+    return yPos;
+}
+
+function Container6(doc) {
+    let yPos = 30;
+    const leftMargin = 10;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const rightMargin = 15;
+    const textWidth = pageWidth - (leftMargin + rightMargin);
+    
+    // Add title
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('VALUATION CERTIFICATE', pageWidth / 2, yPos, { align: 'center' });
+    yPos += 15;
+
+    // Add valuation text
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(13);
+    const valuationText = `As a result of my appraisal and analysis, it is my considered opinion that the present fair market value of the above property in the prevailing condition with aforesaid specifications is Rs.3,73,00,000/- RUPEES THREE CRORE SEVENTY THREE LAKHS ONLY. The Realizable value of the property is Rs.3,35,00,000/- RUPEES THREE CRORE THIRTY FIVE LAKHS ONLY and the Distress / Forced Sale value is Rs.2,90,00,000/- RUPEES TWO CRORE NINTY LAKHS ONLY.`;
+    
+    const splitText = doc.splitTextToSize(valuationText, textWidth);
+    const lineHeight = 6; // Adjust this value to change line spacing
+    
+    splitText.forEach((line, index) => {
+        doc.text(line, leftMargin, yPos + (index * lineHeight));
+    });
+    yPos += splitText.length *7;
+
+    // Declaration table
+    const colWidths = {
+        serial: 20,
+        content: textWidth - 20
+    };
+
+    // Function to add declaration row
+    function addDeclarationRow(serial, content, isBold = false) {
+        const height = Math.max(7, Math.ceil(doc.splitTextToSize(content, colWidths.content - 4).length * 7));
+        
+        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+        doc.setFontSize(9);
+        
+        // Draw cells
+        doc.rect(leftMargin, yPos, colWidths.serial, height);
+        doc.rect(leftMargin + colWidths.serial, yPos, colWidths.content, height);
+        
+        // Add text
+        if(serial) {
+            doc.text(serial.toString(), leftMargin + 2, yPos + 5);
+        }
+        
+        const splitContent = doc.splitTextToSize(content, colWidths.content - 4);
+        doc.text(splitContent, leftMargin + colWidths.serial + 2, yPos + 5);
+        
+        yPos += height;
+        return height;
+    }
+
+    // Add declaration rows
+    addDeclarationRow('16', 'Declaration', true);
+    addDeclarationRow('a', 'I hereby declare that', true);
+    addDeclarationRow('i)', 'The information provided is true and correct to the best of my knowledge and belief.');
+    addDeclarationRow('ii)', 'The analysis and conclusion are limited by the reported assumptions and conditions.');
+    addDeclarationRow('iii)', 'I have read the Handbook on policy, Standard and Procedures for real Estate valuation by banks and HFIs in India, 2011, issued by IBA and NHB, fully understood the provisions of the same and followed the provisions of the same to the best of my ability and this report is in conformity to the standards of Reporting enshrined in the above Handbook.');
+    addDeclarationRow('iv)', 'I have no direct or indirect interest in the above property valued.');
+    addDeclarationRow('v)', 'The Property was inspected by me on 03/12/2024 along with the Owner.');
+    addDeclarationRow('vi)', 'I am a registered valuer under section 34AB of Wealth tax act, 1957, CAT-I/Reg.No.02/PCIT-I/CCIT/BNG-1/2023-24 for valuing property.');
+    addDeclarationRow('vii)', 'The valuation made with reference to the photocopies given only irrespective of the legal opinion');
+    addDeclarationRow('viii )', 'The validity of the report is only for 3 months and is to be used purpose intended for and not for any other purpose');
+
+    return yPos;
+} 
+
+function Container7(doc) {
+    let yPos = 30;
+    const leftMargin = 15;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const rightMargin = 15;
+    const textWidth = pageWidth - (leftMargin + rightMargin);
+    
+    // Add title
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('VALUATION CERTIFICATE', pageWidth / 2, yPos, { align: 'center' });
+    yPos += 8;
+
+    // Add valuation text
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(13);
+    const valuationText = `As a result of my appraisal and analysis, it is my considered opinion that the present fair market value of the above property in the prevailing condition with aforesaid specifications is Rs.3,73,00,000/- RUPEES THREE CRORE SEVENTY THREE LAKHS ONLY. The Realizable value of the property is Rs.3,35,00,000/- RUPEES THREE CRORE THIRTY FIVE LAKHS ONLY and the Distress / Forced Sale value is Rs.2,90,00,000/- RUPEES TWO CRORE NINTY LAKHS ONLY.`;
+    
+    const splitText = doc.splitTextToSize(valuationText, textWidth);
+    const lineHeight = 6; // Adjust this value to change line spacing
+    
+    splitText.forEach((line, index) => {
+        doc.text(line, leftMargin, yPos + (index * lineHeight));
+    });
+    yPos += splitText.length *6;
+
+    // Declaration table
+    const colWidths = {
+        serial: 20,
+        content: textWidth - 20
+    };
+
+    // Function to add declaration row
+    function addDeclarationRow(serial, content, isBold = false) {
+        const height = Math.max(7, Math.ceil(doc.splitTextToSize(content, colWidths.content - 4).length * 7));
+        
+        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+        doc.setFontSize(9);
+        
+        // Draw cells
+        doc.rect(leftMargin, yPos, colWidths.serial, height);
+        doc.rect(leftMargin + colWidths.serial, yPos, colWidths.content, height);
+        
+        // Add text
+        if(serial) {
+            doc.text(serial.toString(), leftMargin + 2, yPos + 5);
+        }
+        
+        const splitContent = doc.splitTextToSize(content, colWidths.content - 4);
+        doc.text(splitContent, leftMargin + colWidths.serial + 2, yPos + 5);
+        
+        yPos += height;
+        return height;
+    }
+
+    // Add declaration rows
+    addDeclarationRow('16', 'Declaration', true);
+    addDeclarationRow('a', 'I hereby declare that', true);
+    addDeclarationRow('i)', 'The information provided is true and correct to the best of my knowledge and belief.');
+    addDeclarationRow('ii)', 'The analysis and conclusion are limited by the reported assumptions and conditions.');
+    addDeclarationRow('iii)', 'I have read the Handbook on policy, Standard and Procedures for real Estate valuation by banks and HFIs in India, 2011, issued by IBA and NHB, fully understood the provisions of the same and followed the provisions of the same to the best of my ability and this report is in conformity to the standards of Reporting enshrined in the above Handbook.');
+    addDeclarationRow('iv)', 'I have no direct or indirect interest in the above property valued.');
+    addDeclarationRow('v)', 'The Property was inspected by me on 03/12/2024 along with the Owner.');
+    addDeclarationRow('vi)', 'I am a registered valuer under section 34AB of Wealth tax act, 1957, CAT-I/Reg.No.02/PCIT-I/CCIT/BNG-1/2023-24 for valuing property.');
+    addDeclarationRow('vii)', 'The valuation made with reference to the photocopies given only irrespective of the legal opinion');
+    addDeclarationRow('viii )', 'The validity of the report is only for 3 months and is to be used purpose intended for and not for any other purpose');
+
+    
+    yPos += 6; // Add spacing before new table
+
+    const tableWidth = textWidth; // Use same width as rest of content
+    
+    // Function to add details row with better alignment
+    function addDetailsRow(label, value, height = 10) {
+        doc.setFontSize(9);
+        
+        // Draw cells with full width
+        doc.rect(leftMargin, yPos, tableWidth/2, height);
+        doc.rect(leftMargin + tableWidth/2, yPos, tableWidth/2, height);
+        
+        // Add text with better alignment
+        doc.setFont('helvetica', 'bold');
+        const splitLabel = doc.splitTextToSize(label, tableWidth/2 - 4);
+        doc.text(splitLabel, leftMargin + 2, yPos + 6);
+        
+        doc.setFont('helvetica', 'normal');
+        const splitValue = doc.splitTextToSize(value, tableWidth/2 - 4);
+        doc.text(splitValue, leftMargin + tableWidth/2 + 2, yPos + 6);
+        
+        yPos += height;
+    }
+    
+    // Add valuer details table with consistent width
+    addDetailsRow('Name of the Valuer', 'Mr BALAKRISHNA R');
+    addDetailsRow('Address', '# 240/C, First floor, 3rd Block, Nagarabhavi 2nd stage, Bangalore-560072');
+    addDetailsRow('Name of valuer association of which I am a\nbonafide member in good standing', 'Indian Institute of Engineers', 15);
+    addDetailsRow('Wealth tax Registration No', 'CAT-I/Reg.No.02/PCIT-I/CCIT/BNG-1/2023-24');
+    
+    // Create signature box
+    yPos += 5;
+    doc.rect(leftMargin, yPos, tableWidth, 40); // Add box for signature
+    
+    // Add signature text aligned to left inside box
+    doc.setFont('helvetica', 'bold');
+    doc.text('Seal & Signature of the Valuer', leftMargin + 2, yPos + 10);
+    
+    // Add date and contact details inside box with proper alignment
+    const detailsX = leftMargin + 2;
+    const detailsY = yPos + 15;
+    
+    doc.setFont('helvetica', 'bold');
+    doc.text('Date   : ', detailsX, detailsY);
+    doc.setFont('helvetica', 'normal');
+    doc.text('04nd DECEMBER 2024', detailsX + 25, detailsY);
+    
+    doc.setFont('helvetica', 'bold');
+    doc.text('Mobile No : ', detailsX, detailsY + 7);
+    doc.setFont('helvetica', 'normal');
+    doc.text('9743142447', detailsX + 35, detailsY + 7);
+    
+    doc.setFont('helvetica', 'bold');
+    doc.text('Email : ', detailsX, detailsY + 14);
+    doc.setFont('helvetica', 'normal');
+    doc.text('balakrishna@truepeak.in', detailsX + 25, detailsY + 14);
+
+    return yPos;
+
+} 
+
+function createTable(doc, startY, title, subtitle = null) {
+    let yPosition = startY;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const leftMargin = 18;  // Changed to 10
+    const rightMargin = 10; // Kept as 20
+    const tableWidth = pageWidth - (leftMargin + rightMargin); // Updated calculation
+    
+    // Only add title and subtitle if they are provided
+    // if (title) {
+    //     doc.setFont('helvetica', 'bold');
+    //     doc.setFontSize(12);
+    //     doc.text(title, pageWidth / 2, yPosition, { align: 'center' });
+        
+    //     // Add underline for title
+    //     const lineWidth = doc.getStringUnitWidth(title) * doc.getFontSize() / doc.internal.scaleFactor;
+    //     const lineStart = (pageWidth - lineWidth) / 2;
+    //     doc.line(lineStart, yPosition + 1, lineStart + lineWidth, yPosition + 1);
+    // }
+    
+    if (subtitle) {
+        yPosition += 5;
+        doc.rect(leftMargin, yPosition, tableWidth, 8);  // Updated to use leftMargin
+        doc.setFontSize(9);
+        doc.text(subtitle, pageWidth / 2, yPosition + 5.5, { align: 'center' });
+        yPosition += 8;
+    }
+    
+    const col1Width = 7;
+    const col2Width = 85;
+    const col3Width = tableWidth - col1Width - col2Width;
+    
+function addAddressRow(number, description, addressData) {
+    // Set consistent font size and calculate widths
+    
+    const col1Width = 7;
+    const col2Width = 45;
+    const col3Width = tableWidth - col1Width - col2Width;
+    const col3SplitWidth = col3Width / 4;  // Split into 4 equal columns
+    
+    const calculateRow4Height = (texts) => {
+        const lineHeight = 3.;
+        let basePadding = 2;
+        let maxLines = 1;
+        
+        // Special handling for legal address
+        if (texts[0] === 'LEGAL ADDRESS') {
+            const legalAddressText = texts[1] || '';
+            const splitText = doc.splitTextToSize(legalAddressText, (col3Width - col3SplitWidth) - 6);
+            
+            // Increase padding if text is longer than threshold (adjust threshold as needed)
+            if (legalAddressText.length > 30) {  // you can adjust this threshold
+                basePadding = 6;  // triple the padding
+            }
+            
+            maxLines = Math.max(maxLines, splitText.length);
+        } else {
+            // Original calculation for non-legal address rows
+            texts.forEach(text => {
+                if (text) {
+                    const splitText = doc.splitTextToSize(text, col3SplitWidth - 6);
+                    maxLines = Math.max(maxLines, splitText.length);
+                }
+            });
+        }
+        
+        return (maxLines * lineHeight) + basePadding - 2;
+    };
+    
+    
+    // Calculate max text length for each row to determine height
+    const calculateRowHeight = (texts) => {
+        const lineHeight = 3.1;
+        const padding = 2;
+        let maxLines = 1;
+        
+        texts.forEach(text => {
+            if (text) {
+                // Add extra padding to ensure text stays within cell
+                const splitText = doc.splitTextToSize(text, col3SplitWidth - 6); 
+                maxLines = Math.max(maxLines, splitText.length);
+            }
+        });
+        
+        return (maxLines * lineHeight) + padding * 2; // Added extra padding
+    };
+    
+    // Calculate heights for each row
+    const row1Height = calculateRowHeight(addressData.row1);
+    const row2Height = calculateRowHeight(addressData.row2);
+    const row3Height = calculateRowHeight(addressData.row3);
+    const row4Height = calculateRow4Height([addressData.row4[0], addressData.row4[1]]);
+    
+    const totalHeight = row1Height + row2Height + row3Height + row4Height;
+    
+    // Draw main columns
+    doc.rect(leftMargin, yPosition, col1Width, totalHeight);
+    doc.rect(leftMargin + col1Width, yPosition, col2Width, totalHeight);
+    
+    // Starting position for third column
+    const col3Start = leftMargin + col1Width + col2Width;
+    
+    // Current Y position tracker
+    let currentY = yPosition;
+    
+    // Draw and fill first three rows
+    const drawRow = (rowData, rowHeight, rowIndex) => {
+        for (let j = 0; j < 4; j++) {
+            doc.rect(
+                col3Start + (j * col3SplitWidth),
+                currentY,
+                col3SplitWidth,
+                rowHeight
+            );
+            
+            // Add text with proper wrapping
+            if (rowData[j]) {
+                const splitText = doc.splitTextToSize(rowData[j], col3SplitWidth - 6);
+                doc.text(splitText, col3Start + (j * col3SplitWidth) + 2, currentY + 4);
+            }
+        }
+        currentY += rowHeight;
+    };
+    
+    // Draw first three rows
+    drawRow(addressData.row1, row1Height, 0);
+    drawRow(addressData.row2, row2Height, 1);
+    drawRow(addressData.row3, row3Height, 2);
+    
+    // Draw last row with two columns
+    const lastRowCol1Width = col3Width / 4;
+    doc.rect(col3Start, currentY, lastRowCol1Width, row4Height);
+    doc.rect(col3Start + lastRowCol1Width, currentY, col3Width - lastRowCol1Width, row4Height);
+    
+    // Add text for last row with proper wrapping
+    if (addressData.row4[0]) {
+        const splitText = doc.splitTextToSize(addressData.row4[0], lastRowCol1Width - 6);
+        doc.text(splitText, col3Start + 2, currentY + 4);
+    }
+    if (addressData.row4[1]) {
+        const splitText = doc.splitTextToSize(addressData.row4[1], (col3Width - lastRowCol1Width) - 6);
+        doc.text(splitText, col3Start + lastRowCol1Width + 2, currentY + 4);
+    }
+    
+    // Add number and description
+    doc.setFont('helvetica', 'normal');
+    doc.text(number.toString(), leftMargin + 2, yPosition + 4);
+    const descriptionSplit = doc.splitTextToSize(description, col2Width - 4);
+    doc.text(descriptionSplit, leftMargin + col1Width + 2, yPosition + 4);
+    
+    yPosition += totalHeight;
+    return yPosition;
+}
+
+function addAdjoiningPropertiesRow(number, description, docValue, actualValue) {
+    // Set font size consistently and calculate widths
+    doc.setFontSize(8);
+    const col1Width = 7;
+    const col2Width = 85;
+    const remainingWidth = tableWidth - col1Width - col2Width;
+    const col3Width = remainingWidth / 2;  // Split remaining width into two equal parts
+    const col4Width = remainingWidth / 2;
+
+    // Calculate text heights for auto-adjustment
+    const splitDescription = doc.splitTextToSize(description, col2Width - 4);
+    const splitDocValue = doc.splitTextToSize(docValue, col3Width - 4);
+    const splitActualValue = doc.splitTextToSize(actualValue, col4Width - 4);
+
+    // Calculate max lines for height
+    const descriptionLines = splitDescription.length;
+    const docValueLines = splitDocValue.length;
+    const actualValueLines = splitActualValue.length;
+    const maxLines = Math.max(descriptionLines, docValueLines, actualValueLines);
+
+    // Calculate height
+    const lineHeight = 3.1;
+    const padding = 2;
+    const rowHeight = (maxLines * lineHeight) + padding * 2;
+
+    // Draw columns
+    doc.rect(leftMargin, yPosition, col1Width, rowHeight);
+    doc.rect(leftMargin + col1Width, yPosition, col2Width, rowHeight);
+    doc.rect(leftMargin + col1Width + col2Width, yPosition, col3Width, rowHeight);
+    doc.rect(leftMargin + col1Width + col2Width + col3Width, yPosition, col4Width, rowHeight);
+
+    // Add text
+    doc.setFont('helvetica', 'normal');
+    if (number) {
+        doc.text(number.toString(), leftMargin + 2, yPosition + 4);
+    }
+
+    // Add description
+    doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 4);
+
+    // Add document value and actual value with conditional bold
+    if (docValue === 'As per Document' && actualValue === 'As per Actuals') {
+        // Make headers bold
+        doc.setFont('helvetica', 'bold');
+        doc.text(splitDocValue, leftMargin + col1Width + col2Width + 2, yPosition + 4);
+        doc.text(splitActualValue, leftMargin + col1Width + col2Width + col3Width + 2, yPosition + 4);
+    } else {
+        // Normal text for other rows
+        doc.setFont('helvetica', 'normal');
+        doc.text(splitDocValue, leftMargin + col1Width + col2Width + 2, yPosition + 4);
+        doc.text(splitActualValue, leftMargin + col1Width + col2Width + col3Width + 2, yPosition + 4);
+    }
+
+    yPosition += rowHeight;
+    return yPosition;
+}
+
+
+function addSplitColumnRow(number, description, col3Texts = ['Own Purpose', 'CAPITAL GAINS', 'Banks Purpose', 'Construction Loan']) {
+    // Set font size consistently and calculate widths
+    
+    const col1Width = 7;
+    const col2Width = 85;
+    const col3Width = tableWidth - col1Width - col2Width;
+    const col3SplitWidth = col3Width / 2;  // Split into 2 equal columns for grid
+    
+    // Helper function to calculate lines for a text within a width
+    const getTextLines = (text, width) => {
+        return doc.splitTextToSize(text, width - 6).length;
+    };
+    
+    // Calculate required height only for bottom row in the grid
+    const bottomRowLines = Math.max(
+        getTextLines(col3Texts[2], col3SplitWidth),
+        getTextLines(col3Texts[3], col3SplitWidth)
+    );
+    
+    // Calculate description lines
+    const descriptionSplit = doc.splitTextToSize(description, col2Width - 6);
+    const descriptionLines = descriptionSplit.length;
+    
+    // Calculate row heights
+    const lineHeight = 2.5;
+    const padding = 2;
+    const topRowHeight = lineHeight + padding * 2;  // Fixed height for top row
+    const bottomRowHeight = (bottomRowLines * lineHeight) + padding * 2;
+    const descriptionHeight = (descriptionLines * lineHeight) + padding * 2;
+    
+    // Total height should be maximum of description or sum of grid rows
+    const rowHeight = Math.max(descriptionHeight, topRowHeight + bottomRowHeight);
+    
+    // Draw main columns
+    doc.rect(leftMargin, yPosition, col1Width, rowHeight);
+    doc.rect(leftMargin + col1Width, yPosition, col2Width, rowHeight);
+    
+    // Draw grid in third column
+    const col3Start = leftMargin + col1Width + col2Width;
+    
+    // Draw grid cells with fixed height for top row
+    doc.rect(col3Start, yPosition, col3SplitWidth, topRowHeight);
+    doc.rect(col3Start + col3SplitWidth, yPosition, col3SplitWidth, topRowHeight);
+    doc.rect(col3Start, yPosition + topRowHeight, col3SplitWidth, rowHeight - topRowHeight);
+    doc.rect(col3Start + col3SplitWidth, yPosition + topRowHeight, col3SplitWidth, rowHeight - topRowHeight);
+    
+    // Add text content with proper wrapping
+    doc.setFont('helvetica', 'normal');
+    doc.text(number.toString(), leftMargin + 2, yPosition + 4);
+    doc.text(descriptionSplit, leftMargin + col1Width + 2, yPosition + 4);
+    
+    // Helper function to add wrapped text
+    const addWrappedText = (text, x, y, width) => {
+        const splitText = doc.splitTextToSize(text, width - 6);
+        doc.text(splitText, x, y);
+    };
+    
+    // Add grid cell text - top row with fixed text
+    doc.setFont('helvetica', 'bold');
+    doc.text(col3Texts[0], col3Start + 2, yPosition + 4);
+    doc.text(col3Texts[1], col3Start + col3SplitWidth + 2, yPosition + 4);
+    
+    // Bottom row with auto-wrapped text
+    doc.setFont('helvetica', 'normal');
+    addWrappedText(col3Texts[2], col3Start + 2, yPosition + topRowHeight + 4, col3SplitWidth);
+    addWrappedText(col3Texts[3], col3Start + col3SplitWidth + 2, yPosition + topRowHeight + 4, col3SplitWidth);
+    
+    yPosition += rowHeight;
+    return yPosition;
+}
+
+    function addRow(number, description, value, height = null, no_column = false) {
+    // Set font size consistently
+    
+    
+    // Calculate text length
+    const textLength = description.length + (value ? value.length : 0);
+    
+    // Split text for measurement
+    const splitDescription = doc.splitTextToSize(description, col2Width - 4);
+    const splitValue = value ? doc.splitTextToSize(value, col3Width - 4) : [''];
+    
+    // Get number of lines for both description and value
+    const descriptionLines = splitDescription.length;
+    const valueLines = splitValue.length;
+    
+    // Use the maximum number of lines to determine height
+    const maxLines = Math.max(descriptionLines, valueLines);
+    const lineHeight = 3.1; // Reduced base height per line
+    const padding = 2; // Minimum padding
+    
+    // Calculate height based on content
+    let calculatedHeight;
+    if (maxLines === 1) {
+        calculatedHeight = lineHeight + padding; // Minimum height for single line
+    } else {
+        calculatedHeight = (maxLines * lineHeight) + padding; // Height for multiple lines
+    }
+    
+    
+    // If height parameter is provided, use it as minimum height
+    const rowHeight = height ? Math.max(calculatedHeight, height) : calculatedHeight;
+
+    if (no_column) {
+        // Draw only two columns when no_column is true
+        doc.rect(leftMargin , yPosition, col1Width, rowHeight);
+        
+        if (number) {
+            doc.setFont('helvetica', 'normal');
+            doc.text(number.toString(), leftMargin + 1, yPosition + 3);
+            doc.rect(leftMargin + col1Width, yPosition, col2Width + col3Width, rowHeight);
+
+        }
+        
+        // Set bold font for description when no_column is true
+        doc.setFont('helvetica', 'bold');
+        doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 3);
+    } else {
+        // Original three-column layout
+        doc.rect(leftMargin, yPosition, col1Width, rowHeight);
+        doc.rect(leftMargin + col1Width, yPosition, col2Width, rowHeight);
+        doc.rect(leftMargin + col1Width + col2Width, yPosition, col3Width, rowHeight);
+        
+        if (number) {
+            doc.setFont('helvetica', 'normal');
+            doc.text(number.toString(), leftMargin + 2, yPosition + 3);
+        }
+        
+        doc.setFont('helvetica', 'normal');
+        doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 3);
+        
+        if (value && value.includes('Mrs')) {
+            doc.setFont('helvetica', 'bold');
+        }
+        doc.text(splitValue, leftMargin + col1Width + col2Width + 2, yPosition + 3);
+    }
+    
+    yPosition += rowHeight;
+    return yPosition;
+}
+    
+    return {
+        addRow,
+        addSplitColumnRow,
+        addAddressRow,
+        addAdjoiningPropertiesRow,
+        getPosition: () => yPosition
+    };
+ }
+
+ 
+ function addFooter(doc, pageNumber) {  // Add pageNumber parameter
+    const margin = 10;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    
+    // Add horizontal line at the bottom
+    const footerY = pageHeight - 20;
+    doc.setLineWidth(0.1);
+    doc.line(margin, footerY + 4, pageWidth - margin, footerY + 4);
+    
+    // Add the chartered engineers text
+    doc.setFontSize(9);
+    doc.setTextColor(65, 105, 225); // Blue color
+    doc.setFont('helvetica', 'bold');
+    doc.text('CHARTERED ENGINEERS | STRUCTURAL CONSULTANTS | N.D.T | R&R | VALUATION OF IMMOVABLE PROPERTIES.', 
+        pageWidth / 2, footerY + 9, { align: 'center' });
+    
+    // Add reference number and page number on next line
+    doc.setFontSize(9);
+    doc.setTextColor(0, 0, 0); // Reset back to black for subsequent text
+    // Reference number on left
+    doc.text('TP/JCB/K-BKR/R-09/12/2024-25', margin + 5, footerY + 15);
+    // Page number on right with automatic numbering
+    doc.text(`Page ${pageNumber}`, pageWidth - margin - 20, footerY + 15);
+}
+
+
+function container_last_page(doc, imagePath) {
+    // Set initial positions and dimensions
+    const margin = 10;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    
+    // Add "PHOTOGRAPHS:" text
+    let yPosition = 30;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('PHOTOGRAPHS:', margin, yPosition);
+    
+    // Calculate image dimensions and spacing
+    const imageWidth = (pageWidth - (2 * margin) - 20) / 3;
+    const imageHeight = (pageHeight - yPosition - margin - 60) / 3;
+    const spacing = 10;
+    
+    // Starting position for the grid
+    let startY = yPosition + 10;
+    
+    try {
+        // Create a 3x3 grid of images
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                const x = margin + (col * (imageWidth + spacing));
+                const y = startY + (row * (imageHeight + spacing));
+                
+                // Add the image to each cell
+                doc.addImage(imagePath, 'JPEG', x, y, imageWidth, imageHeight);
+                
+                // Draw border around the image
+                doc.rect(x, y, imageWidth, imageHeight);
+            }
+        }
+    } catch (error) {
+        console.error('Error adding images:', error);
+        
+        // Fallback to placeholders if image loading fails
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                const x = margin + (col * (imageWidth + spacing));
+                const y = startY + (row * (imageHeight + spacing));
+                
+                // Draw border and placeholder
+                doc.rect(x, y, imageWidth, imageHeight);
+                doc.setFontSize(8);
+                doc.text(`Photo ${row * 3 + col + 1}`, x + 2, y + 5);
+            }
+        }
+    }
+    
+    return startY + (3 * (imageHeight + spacing));
+}
+
+async function generatePDF(Container_1) {
+   const { jsPDF } = window.jspdf;
+   const doc = new jsPDF();
+   let currentPage = 1;
+
+   await Container1(doc, Container_1)
+   addFooter(doc, currentPage++)
+
+//    doc.addPage()
+//    Container2(doc, Container_2)
+//    addFooter(doc, currentPage++)
+
+//    doc.addPage()
+//    Container3(doc, Container_3)
+//    addFooter(doc, currentPage++)
+
+//    doc.addPage()
+//    Container4(doc, Container_4)
+//    addFooter(doc, currentPage++)
+
+//    doc.addPage()
+//    header(doc, page=5)
+//    Container5(doc)
+//    addFooter(doc, currentPage++)
+
+//    doc.addPage()
+//    header(doc, page=6)
+//    Container6(doc)
+//    addFooter(doc, currentPage++)
+   
+//    doc.addPage()
+//    header(doc, page=7)
+//    Container7(doc)
+//    addFooter(doc)
+
+//    doc.addPage()
+//    header(doc, page=8)
+//    container_last_page(doc, 'images/building.jpeg');
+//    addFooter(doc)
+
+//    doc.save('Final_version.pdf');
+   return doc;
+}

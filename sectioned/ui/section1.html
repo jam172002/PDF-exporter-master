@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation Report Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Valuation Report Generator Section 1</h1>
+        <form id="valuationFormSection1">
+
+            <div class="form-group">
+                <label>Bank Details<span class="required">*</span></label>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <!-- Bank Manager Title -->
+                    <input type="text" id="managerTitle" value="To," readonly
+                        style="width: 50px; background-color: #f4f4f4;">
+
+                    <!-- Manager Designation -->
+                    <input type="text" id="managerDesignation" placeholder="THE MANAGER (Branch Head)" required>
+
+                    <!-- Bank Name -->
+                    <input type="text" id="bankName" placeholder="THE JANATHA CO-OPERATIVE BANK Ltd" required>
+
+                    <!-- Branch Location -->
+                    <input type="text" id="branchLocation" placeholder="MALLESHWARAM" required>
+                </div>
+            </div>
+
+            <!-- Container 1 -->
+            <div class="form-section" id="section1" style="display: block;">
+
+                <div class="form-group">
+                    <label>Type of Property<span class="required">*</span></label>
+                    <select id="propertyType" required>
+                        <option value="">Select Property Type</option>
+                        <option value="SITE / LAND">SITE / LAND</option>
+                        <option value="LAND & BUILDING">LAND & BUILDING</option>
+                        <option value="UNDER CONSTRUCTION LAND & BUILDING">UNDER CONSTRUCTION LAND & BUILDING</option>
+                        <option value="FLAT">FLAT</option>
+                        <option value="UNDER CONSTRUCTION FLAT">UNDER CONSTRUCTION FLAT</option>
+                        <option value="COMMERCIAL LAND BILDING">COMMERCIAL LAND BILDING</option>
+                        <option value="INDUSTRIAL LAND & BUILDING">INDUSTRIAL LAND & BUILDING</option>
+                        <option value="AGRICULTURAL LAND">AGRICULTURAL LAND</option>
+                        <option value="AGRICULTURAL LAND & BUILDING">AGRICULTURAL LAND & BUILDING</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Purpose of Valuation<span class="required">*</span></label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="mainPurpose" style="width: 50%;" required onchange="updateSubPurpose()">
+                            <option value="">Select Main Purpose</option>
+                            <option value="Own Purpose">Own Purpose</option>
+                            <option value="Bank's Purpose">Bank's Purpose</option>
+                        </select>
+
+                        <select id="subPurpose" style="width: 50%;" required>
+                            <option value="">Select Sub Purpose</option>
+                            <option value="CAPITAL GAINS">CAPITAL GAINS</option>
+                            <option value="NETWORTH">NETWORTH</option>
+                            <option value="TO KNOW THE FMV">TO KNOW THE FMV</option>
+                            <option value="PURCHASE">PURCHASE</option>
+                            <option value="CONSTRUCTION">CONSTRUCTION</option>
+                            <option value="IMPROVEMENTS">IMPROVEMENTS</option>
+                            <option value="INTERIORS">INTERIORS</option>
+                            <option value="TOP-UP">TOP-UP</option>
+                            <option value="MORTGAGE">MORTGAGE</option>
+                            <option value="REVALUATION">REVALUATION</option>
+                            <option value="EDUCATION">EDUCATION</option>
+                            <option value="VISA">VISA</option>
+                            <option value="COLLATERAL">COLLATERAL</option>
+                            <option value="TAKE OVER">TAKE OVER</option>
+                        </select>
+                    </div>
+                </div>
+
+                <script>
+                    function updateSubPurpose() {
+                        const mainPurpose = document.getElementById('mainPurpose').value;
+                        const subPurpose = document.getElementById('subPurpose');
+
+                        // Clear current selection
+                        subPurpose.value = "";
+
+                        // Enable/disable sub-purpose dropdown based on main purpose selection
+                        if (mainPurpose === "") {
+                            subPurpose.disabled = true;
+                        } else {
+                            subPurpose.disabled = false;
+                        }
+                    }
+
+                    // Initialize the sub-purpose dropdown state
+                    document.addEventListener('DOMContentLoaded', function () {
+                        updateSubPurpose();
+                    });
+                </script>
+
+                <div class="form-group">
+                    <label>Persons Accompanying / Contact No<span class="required">*</span></label>
+                    <input type="text" id="customer_details_b" required>
+                </div>
+
+                <h3 style="color:#4169E1"><b> Customer Details</b></h3>
+
+                <div>
+
+                    <div class="form-group">
+                        <label>Name of Owner<span class="required">*</span></label>
+
+                        <input type="text" id="customerName" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Name of Purchaser<span class="required">*</span></label>
+                        <input type="text" id="customer_details_c" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Application No<span class="required">*</span></label>
+                        <input type="text" id="customer_details_d" required>
+                    </div>
+                </div>
+
+                <h3 style="color:#4169E1"><b> Property Details</b></h3>
+                <div>
+                    <div class="form-group">
+                        <label>Address<span class="required">*</span></label>
+                        <input type="text" id="property_a" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nearby Landmark/Google Map /
+                            Independent access to the property <span class="required">*</span></label>
+                        <input type="text" id="property_b" required>
+                    </div>
+
+                </div>
+
+                <h3 style="color:#4169E1"><b> Document Details</b></h3>
+                <div>
+                    <div class="form-group">
+                        <label>Building Plan<span class="required">*</span></label>
+                        <input type="text" id="document_a" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Name of Approving Authority<span class="required">*</span></label>
+                        <input type="text" id="document_b" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Approval No / Date / Details<span class="required">*</span></label>
+                        <input type="text" id="document_c" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Legal & Other Documents<span class="required">*</span></label>
+                        <input type="text" id="document_d" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Adjoining Properties</label>
+                        <div class="boundaries-grid">
+                            <div class="form-group">
+                                <label>East<span class="required">*</span></label>
+                                <input type="text" id="eastBoundary" required>
+                            </div>
+                            <div class="form-group">
+                                <label>West<span class="required">*</span></label>
+                                <input type="text" id="westBoundary" required>
+                            </div>
+                            <div class="form-group">
+                                <label>North<span class="required">*</span></label>
+                                <input type="text" id="northBoundary" required>
+                            </div>
+                            <div class="form-group">
+                                <label>South<span class="required">*</span></label>
+                                <input type="text" id="southBoundary" required>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="form-group">
+                        <label>Matching of Boundaries<span class="required">*</span></label>
+                        <input type="text" id="boundaryMatch" required>
+                    </div>
+    
+                    <div class="form-group">
+                        <label>Plot Demarcated<span class="required">*</span></label>
+                        <input type="text" id="plotDemarcation" required>
+                    </div>
+    
+                    <div class="form-group">
+                        <label>Approved and Land Use<span class="required">*</span></label>
+                        <input type="text" id="landUse" required>
+                    </div>
+    
+                    <div class="form-group">
+                        <label>Types of property<span class="required">*</span></label>
+                        <input type="text" id="propertyType" required>
+                    </div>
+
+                </div>
+
+                <button type="button" onclick="nextSection(1)">Next</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function nextSection(currentSection) {
+            // Validate current section
+            const currentDiv = document.getElementById(`section${currentSection}`);
+            const requiredFields = currentDiv.querySelectorAll('[required]');
+            let isValid = true;
+            let missingFields = [];
+
+            // Check all required fields
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                    // Get the field label
+                    const label = field.previousElementSibling.textContent.replace('*', '').trim();
+                    missingFields.push(label);
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in the following fields:\n\n' + missingFields.join('\n'));
+                return;
+            }
+
+            // If validation passes, proceed to next section
+            document.getElementById(`section${currentSection}`).style.display = 'none';
+            document.getElementById(`section${currentSection + 1}`).style.display = 'block';
+        }
+
+        function prevSection(currentSection) {
+            // Hide current section and show previous section
+            document.getElementById(`section${currentSection}`).style.display = 'none';
+            document.getElementById(`section${currentSection - 1}`).style.display = 'block';
+        }
+
+    </script>
+   
+    <script src="index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script>
+
+        // Form submission handler
+        document.getElementById('valuationForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Validate all required fields
+            const requiredFields = this.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const bank_info = {
+                managerTitle: document.getElementById('managerTitle').value,
+                managerDesignation: document.getElementById('managerDesignation').value,
+                bankName: document.getElementById('bankName').value,
+                branchLocation: document.getElementById('branchLocation').value
+            }
+            // Capture form data
+            const Container_1 = {
+                purpose: 'TEST',
+                customerName: document.getElementById('customerName').value,
+                customerDetailsB: document.getElementById('customer_details_b').value,
+                customerDetailsC: document.getElementById('customer_details_c').value,
+                customerDetailsD: document.getElementById('customer_details_d').value,
+                propertyA: document.getElementById('property_a').value,
+                propertyB: document.getElementById('property_b').value,
+                documentA: document.getElementById('document_a').value,
+                documentB: document.getElementById('document_b').value,
+                documentC: document.getElementById('document_c').value,
+                documentD: document.getElementById('document_d').value,
+                // Add more fields as needed
+
+            };
+
+ 
+            console.log(Container_1)
+            // Call the function to generate the PDF
+            try {
+                // Wait for the PDF to be generated
+                const doc = await generatePDF(bank_info, Container_1, Container_2, Container_3, Container_4);
+
+                // Save the generated PDF
+                doc.save('valuation_report.pdf');
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('There was an error generating the PDF. Please try again.');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

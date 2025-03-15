@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation Report Generator Section 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Valuation Report Generator</h1>
+        <form id="valuationForm">
+
+            <!-- Container 2 -->
+            <div class="form-section" id="section2" >
+                <h3 style="color:#4169E1"><b>Physical Details</b></h3>
+
+                <div class="form-group">
+                    <label>Adjoining Properties</label>
+                    <div class="boundaries-grid">
+                        <div class="form-group">
+                            <label>East<span class="required">*</span></label>
+                            <input type="text" id="eastBoundary" required>
+                        </div>
+                        <div class="form-group">
+                            <label>West<span class="required">*</span></label>
+                            <input type="text" id="westBoundary" required>
+                        </div>
+                        <div class="form-group">
+                            <label>North<span class="required">*</span></label>
+                            <input type="text" id="northBoundary" required>
+                        </div>
+                        <div class="form-group">
+                            <label>South<span class="required">*</span></label>
+                            <input type="text" id="southBoundary" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Matching of Boundaries<span class="required">*</span></label>
+                    <input type="text" id="boundaryMatch" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Plot Demarcated<span class="required">*</span></label>
+                    <input type="text" id="plotDemarcation" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Approved and Land Use<span class="required">*</span></label>
+                    <input type="text" id="landUse" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Types of property<span class="required">*</span></label>
+                    <input type="text" id="propertyType" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Details of Accommodations</label>
+                    <div class="accommodations-grid">
+                        <div class="form-group">
+                            <label>Living/Dining<span class="required">*</span></label>
+                            <input type="text" id="livingStatus" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Bedroom & Pooja Room<span class="required">*</span></label>
+                            <input type="text" id="bedroomStatus" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Toilet<span class="required">*</span></label>
+                            <input type="text" id="toiletStatus" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Kitchen<span class="required">*</span></label>
+                            <input type="text" id="kitchenStatus" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Total No of Floors<span class="required">*</span></label>
+                    <input type="text" id="totalFloors" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Floor on which the property is located </label><span class="required">*</span></label>
+                    <input type="text" id="propertyFloor" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Year of construction </label><span class="required">*</span></label>
+                    <input type="text" id="constructionYear" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Approx. age of the Property </label><span class="required">*</span></label>
+                    <input type="text" id="propertyAge" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Residual age of the Property </label><span class="required">*</span></label>
+                    <input type="text" id="residualAge" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Type of structure </label><span class="required">*</span></label>
+                    <input type="text" id="structureType" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Amenities provided </label><span class="required">*</span></label>
+                    <input type="text" id="amenities" required>
+                </div>
+
+                <button type="button" onclick="prevSection(2)">Previous</button>
+                <button type="button" onclick="nextSection(2)">Next</button>
+            </div>                    
+        </form>
+    </div>
+
+    <script>
+        function nextSection(currentSection) {
+            // Validate current section
+            const currentDiv = document.getElementById(`section${currentSection}`);
+            const requiredFields = currentDiv.querySelectorAll('[required]');
+            let isValid = true;
+            let missingFields = [];
+
+            // Check all required fields
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                    // Get the field label
+                    const label = field.previousElementSibling.textContent.replace('*', '').trim();
+                    missingFields.push(label);
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in the following fields:\n\n' + missingFields.join('\n'));
+                return;
+            }
+
+            // If validation passes, proceed to next section
+            document.getElementById(`section${currentSection}`).style.display = 'none';
+            document.getElementById(`section${currentSection + 1}`).style.display = 'block';
+        }
+
+        function prevSection(currentSection) {
+            // Hide current section and show previous section
+            document.getElementById(`section${currentSection}`).style.display = 'none';
+            document.getElementById(`section${currentSection - 1}`).style.display = 'block';
+        }
+
+
+    </script>
+
+    <script src="index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+
+    <script>
+
+        // Form submission handler
+        document.getElementById('valuationForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Validate all required fields
+            const requiredFields = this.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const bank_info = {
+                managerTitle: document.getElementById('managerTitle').value,
+                managerDesignation: document.getElementById('managerDesignation').value,
+                bankName: document.getElementById('bankName').value,
+                branchLocation: document.getElementById('branchLocation').value
+            }
+            // Capture form data
+            const Container_1 = {
+                purpose: 'TEST',
+                customerName: document.getElementById('customerName').value,
+                customerDetailsB: document.getElementById('customer_details_b').value,
+                customerDetailsC: document.getElementById('customer_details_c').value,
+                customerDetailsD: document.getElementById('customer_details_d').value,
+                propertyA: document.getElementById('property_a').value,
+                propertyB: document.getElementById('property_b').value,
+                documentA: document.getElementById('document_a').value,
+                documentB: document.getElementById('document_b').value,
+                documentC: document.getElementById('document_c').value,
+                documentD: document.getElementById('document_d').value,
+                // Add more fields as needed
+
+            };
+
+            const Container_2 = {
+                eastBoundary: document.getElementById('eastBoundary').value,
+                westBoundary: document.getElementById('westBoundary').value,
+                northBoundary: document.getElementById('northBoundary').value,
+                southBoundary: document.getElementById('southBoundary').value,
+                boundaryMatch: document.getElementById('boundaryMatch').value,
+                plotDemarcation: document.getElementById('plotDemarcation').value,
+                landUse: document.getElementById('landUse').value,
+                propertyType: document.getElementById('propertyType').value,
+                livingStatus: document.getElementById('livingStatus').value,
+                bedroomStatus: document.getElementById('bedroomStatus').value,
+                toiletStatus: document.getElementById('toiletStatus').value,
+                kitchenStatus: document.getElementById('kitchenStatus').value,
+
+                totalFloors: document.getElementById('totalFloors').value,
+                propertyFloor: document.getElementById('propertyFloor').value,
+                constructionYear: document.getElementById('constructionYear').value,
+                propertyAge: document.getElementById('propertyAge').value,
+                residualAge: document.getElementById('residualAge').value,
+                structureType: document.getElementById('structureType').value,
+                amenities: document.getElementById('amenities').value
+
+            };
+
+
+            const Container_3 = {
+                existingBuilding: document.getElementById('existingBuilding').value,
+                constructionStage: document.getElementById('constructionStage').value,
+                workCompletion: document.getElementById('workCompletion').value,
+                violations: document.getElementById('violations').value,
+                siteArea: document.getElementById('siteArea').value,
+                plinthArea: document.getElementById('plinthArea').value,
+                govtValue: document.getElementById('govtValue').value,
+                variationJustification: document.getElementById('variationJustification').value,
+                guidelineRate: document.getElementById('guidelineRate').value,
+                marketRate: document.getElementById('marketRate').value,
+                landValue: document.getElementById('landValue').value,
+                buildingValue: document.getElementById('buildingValue').value,
+                extraItems: document.getElementById('extraItems').value,
+                fairMarketValue: document.getElementById('fairMarketValue').value,
+                rentalValue: document.getElementById('rentalValue').value
+            };
+
+            const Container_4 = {
+                // As Per Actuals
+                stiltFloorRoof: document.getElementById('stiltFloorRoof').value,
+                stiltFloorArea: document.getElementById('stiltFloorArea').value,
+                stiltFloorRate: document.getElementById('stiltFloorRate').value,
+                stiltFloorAmount: document.getElementById('stiltFloorAmount').value,
+                stiltFloorDeprn: document.getElementById('stiltFloorDeprn').value,
+                stiltFloorDeprnAmount: document.getElementById('stiltFloorDeprnAmount').value,
+                stiltFloorNetAmount: document.getElementById('stiltFloorNetAmount').value,
+
+                // Ground Floor
+                groundFloorRoof: document.getElementById('groundFloorRoof').value,
+                groundFloorArea: document.getElementById('groundFloorArea').value,
+                groundFloorRate: document.getElementById('groundFloorRate').value,
+                groundFloorAmount: document.getElementById('groundFloorAmount').value,
+                groundFloorDeprn: document.getElementById('groundFloorDeprn').value,
+                groundFloorDeprnAmount: document.getElementById('groundFloorDeprnAmount').value,
+                groundFloorNetAmount: document.getElementById('groundFloorNetAmount').value,
+
+                // Extra Items
+                porticoStatus: document.getElementById('porticoStatus').value,
+                frontDoorStatus: document.getElementById('frontDoorStatus').value,
+                verandahStatus: document.getElementById('verandahStatus').value,
+                boreWellStatus: document.getElementById('boreWellStatus').value,
+                gatesStatus: document.getElementById('gatesStatus').value,
+                extraItemsTotal: document.getElementById('extraItemsTotal').value,
+
+                // Amenities
+                wardrobesStatus: document.getElementById('wardrobesStatus').value,
+                glazedTilesStatus: document.getElementById('glazedTilesStatus').value,
+                bathTubsStatus: document.getElementById('bathTubsStatus').value,
+                marbleFlooringStatus: document.getElementById('marbleFlooringStatus').value,
+                interiorStatus: document.getElementById('interiorStatus').value,
+                architecturalStatus: document.getElementById('architecturalStatus').value,
+                panelingStatus: document.getElementById('panelingStatus').value,
+                aluminiumStatus: document.getElementById('aluminiumStatus').value,
+                handRailsStatus: document.getElementById('handRailsStatus').value,
+                falseCeilingStatus: document.getElementById('falseCeilingStatus').value,
+                amenitiesTotal: document.getElementById('amenitiesTotal').value
+            };
+
+            console.log(Container_1, Container_2, Container_3)
+            // Call the function to generate the PDF
+            try {
+                // Wait for the PDF to be generated
+                const doc = await generatePDF(bank_info, Container_1, Container_2, Container_3, Container_4);
+
+                // Save the generated PDF
+                doc.save('valuation_report.pdf');
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('There was an error generating the PDF. Please try again.');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

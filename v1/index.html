@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation Report Generator</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Valuation Report Generator</h1>
+        <form id="valuationForm">
+
+            <div class="form-group">
+                <label>Bank Details<span class="required">*</span></label>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <!-- Bank Manager Title -->
+                    <input type="text" id="managerTitle" value="To," readonly
+                        style="width: 50px; background-color: #f4f4f4;">
+
+                    <!-- Manager Designation -->
+                    <input type="text" id="managerDesignation" placeholder="THE MANAGER (Branch Head)" required>
+
+                    <!-- Bank Name -->
+                    <input type="text" id="bankName" placeholder="THE JANATHA CO-OPERATIVE BANK Ltd" required>
+
+                    <!-- Branch Location -->
+                    <input type="text" id="branchLocation" placeholder="MALLESHWARAM" required>
+                </div>
+            </div>
+
+            <!-- Container 1 -->
+            <div class="form-section" id="section1" style="display: block;">
+
+                <div class="form-group">
+                    <label>Type of Property<span class="required">*</span></label>
+                    <select id="propertyType" required>
+                        <option value="">Select Property Type</option>
+                        <option value="SITE / LAND">SITE / LAND</option>
+                        <option value="LAND & BUILDING">LAND & BUILDING</option>
+                        <option value="UNDER CONSTRUCTION LAND & BUILDING">UNDER CONSTRUCTION LAND & BUILDING</option>
+                        <option value="FLAT">FLAT</option>
+                        <option value="UNDER CONSTRUCTION FLAT">UNDER CONSTRUCTION FLAT</option>
+                        <option value="COMMERCIAL LAND BILDING">COMMERCIAL LAND BILDING</option>
+                        <option value="INDUSTRIAL LAND & BUILDING">INDUSTRIAL LAND & BUILDING</option>
+                        <option value="AGRICULTURAL LAND">AGRICULTURAL LAND</option>
+                        <option value="AGRICULTURAL LAND & BUILDING">AGRICULTURAL LAND & BUILDING</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Purpose of Valuation<span class="required">*</span></label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="mainPurpose" style="width: 50%;" required onchange="updateSubPurpose()">
+                            <option value="">Select Main Purpose</option>
+                            <option value="Own Purpose">Own Purpose</option>
+                            <option value="Bank's Purpose">Bank's Purpose</option>
+                        </select>
+
+                        <select id="subPurpose" style="width: 50%;" required>
+                            <option value="">Select Sub Purpose</option>
+                            <option value="CAPITAL GAINS">CAPITAL GAINS</option>
+                            <option value="NETWORTH">NETWORTH</option>
+                            <option value="TO KNOW THE FMV">TO KNOW THE FMV</option>
+                            <option value="PURCHASE">PURCHASE</option>
+                            <option value="CONSTRUCTION">CONSTRUCTION</option>
+                            <option value="IMPROVEMENTS">IMPROVEMENTS</option>
+                            <option value="INTERIORS">INTERIORS</option>
+                            <option value="TOP-UP">TOP-UP</option>
+                            <option value="MORTGAGE">MORTGAGE</option>
+                            <option value="REVALUATION">REVALUATION</option>
+                            <option value="EDUCATION">EDUCATION</option>
+                            <option value="VISA">VISA</option>
+                            <option value="COLLATERAL">COLLATERAL</option>
+                            <option value="TAKE OVER">TAKE OVER</option>
+                        </select>
+                    </div>
+                </div>
+
+                <script>
+                    function updateSubPurpose() {
+                        const mainPurpose = document.getElementById('mainPurpose').value;
+                        const subPurpose = document.getElementById('subPurpose');
+
+                        // Clear current selection
+                        subPurpose.value = "";
+
+                        // Enable/disable sub-purpose dropdown based on main purpose selection
+                        if (mainPurpose === "") {
+                            subPurpose.disabled = true;
+                        } else {
+                            subPurpose.disabled = false;
+                        }
+                    }
+
+                    // Initialize the sub-purpose dropdown state
+                    document.addEventListener('DOMContentLoaded', function () {
+                        updateSubPurpose();
+                    });
+                </script>
+
+                <div class="form-group">
+                    <label>Persons Accompanying / Contact No<span class="required">*</span></label>
+                    <input type="text" id="customer_details_b" required>
+                </div>
+
+                <h3 style="color:#4169E1"><b> Customer Details</b></h3>
+
+                <div>
+
+                    <div class="form-group">
+                        <label>Name of Owner<span class="required">*</span></label>
+
+                        <input type="text" id="customerName" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Name of Purchaser<span class="required">*</span></label>
+                        <input type="text" id="customer_details_c" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Application No<span class="required">*</span></label>
+                        <input type="text" id="customer_details_d" required>
+                    </div>
+                </div>
+
+                <h3 style="color:#4169E1"><b> Property Details</b></h3>
+                <div>
+                    <div class="form-group">
+                        <label>PLOT/ SITE NO<span class="required">*</span></label>
+                        <input type="text" id="property_plot_no" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Survey.No<span class="required">*</span></label>
+                        <input type="text" id="property_survey_no" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>LOCALITY<span class="required">*</span></label>
+                        <input type="text" id="property_locality" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>DISTRICT<span class="required">*</span></label>
+                        <input type="text" id="property_district" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>LAND MARK NEAR<span class="required">*</span></label>
+                        <input type="text" id="property_landmark" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>DISTANCE<span class="required">*</span></label>
+                        <input type="text" id="property_distance" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>LEGAL ADDRESS<span class="required">*</span></label>
+                        <input type="text" id="property_legal_address" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nearby Landmark/Google Map / Independent access to the property<span class="required">*</span></label>
+                        <input type="text" id="property_nearby_landmark" required>
+                    </div>
+                </div>
+
+                <h3 style="color:#4169E1"><b> Document Details</b></h3>
+                <div>
+                    <div class="form-group">
+                        <label>Building Plan<span class="required">*</span></label>
+                        <input type="text" id="document_a" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Name of Approving Authority<span class="required">*</span></label>
+                        <input type="text" id="document_b" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Approval No / Date / Details<span class="required">*</span></label>
+                        <input type="text" id="document_c" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Legal & Other Documents<span class="required">*</span></label>
+                        <input type="text" id="document_d" required>
+                    </div>
+
+                </div>
+
+                <!-- <button type="button" onclick="nextSection(1)">Next</button> -->
+                <button type="submit">Generate Valuation Report PDF</button>
+            </div>
+        </form>
+    </div>
+    <script src="index.js"></script>
+    <script src="submit_form.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation Report Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Valuation Report Generator</h1>
+        <form id="valuationForm">          
+
+            <!-- Container 4 -->
+            <div class="form-section" id="section4">
+                <h3 style="color:#4169E1"><b>Building Value</b></h3>
+
+                <div class="table-container">
+                    <table id="buildingValueTable" class="building-value-table">
+                        <thead>
+                            <tr>
+                                <th>SL No.</th>
+                                <th>PARTICULARS</th>
+                                <th>ROOF</th>
+                                <th>AREA IN SFT</th>
+                                <th>RATE IN Rs</th>
+                                <th>AMOUNT IN Rs</th>
+                                <th>DEPRN IN %</th>
+                                <th>DEPRN AMOUNT</th>
+                                <th>NET AMOUNT</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="buildingValueTableBody">
+                            <!-- Rows will be added here -->
+                        </tbody>
+                    </table>
+                    <button type="button" onclick="addNewRow()" class="add-row-btn">Add Row</button>
+                </div>
+
+                <!-- As Per Actuals Section -->
+                <h4>As Per Actuals</h4>
+
+                <!-- Stilt Floor -->
+                <div class="form-group">
+                    <label>Stilt Floor Roof Type<span class="required">*</span></label>
+                    <input type="text" id="stiltFloorRoof" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Area (SFT)<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorArea" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Rate (Rs)<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorRate" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Amount (Rs)<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorAmount" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Depreciation (%)<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorDeprn" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Depreciation Amount<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorDeprnAmount" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Net Amount<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorNetAmount" required>
+                </div>
+
+                <!-- Ground Floor -->
+                <div class="form-group">
+                    <label>Ground Floor Roof Type<span class="required">*</span></label>
+                    <input type="text" id="groundFloorRoof" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Area (SFT)<span class="required">*</span></label>
+                    <input type="number" id="groundFloorArea" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Rate (Rs)<span class="required">*</span></label>
+                    <input type="number" id="groundFloorRate" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Amount (Rs)<span class="required">*</span></label>
+                    <input type="number" id="groundFloorAmount" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Depreciation (%)<span class="required">*</span></label>
+                    <input type="number" id="groundFloorDeprn" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Depreciation Amount<span class="required">*</span></label>
+                    <input type="number" id="groundFloorDeprnAmount" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Net Amount<span class="required">*</span></label>
+                    <input type="number" id="groundFloorNetAmount" required>
+                </div>
+
+                <h4>Extra Items</h4>
+                <!-- Extra Items Section -->
+                <div class="form-group">
+                    <label>Portico Status<span class="required">*</span></label>
+                    <input type="text" id="porticoStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Ornamental Front Door Status<span class="required">*</span></label>
+                    <input type="text" id="frontDoorStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Verandah Status<span class="required">*</span></label>
+                    <input type="text" id="verandahStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Bore Well Status<span class="required">*</span></label>
+                    <input type="text" id="boreWellStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Gates Status<span class="required">*</span></label>
+                    <input type="text" id="gatesStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Extra Items Total (Rs)<span class="required">*</span></label>
+                    <input type="number" id="extraItemsTotal" required>
+                </div>
+
+                <h4>Amenities</h4>
+                <!-- Amenities Section -->
+                <div class="form-group">
+                    <label>Wardrobes Status<span class="required">*</span></label>
+                    <input type="text" id="wardrobesStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Glazed Tiles Status<span class="required">*</span></label>
+                    <input type="text" id="glazedTilesStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Bath Tubs Status<span class="required">*</span></label>
+                    <input type="text" id="bathTubsStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Marble Flooring Status<span class="required">*</span></label>
+                    <input type="text" id="marbleFlooringStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Interior Decorations Status<span class="required">*</span></label>
+                    <input type="text" id="interiorStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Architectural Works Status<span class="required">*</span></label>
+                    <input type="text" id="architecturalStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Paneling Works Status<span class="required">*</span></label>
+                    <input type="text" id="panelingStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Aluminium Works Status<span class="required">*</span></label>
+                    <input type="text" id="aluminiumStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Hand Rails Status<span class="required">*</span></label>
+                    <input type="text" id="handRailsStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>False Ceiling Status<span class="required">*</span></label>
+                    <input type="text" id="falseCeilingStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Amenities Total (Rs)<span class="required">*</span></label>
+                    <input type="number" id="amenitiesTotal" required>
+                </div>
+
+
+
+                <button type="button" onclick="prevSection(4)">Previous</button>
+                <!-- <button type="button" onclick="nextSection(5)">Next</button> -->
+                <button type="submit">Generate Report</button>
+            </div>
+
+        
+        </form>
+    </div>
+
+    <script>
+        function nextSection(currentSection) {
+            // Validate current section
+            const currentDiv = document.getElementById(`section${currentSection}`);
+            const requiredFields = currentDiv.querySelectorAll('[required]');
+            let isValid = true;
+            let missingFields = [];
+
+            // Check all required fields
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                    // Get the field label
+                    const label = field.previousElementSibling.textContent.replace('*', '').trim();
+                    missingFields.push(label);
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in the following fields:\n\n' + missingFields.join('\n'));
+                return;
+            }
+
+            // If validation passes, proceed to next section
+            document.getElementById(`section${currentSection}`).style.display = 'none';
+            document.getElementById(`section${currentSection + 1}`).style.display = 'block';
+        }
+
+        function prevSection(currentSection) {
+            // Hide current section and show previous section
+            document.getElementById(`section${currentSection}`).style.display = 'none';
+            document.getElementById(`section${currentSection - 1}`).style.display = 'block';
+        }
+
+
+    </script>
+
+    <style>
+        /* Add these new styles while keeping all existing CSS */
+        .form-section button {
+            width: auto;
+            margin-right: 10px;
+            padding: 10px 20px;
+        }
+
+        .form-section button[type="submit"] {
+            width: auto;
+        }
+
+        /* Style for the buttons container */
+        .form-section {
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+
+    <script>
+
+        // Form submission handler
+        document.getElementById('valuationForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Validate all required fields
+            const requiredFields = this.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const bank_info = {
+                managerTitle: document.getElementById('managerTitle').value,
+                managerDesignation: document.getElementById('managerDesignation').value,
+                bankName: document.getElementById('bankName').value,
+                branchLocation: document.getElementById('branchLocation').value
+            }
+            // Capture form data
+            const Container_1 = {
+                purpose: 'TEST',
+                customerName: document.getElementById('customerName').value,
+                customerDetailsB: document.getElementById('customer_details_b').value,
+                customerDetailsC: document.getElementById('customer_details_c').value,
+                customerDetailsD: document.getElementById('customer_details_d').value,
+                propertyA: document.getElementById('property_a').value,
+                propertyB: document.getElementById('property_b').value,
+                documentA: document.getElementById('document_a').value,
+                documentB: document.getElementById('document_b').value,
+                documentC: document.getElementById('document_c').value,
+                documentD: document.getElementById('document_d').value,
+                // Add more fields as needed
+
+            };
+
+            const Container_2 = {
+                eastBoundary: document.getElementById('eastBoundary').value,
+                westBoundary: document.getElementById('westBoundary').value,
+                northBoundary: document.getElementById('northBoundary').value,
+                southBoundary: document.getElementById('southBoundary').value,
+                boundaryMatch: document.getElementById('boundaryMatch').value,
+                plotDemarcation: document.getElementById('plotDemarcation').value,
+                landUse: document.getElementById('landUse').value,
+                propertyType: document.getElementById('propertyType').value,
+                livingStatus: document.getElementById('livingStatus').value,
+                bedroomStatus: document.getElementById('bedroomStatus').value,
+                toiletStatus: document.getElementById('toiletStatus').value,
+                kitchenStatus: document.getElementById('kitchenStatus').value,
+
+                totalFloors: document.getElementById('totalFloors').value,
+                propertyFloor: document.getElementById('propertyFloor').value,
+                constructionYear: document.getElementById('constructionYear').value,
+                propertyAge: document.getElementById('propertyAge').value,
+                residualAge: document.getElementById('residualAge').value,
+                structureType: document.getElementById('structureType').value,
+                amenities: document.getElementById('amenities').value
+
+            };
+
+
+            const Container_3 = {
+                existingBuilding: document.getElementById('existingBuilding').value,
+                constructionStage: document.getElementById('constructionStage').value,
+                workCompletion: document.getElementById('workCompletion').value,
+                violations: document.getElementById('violations').value,
+                siteArea: document.getElementById('siteArea').value,
+                plinthArea: document.getElementById('plinthArea').value,
+                govtValue: document.getElementById('govtValue').value,
+                variationJustification: document.getElementById('variationJustification').value,
+                guidelineRate: document.getElementById('guidelineRate').value,
+                marketRate: document.getElementById('marketRate').value,
+                landValue: document.getElementById('landValue').value,
+                buildingValue: document.getElementById('buildingValue').value,
+                extraItems: document.getElementById('extraItems').value,
+                fairMarketValue: document.getElementById('fairMarketValue').value,
+                rentalValue: document.getElementById('rentalValue').value
+            };
+
+            const Container_4 = {
+                // As Per Actuals
+                stiltFloorRoof: document.getElementById('stiltFloorRoof').value,
+                stiltFloorArea: document.getElementById('stiltFloorArea').value,
+                stiltFloorRate: document.getElementById('stiltFloorRate').value,
+                stiltFloorAmount: document.getElementById('stiltFloorAmount').value,
+                stiltFloorDeprn: document.getElementById('stiltFloorDeprn').value,
+                stiltFloorDeprnAmount: document.getElementById('stiltFloorDeprnAmount').value,
+                stiltFloorNetAmount: document.getElementById('stiltFloorNetAmount').value,
+
+                // Ground Floor
+                groundFloorRoof: document.getElementById('groundFloorRoof').value,
+                groundFloorArea: document.getElementById('groundFloorArea').value,
+                groundFloorRate: document.getElementById('groundFloorRate').value,
+                groundFloorAmount: document.getElementById('groundFloorAmount').value,
+                groundFloorDeprn: document.getElementById('groundFloorDeprn').value,
+                groundFloorDeprnAmount: document.getElementById('groundFloorDeprnAmount').value,
+                groundFloorNetAmount: document.getElementById('groundFloorNetAmount').value,
+
+                // Extra Items
+                porticoStatus: document.getElementById('porticoStatus').value,
+                frontDoorStatus: document.getElementById('frontDoorStatus').value,
+                verandahStatus: document.getElementById('verandahStatus').value,
+                boreWellStatus: document.getElementById('boreWellStatus').value,
+                gatesStatus: document.getElementById('gatesStatus').value,
+                extraItemsTotal: document.getElementById('extraItemsTotal').value,
+
+                // Amenities
+                wardrobesStatus: document.getElementById('wardrobesStatus').value,
+                glazedTilesStatus: document.getElementById('glazedTilesStatus').value,
+                bathTubsStatus: document.getElementById('bathTubsStatus').value,
+                marbleFlooringStatus: document.getElementById('marbleFlooringStatus').value,
+                interiorStatus: document.getElementById('interiorStatus').value,
+                architecturalStatus: document.getElementById('architecturalStatus').value,
+                panelingStatus: document.getElementById('panelingStatus').value,
+                aluminiumStatus: document.getElementById('aluminiumStatus').value,
+                handRailsStatus: document.getElementById('handRailsStatus').value,
+                falseCeilingStatus: document.getElementById('falseCeilingStatus').value,
+                amenitiesTotal: document.getElementById('amenitiesTotal').value
+            };
+
+            console.log(Container_1, Container_2, Container_3)
+            // Call the function to generate the PDF
+            try {
+                // Wait for the PDF to be generated
+                const doc = await generatePDF(bank_info, Container_1, Container_2, Container_3, Container_4);
+
+                // Save the generated PDF
+                doc.save('valuation_report.pdf');
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('There was an error generating the PDF. Please try again.');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

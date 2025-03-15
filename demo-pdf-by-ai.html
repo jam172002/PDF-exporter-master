@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation Report Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .required {
+            color: red;
+            margin-left: 3px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0052a3;
+        }
+
+        .boundaries-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .accommodations-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Valuation Report Generator</h1>
+        <form id="valuationForm">
+            <div class="form-group">
+                <label>Purpose of Valuation<span class="required">*</span></label>
+                <select id="purpose" required>
+                    <option value="">Select Purpose</option>
+                    <option value="For Bank's purpose - Construction Loan">For Bank's purpose - Construction Loan</option>
+                    <option value="For Bank's purpose - Home Loan">For Bank's purpose - Home Loan</option>
+                    <option value="For Bank's purpose - Mortgage Loan">For Bank's purpose - Mortgage Loan</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Customer Name<span class="required">*</span></label>
+                <input type="text" id="customerName" required placeholder="e.g., Mrs RIZWANA.A.PATEL & Mr ALTAF.D.PATEL">
+            </div>
+
+            <div class="form-group">
+                <label>Mobile Number<span class="required">*</span></label>
+                <input type="tel" id="mobileNo" required pattern="[0-9]{10}" placeholder="e.g., 9810705282">
+            </div>
+
+            <div class="form-group">
+                <label>Property Address<span class="required">*</span></label>
+                <textarea id="propertyAddress" required placeholder="Enter complete property address"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Site Details</label>
+                <input type="text" id="siteNo" placeholder="Site No.">
+            </div>
+
+            <div class="form-group">
+                <label>Building Plan Details</label>
+                <input type="text" id="planApprovalNo" placeholder="Approval No.">
+                <input type="text" id="approvalAuthority" placeholder="Approving Authority">
+            </div>
+
+            <div class="form-group">
+                <label>Boundaries</label>
+                <div class="boundaries-grid">
+                    <input type="text" id="eastBoundary" placeholder="East">
+                    <input type="text" id="westBoundary" placeholder="West">
+                    <input type="text" id="northBoundary" placeholder="North">
+                    <input type="text" id="southBoundary" placeholder="South">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Accommodations</label>
+                <div class="accommodations-grid">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="livingDining">
+                        <label for="livingDining">Living/Dining</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="bedRoom">
+                        <label for="bedRoom">Bed Room</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="toilet">
+                        <label for="toilet">Toilet</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="kitchen">
+                        <label for="kitchen">Kitchen</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Generate Valuation Report PDF</button>
+        </form>
+    </div>
+
+    <script>
+        window.jsPDF = window.jspdf.jsPDF;
+
+        document.getElementById('valuationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generatePDF();
+        });
+
+        function generatePDF() {
+            const doc = new jsPDF();
+
+            // Add company header
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('TRUE PEAK HOUSE LLP', doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+
+            // Add company details
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.text('GSTIN: 29AAUFT3924A1ZW, #240/C, FIRST FLOOR, 3RD BLOCK, NAGARABHAVI 2ND STAGE,', 
+                    doc.internal.pageSize.getWidth() / 2, 25, { align: 'center' });
+            doc.text('Bangalore: 560072, MOB: +91 9743142447 | balakrishna@truepeak.in | www.truepeak.in',
+                    doc.internal.pageSize.getWidth() / 2, 30, { align: 'center' });
+
+            // Add manager section
+            doc.setFontSize(11);
+            doc.text('To,', 20, 40);
+            doc.text('THE MANAGER (Branch Head),', 20, 47);
+            doc.text('THE JANATHA CO-OPERATIVE BANK Ltd,', 20, 54);
+            doc.text('MALLESHWARAM,', 20, 61);
+
+            // Add report title
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('VALUATION REPORT - IMMOVABLE PROPERTY', doc.internal.pageSize.getWidth() / 2, 75, { align: 'center' });
+
+            // Add property type
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Type of Property – Under Construction Residential Land & Building', 20, 85);
+
+            // Create main table
+            const tableData = [
+                ['1', 'Purpose of Valuation', document.getElementById('purpose').value],
+                ['2', 'Name of Customer(s)/ Borrower unit', document.getElementById('customerName').value],
+                ['3', 'Customer Details', ''],
+                ['a', 'Name of Customer/Applicant', document.getElementById('customerName').value],
+                ['b', 'Persons Accompanying / Contact No.', document.getElementById('mobileNo').value],
+                ['4', 'Property Details', ''],
+                ['a', 'Address', document.getElementById('propertyAddress').value],
+                ['5', 'Document Details', ''],
+                ['a', 'Building Plan', ''],
+                ['i', 'Approval No.', document.getElementById('planApprovalNo').value],
+                ['ii', 'Name of Approving Authority', document.getElementById('approvalAuthority').value],
+                ['6', 'Boundaries', ''],
+                ['a', 'East', document.getElementById('eastBoundary').value],
+                ['b', 'West', document.getElementById('westBoundary').value],
+                ['c', 'North', document.getElementById('northBoundary').value],
+                ['d', 'South', document.getElementById('southBoundary').value]
+            ];
+
+            doc.autoTable({
+                startY: 90,
+                head: [['No.', 'Details', 'Information']],
+                body: tableData,
+                theme: 'grid',
+                styles: { fontSize: 9, cellPadding: 2 },
+                columnStyles: {
+                    0: { cellWidth: 15 },
+                    1: { cellWidth: 80 },
+                    2: { cellWidth: 'auto' }
+                },
+                headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold' }
+            });
+
+            // Add footer
+            doc.setFontSize(8);
+            const currentDate = new Date().toISOString().split('T')[0];
+            doc.text('CHARTERED ENGINEERS | STRUCTURAL CONSULTANTS | N.C.T | R&R | VALUATION OF IMMOVABLE PROPERTIES', 20, 280);
+            doc.text(`TP/CB/K-BKL/R-${currentDate}`, 20, 285);
+            doc.text('Page 1', 180, 285);
+
+            // Save the PDF
+            doc.save('valuation-report.pdf');
+        }
+    </script>
+</body>
+</html>

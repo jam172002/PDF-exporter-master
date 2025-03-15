@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation Report Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .required {
+            color: red;
+            margin-left: 3px;
+        }
+
+        .boundaries-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .accommodations-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4169E1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #3151b2;
+        }
+
+        .building-value-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .building-value-table th,
+        .building-value-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .building-value-table th {
+            background-color: #f4f4f4;
+        }
+
+        .add-row-btn {
+            margin-bottom: 20px;
+            background-color: #4CAF50;
+        }
+
+        .delete-row-btn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Valuation Report Generator</h1>
+
+        <form id="valuationForm">
+
+            <div class="form-group">
+                <label>Bank Details<span class="required">*</span></label>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <!-- Bank Manager Title -->
+                    <input type="text" id="managerTitle" value="To," readonly
+                        style="width: 50px; background-color: #f4f4f4;">
+
+                    <!-- Manager Designation -->
+                    <input type="text" id="managerDesignation" placeholder="THE MANAGER (Branch Head)" required>
+
+                    <!-- Bank Name -->
+                    <input type="text" id="bankName" placeholder="THE JANATHA CO-OPERATIVE BANK Ltd" required>
+
+                    <!-- Branch Location -->
+                    <input type="text" id="branchLocation" placeholder="MALLESHWARAM" required>
+                </div>
+            </div>
+
+            <!-- Container 1 -->
+            <div class="form-section" id="section1" style="display: block;">
+
+                <div class="form-group">
+                    <label>Type of Property<span class="required">*</span></label>
+                    <select id="propertyType" required>
+                        <option value="">Select Property Type</option>
+                        <option value="SITE / LAND">SITE / LAND</option>
+                        <option value="LAND & BUILDING">LAND & BUILDING</option>
+                        <option value="UNDER CONSTRUCTION LAND & BUILDING">UNDER CONSTRUCTION LAND & BUILDING</option>
+                        <option value="FLAT">FLAT</option>
+                        <option value="UNDER CONSTRUCTION FLAT">UNDER CONSTRUCTION FLAT</option>
+                        <option value="COMMERCIAL LAND BILDING">COMMERCIAL LAND BILDING</option>
+                        <option value="INDUSTRIAL LAND & BUILDING">INDUSTRIAL LAND & BUILDING</option>
+                        <option value="AGRICULTURAL LAND">AGRICULTURAL LAND</option>
+                        <option value="AGRICULTURAL LAND & BUILDING">AGRICULTURAL LAND & BUILDING</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Purpose of Valuation<span class="required">*</span></label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="mainPurpose" style="width: 50%;" required onchange="updateSubPurpose()">
+                            <option value="">Select Main Purpose</option>
+                            <option value="Own Purpose">Own Purpose</option>
+                            <option value="Bank's Purpose">Bank's Purpose</option>
+                        </select>
+
+                        <select id="subPurpose" style="width: 50%;" required>
+                            <option value="">Select Sub Purpose</option>
+                            <option value="CAPITAL GAINS">CAPITAL GAINS</option>
+                            <option value="NETWORTH">NETWORTH</option>
+                            <option value="TO KNOW THE FMV">TO KNOW THE FMV</option>
+                            <option value="PURCHASE">PURCHASE</option>
+                            <option value="CONSTRUCTION">CONSTRUCTION</option>
+                            <option value="IMPROVEMENTS">IMPROVEMENTS</option>
+                            <option value="INTERIORS">INTERIORS</option>
+                            <option value="TOP-UP">TOP-UP</option>
+                            <option value="MORTGAGE">MORTGAGE</option>
+                            <option value="REVALUATION">REVALUATION</option>
+                            <option value="EDUCATION">EDUCATION</option>
+                            <option value="VISA">VISA</option>
+                            <option value="COLLATERAL">COLLATERAL</option>
+                            <option value="TAKE OVER">TAKE OVER</option>
+                        </select>
+                    </div>
+                </div>
+
+                <script>
+                    function updateSubPurpose() {
+                        const mainPurpose = document.getElementById('mainPurpose').value;
+                        const subPurpose = document.getElementById('subPurpose');
+
+                        // Clear current selection
+                        subPurpose.value = "";
+
+                        // Enable/disable sub-purpose dropdown based on main purpose selection
+                        if (mainPurpose === "") {
+                            subPurpose.disabled = true;
+                        } else {
+                            subPurpose.disabled = false;
+                        }
+                    }
+
+                    // Initialize the sub-purpose dropdown state
+                    document.addEventListener('DOMContentLoaded', function () {
+                        updateSubPurpose();
+                    });
+                </script>
+
+                <div class="form-group">
+                    <label>Persons Accompanying / Contact No<span class="required">*</span></label>
+                    <input type="text" id="customer_details_b" required>
+                </div>
+
+                <h3 style="color:#4169E1"><b> Customer Details</b></h3>
+
+                <div>
+
+                    <div class="form-group">
+                        <label>Name of Owner<span class="required">*</span></label>
+
+                        <input type="text" id="customerName" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Name of Purchaser<span class="required">*</span></label>
+                        <input type="text" id="customer_details_c" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Application No<span class="required">*</span></label>
+                        <input type="text" id="customer_details_d" required>
+                    </div>
+                </div>
+
+                <h3 style="color:#4169E1"><b> Property Details</b></h3>
+                <div>
+                    <div class="form-group">
+                        <label>Address<span class="required">*</span></label>
+                        <input type="text" id="property_a" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nearby Landmark/Google Map /
+                            Independent access to the property <span class="required">*</span></label>
+                        <input type="text" id="property_b" required>
+                    </div>
+
+                </div>
+
+                <h3 style="color:#4169E1"><b> Document Details</b></h3>
+                <div>
+                    <div class="form-group">
+                        <label>Building Plan<span class="required">*</span></label>
+                        <input type="text" id="document_a" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Name of Approving Authority<span class="required">*</span></label>
+                        <input type="text" id="document_b" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Approval No / Date / Details<span class="required">*</span></label>
+                        <input type="text" id="document_c" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Legal & Other Documents<span class="required">*</span></label>
+                        <input type="text" id="document_d" required>
+                    </div>
+
+                </div>
+
+                <button type="button" onclick="nextSection(1)">Next</button>
+            </div>
+
+            <!-- Container 2 -->
+            <div class="form-section" id="section2" style="display: none;">
+                <h3 style="color:#4169E1"><b>Physical Details</b></h3>
+
+                <div class="form-group">
+                    <label>Adjoining Properties</label>
+                    <div class="boundaries-grid">
+                        <div class="form-group">
+                            <label>East<span class="required">*</span></label>
+                            <input type="text" id="eastBoundary" required>
+                        </div>
+                        <div class="form-group">
+                            <label>West<span class="required">*</span></label>
+                            <input type="text" id="westBoundary" required>
+                        </div>
+                        <div class="form-group">
+                            <label>North<span class="required">*</span></label>
+                            <input type="text" id="northBoundary" required>
+                        </div>
+                        <div class="form-group">
+                            <label>South<span class="required">*</span></label>
+                            <input type="text" id="southBoundary" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Matching of Boundaries<span class="required">*</span></label>
+                    <input type="text" id="boundaryMatch" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Plot Demarcated<span class="required">*</span></label>
+                    <input type="text" id="plotDemarcation" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Approved and Land Use<span class="required">*</span></label>
+                    <input type="text" id="landUse" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Types of property<span class="required">*</span></label>
+                    <input type="text" id="propertyType" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Details of Accommodations</label>
+                    <div class="accommodations-grid">
+                        <div class="form-group">
+                            <label>Living/Dining<span class="required">*</span></label>
+                            <input type="text" id="livingStatus" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Bedroom & Pooja Room<span class="required">*</span></label>
+                            <input type="text" id="bedroomStatus" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Toilet<span class="required">*</span></label>
+                            <input type="text" id="toiletStatus" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Kitchen<span class="required">*</span></label>
+                            <input type="text" id="kitchenStatus" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Total No of Floors<span class="required">*</span></label>
+                    <input type="text" id="totalFloors" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Floor on which the property is located </label><span class="required">*</span></label>
+                    <input type="text" id="propertyFloor" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Year of construction </label><span class="required">*</span></label>
+                    <input type="text" id="constructionYear" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Approx. age of the Property </label><span class="required">*</span></label>
+                    <input type="text" id="propertyAge" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Residual age of the Property </label><span class="required">*</span></label>
+                    <input type="text" id="residualAge" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Type of structure </label><span class="required">*</span></label>
+                    <input type="text" id="structureType" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Amenities provided </label><span class="required">*</span></label>
+                    <input type="text" id="amenities" required>
+                </div>
+
+                <button type="button" onclick="prevSection(2)">Previous</button>
+                <button type="button" onclick="nextSection(2)">Next</button>
+            </div>
+
+            <!-- Container 3 -->
+            <div class="form-section" id="section3" style="display: none;">
+                <h3 style="color:#4169E1"><b>Building Status & Valuation</b></h3>
+
+                <div class="form-group">
+                    <label>Existing building<span class="required">*</span></label>
+                    <input type="text" id="existingBuilding" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Stage of construction<span class="required">*</span></label>
+                    <input type="text" id="constructionStage" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Work completion<span class="required">*</span></label>
+                    <input type="text" id="workCompletion" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nature and extent of violations<span class="required">*</span></label>
+                    <textarea id="violations" required></textarea>
+                </div>
+
+                <h4>Area Details</h4>
+                <div class="form-group">
+                    <label>Site Area<span class="required">*</span></label>
+                    <input type="text" id="siteArea" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Carpet area<span class="required">*</span></label>
+                    <input type="text" id="carpetArea" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Saleable area<span class="required">*</span></label>
+                    <input type="text" id="saleableArea" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Remarks<span class="required">*</span></label>
+                    <input type="text" id="Remarks" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Plinth area<span class="required">*</span></label>
+                    <input type="text" id="plinthArea" required>
+                </div>
+
+                <h4>Valuation Details</h4>
+
+                <div class="form-group">
+                    <label>Government Approved Rate<span class="required">*</span></label>
+                    <input type="text" id="govtValue" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Variation Justification<span class="required">*</span></label>
+                    <input type="text" id="variationJustification" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Guideline Rate<span class="required">*</span></label>
+                    <input type="text" id="guidelineRate" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Market Rate<span class="required">*</span></label>
+                    <input type="text" id="marketRate" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Land Value<span class="required">*</span></label>
+                    <input type="text" id="landValue" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Building Value<span class="required">*</span></label>
+                    <input type="text" id="buildingValue" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Extra Items, Amenities & Services<span class="required">*</span></label>
+                    <input type="text" id="extraItems" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Fair Market Value<span class="required">*</span></label>
+                    <input type="text" id="fairMarketValue" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Expected Rental Value<span class="required">*</span></label>
+                    <input type="text" id="rentalValue" required>
+                </div>
+
+                <button type="button" onclick="prevSection(3)">Previous</button>
+                <button type="button" onclick="nextSection(3)">Next</button>
+            </div>
+
+            <div class="form-section" id="section4" style="display: none;">
+                <h3 style="color:#4169E1"><b>Building Value</b></h3>
+
+                <div class="table-container">
+                    <table id="buildingValueTable" class="building-value-table">
+                        <thead>
+                            <tr>
+                                <th>SL No.</th>
+                                <th>PARTICULARS</th>
+                                <th>ROOF</th>
+                                <th>AREA IN SFT</th>
+                                <th>RATE IN Rs</th>
+                                <th>AMOUNT IN Rs</th>
+                                <th>DEPRN IN %</th>
+                                <th>DEPRN AMOUNT</th>
+                                <th>NET AMOUNT</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="buildingValueTableBody">
+                            <!-- Rows will be added here -->
+                        </tbody>
+                    </table>
+                    <button type="button" onclick="addNewRow()" class="add-row-btn">Add Row</button>
+                </div>
+
+                <!-- As Per Actuals Section -->
+                <h4>As Per Actuals</h4>
+
+                <!-- Stilt Floor -->
+                <div class="form-group">
+                    <label>Stilt Floor Roof Type<span class="required">*</span></label>
+                    <input type="text" id="stiltFloorRoof" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Area (SFT)<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorArea" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Rate (Rs)<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorRate" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Amount (Rs)<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorAmount" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Depreciation (%)<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorDeprn" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Depreciation Amount<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorDeprnAmount" required>
+                </div>
+                <div class="form-group">
+                    <label>Stilt Floor Net Amount<span class="required">*</span></label>
+                    <input type="number" id="stiltFloorNetAmount" required>
+                </div>
+
+                <!-- Ground Floor -->
+                <div class="form-group">
+                    <label>Ground Floor Roof Type<span class="required">*</span></label>
+                    <input type="text" id="groundFloorRoof" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Area (SFT)<span class="required">*</span></label>
+                    <input type="number" id="groundFloorArea" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Rate (Rs)<span class="required">*</span></label>
+                    <input type="number" id="groundFloorRate" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Amount (Rs)<span class="required">*</span></label>
+                    <input type="number" id="groundFloorAmount" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Depreciation (%)<span class="required">*</span></label>
+                    <input type="number" id="groundFloorDeprn" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Depreciation Amount<span class="required">*</span></label>
+                    <input type="number" id="groundFloorDeprnAmount" required>
+                </div>
+                <div class="form-group">
+                    <label>Ground Floor Net Amount<span class="required">*</span></label>
+                    <input type="number" id="groundFloorNetAmount" required>
+                </div>
+
+                <h4>Extra Items</h4>
+                <!-- Extra Items Section -->
+                <div class="form-group">
+                    <label>Portico Status<span class="required">*</span></label>
+                    <input type="text" id="porticoStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Ornamental Front Door Status<span class="required">*</span></label>
+                    <input type="text" id="frontDoorStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Verandah Status<span class="required">*</span></label>
+                    <input type="text" id="verandahStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Bore Well Status<span class="required">*</span></label>
+                    <input type="text" id="boreWellStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Gates Status<span class="required">*</span></label>
+                    <input type="text" id="gatesStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Extra Items Total (Rs)<span class="required">*</span></label>
+                    <input type="number" id="extraItemsTotal" required>
+                </div>
+
+                <h4>Amenities</h4>
+                <!-- Amenities Section -->
+                <div class="form-group">
+                    <label>Wardrobes Status<span class="required">*</span></label>
+                    <input type="text" id="wardrobesStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Glazed Tiles Status<span class="required">*</span></label>
+                    <input type="text" id="glazedTilesStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Bath Tubs Status<span class="required">*</span></label>
+                    <input type="text" id="bathTubsStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Marble Flooring Status<span class="required">*</span></label>
+                    <input type="text" id="marbleFlooringStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Interior Decorations Status<span class="required">*</span></label>
+                    <input type="text" id="interiorStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Architectural Works Status<span class="required">*</span></label>
+                    <input type="text" id="architecturalStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Paneling Works Status<span class="required">*</span></label>
+                    <input type="text" id="panelingStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Aluminium Works Status<span class="required">*</span></label>
+                    <input type="text" id="aluminiumStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Hand Rails Status<span class="required">*</span></label>
+                    <input type="text" id="handRailsStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>False Ceiling Status<span class="required">*</span></label>
+                    <input type="text" id="falseCeilingStatus" required>
+                </div>
+                <div class="form-group">
+                    <label>Amenities Total (Rs)<span class="required">*</span></label>
+                    <input type="number" id="amenitiesTotal" required>
+                </div>
+
+
+
+                <button type="button" onclick="prevSection(4)">Previous</button>
+                <!-- <button type="button" onclick="nextSection(5)">Next</button> -->
+                <button type="submit">Generate Report</button>
+            </div>
+
+            <!-- Container 4 -->
+            <!-- <div class="form-section" id="section4" style="display: none;">
+                <div class="form-group">
+                    <label>Boundaries<span class="required">*</span></label>
+                    <div class="boundaries-grid">
+                        <input type="text" id="eastBoundary" placeholder="East" required>
+                        <input type="text" id="westBoundary" placeholder="West" required>
+                        <input type="text" id="northBoundary" placeholder="North" required>
+                        <input type="text" id="southBoundary" placeholder="South" required>
+                    </div>
+                </div>
+                <button type="button" onclick="prevSection(4)">Previous</button>
+                <button type="submit">Generate Valuation Report PDF</button>
+            </div> -->
+        </form>
+    </div>
+
+    <script>
+        function nextSection(currentSection) {
+            // Validate current section
+            const currentDiv = document.getElementById(`section${currentSection}`);
+            const requiredFields = currentDiv.querySelectorAll('[required]');
+            let isValid = true;
+            let missingFields = [];
+
+            // Check all required fields
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                    // Get the field label
+                    const label = field.previousElementSibling.textContent.replace('*', '').trim();
+                    missingFields.push(label);
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in the following fields:\n\n' + missingFields.join('\n'));
+                return;
+            }
+
+            // If validation passes, proceed to next section
+            document.getElementById(`section${currentSection}`).style.display = 'none';
+            document.getElementById(`section${currentSection + 1}`).style.display = 'block';
+        }
+
+        function prevSection(currentSection) {
+            // Hide current section and show previous section
+            document.getElementById(`section${currentSection}`).style.display = 'none';
+            document.getElementById(`section${currentSection - 1}`).style.display = 'block';
+        }
+
+    </script>
+
+    <style>
+        /* Add these new styles while keeping all existing CSS */
+        .form-section button {
+            width: auto;
+            margin-right: 10px;
+            padding: 10px 20px;
+        }
+
+        .form-section button[type="submit"] {
+            width: auto;
+        }
+
+        /* Style for the buttons container */
+        .form-section {
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+
+        // Form submission handler
+        document.getElementById('valuationForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Validate all required fields
+            const requiredFields = this.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const bank_info = {
+                managerTitle: document.getElementById('managerTitle').value,
+                managerDesignation: document.getElementById('managerDesignation').value,
+                bankName: document.getElementById('bankName').value,
+                branchLocation: document.getElementById('branchLocation').value
+            }
+            // Capture form data
+            const Container_1 = {
+                purpose: 'TEST',
+                customerName: document.getElementById('customerName').value,
+                customerDetailsB: document.getElementById('customer_details_b').value,
+                customerDetailsC: document.getElementById('customer_details_c').value,
+                customerDetailsD: document.getElementById('customer_details_d').value,
+                propertyA: document.getElementById('property_a').value,
+                propertyB: document.getElementById('property_b').value,
+                documentA: document.getElementById('document_a').value,
+                documentB: document.getElementById('document_b').value,
+                documentC: document.getElementById('document_c').value,
+                documentD: document.getElementById('document_d').value,
+                // Add more fields as needed
+
+            };
+
+            const Container_2 = {
+                eastBoundary: document.getElementById('eastBoundary').value,
+                westBoundary: document.getElementById('westBoundary').value,
+                northBoundary: document.getElementById('northBoundary').value,
+                southBoundary: document.getElementById('southBoundary').value,
+                boundaryMatch: document.getElementById('boundaryMatch').value,
+                plotDemarcation: document.getElementById('plotDemarcation').value,
+                landUse: document.getElementById('landUse').value,
+                propertyType: document.getElementById('propertyType').value,
+                livingStatus: document.getElementById('livingStatus').value,
+                bedroomStatus: document.getElementById('bedroomStatus').value,
+                toiletStatus: document.getElementById('toiletStatus').value,
+                kitchenStatus: document.getElementById('kitchenStatus').value,
+
+                totalFloors: document.getElementById('totalFloors').value,
+                propertyFloor: document.getElementById('propertyFloor').value,
+                constructionYear: document.getElementById('constructionYear').value,
+                propertyAge: document.getElementById('propertyAge').value,
+                residualAge: document.getElementById('residualAge').value,
+                structureType: document.getElementById('structureType').value,
+                amenities: document.getElementById('amenities').value
+
+            };
+
+
+            const Container_3 = {
+                existingBuilding: document.getElementById('existingBuilding').value,
+                constructionStage: document.getElementById('constructionStage').value,
+                workCompletion: document.getElementById('workCompletion').value,
+                violations: document.getElementById('violations').value,
+                siteArea: document.getElementById('siteArea').value,
+                plinthArea: document.getElementById('plinthArea').value,
+                govtValue: document.getElementById('govtValue').value,
+                variationJustification: document.getElementById('variationJustification').value,
+                guidelineRate: document.getElementById('guidelineRate').value,
+                marketRate: document.getElementById('marketRate').value,
+                landValue: document.getElementById('landValue').value,
+                buildingValue: document.getElementById('buildingValue').value,
+                extraItems: document.getElementById('extraItems').value,
+                fairMarketValue: document.getElementById('fairMarketValue').value,
+                rentalValue: document.getElementById('rentalValue').value
+            };
+
+            const Container_4 = {
+                // As Per Actuals
+                stiltFloorRoof: document.getElementById('stiltFloorRoof').value,
+                stiltFloorArea: document.getElementById('stiltFloorArea').value,
+                stiltFloorRate: document.getElementById('stiltFloorRate').value,
+                stiltFloorAmount: document.getElementById('stiltFloorAmount').value,
+                stiltFloorDeprn: document.getElementById('stiltFloorDeprn').value,
+                stiltFloorDeprnAmount: document.getElementById('stiltFloorDeprnAmount').value,
+                stiltFloorNetAmount: document.getElementById('stiltFloorNetAmount').value,
+
+                // Ground Floor
+                groundFloorRoof: document.getElementById('groundFloorRoof').value,
+                groundFloorArea: document.getElementById('groundFloorArea').value,
+                groundFloorRate: document.getElementById('groundFloorRate').value,
+                groundFloorAmount: document.getElementById('groundFloorAmount').value,
+                groundFloorDeprn: document.getElementById('groundFloorDeprn').value,
+                groundFloorDeprnAmount: document.getElementById('groundFloorDeprnAmount').value,
+                groundFloorNetAmount: document.getElementById('groundFloorNetAmount').value,
+
+                // Extra Items
+                porticoStatus: document.getElementById('porticoStatus').value,
+                frontDoorStatus: document.getElementById('frontDoorStatus').value,
+                verandahStatus: document.getElementById('verandahStatus').value,
+                boreWellStatus: document.getElementById('boreWellStatus').value,
+                gatesStatus: document.getElementById('gatesStatus').value,
+                extraItemsTotal: document.getElementById('extraItemsTotal').value,
+
+                // Amenities
+                wardrobesStatus: document.getElementById('wardrobesStatus').value,
+                glazedTilesStatus: document.getElementById('glazedTilesStatus').value,
+                bathTubsStatus: document.getElementById('bathTubsStatus').value,
+                marbleFlooringStatus: document.getElementById('marbleFlooringStatus').value,
+                interiorStatus: document.getElementById('interiorStatus').value,
+                architecturalStatus: document.getElementById('architecturalStatus').value,
+                panelingStatus: document.getElementById('panelingStatus').value,
+                aluminiumStatus: document.getElementById('aluminiumStatus').value,
+                handRailsStatus: document.getElementById('handRailsStatus').value,
+                falseCeilingStatus: document.getElementById('falseCeilingStatus').value,
+                amenitiesTotal: document.getElementById('amenitiesTotal').value
+            };
+
+            console.log(Container_1, Container_2, Container_3)
+            // Call the function to generate the PDF
+            try {
+                // Wait for the PDF to be generated
+                const doc = await generatePDF(bank_info, Container_1, Container_2, Container_3, Container_4);
+
+                // Save the generated PDF
+                doc.save('valuation_report.pdf');
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('There was an error generating the PDF. Please try again.');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

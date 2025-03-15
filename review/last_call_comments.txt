@@ -1,0 +1,3 @@
+2. show the data from the drop down.
+4. Auto row and coulmn adjustment optional for now [mandatory].
+5. Integrate table component if we have the time.
