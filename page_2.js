@@ -12,29 +12,23 @@ function Container2(doc) {
   
 
    // Document Details section
-   yPos = table.addRow('b', 'Matching of Boundaries', 'Yes');
-   yPos = table.addRow('c', 'Plot Demarcated', 'Yes');
-   yPos = table.addRow('d)', 'Approved and Land Use', 'Residental use');
-   yPos = table.addRow('e)', 'Types of property', 'Under Construction Residential Land & Building');
    yPos = table.addRow('f)', 'Details of Accommodations', 'As per Actual');
-   yPos = table.addRow('b', 'Legal & Other Documents', ' Tax paid receipt dated 03/04/2024 &  Sanction Plan');
+    yPos = table.addRow('b', 'Legal & Other Documents', ' Tax paid receipt dated 03/04/2024 &  Sanction Plan');
+    yPos = table.addRow('i', 'Living/ Dinning', 'UC');
+    yPos = table.addRow('ii', 'Bed Room & Pooja Room', 'UC');
+    yPos = table.addRow('iii', 'Toilet', 'UC');
+    yPos = table.addRow('iv', 'Kitchen', 'UC');
 
+    yPos = table.addRow('g', 'Total No of Floors', 'Stilt + GF + 3 Upper floor + Terrace (As per Plan)');
+    yPos = table.addRow('h', 'Floor on which the property is located', 'NA');
 
-   yPos = table.addRow('i', 'Living/ Dinning', 'UC');
-   yPos = table.addRow('ii', 'Bed Room & Pooja Room', 'UC');
-   yPos = table.addRow('iii', 'Toilet', 'UC');
-   yPos = table.addRow('iv', 'Kitchen', 'UC');
+    yPos = table.addRow('i', 'Year of construction', 'UC');
 
-   yPos = table.addRow('g', 'Total No of Floors', 'Stilt + GF + 3 Upper floor + Terrace (As per Plan)');
-   yPos = table.addRow('h', 'Floor on which the property is located', 'NA');
-
-   yPos = table.addRow('i', 'Year of construction', 'UC');
-
-   yPos = table.addRow('j', 'Approx. age of the Property', 'test');
+    yPos = table.addRow('j', 'Approx. age of the Property', 'test');
 
    yPos = table.addRow('h', 'Residual age of the Property ', '60 Years after completion');
    yPos = table.addRow('k', 'Type of structure', 'Structure')
-   yPos = table.addRow('', 'Amenities provided', 'BW & Sump Provided')
+   yPos = table.addRow('l', 'Amenities provided', 'BW & Sump Provided')
    yPos = table.addRow('7', 'Tenure / Occupancy Details', '',null, true)
    yPos = table.addRow('', 'Status of Tenure', '',null, true)
    yPos = table.addRow('i', 'Owned /Rented ', 'UC');

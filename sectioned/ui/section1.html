@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valuation Report Generator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
@@ -43,7 +43,7 @@
                         <option value="UNDER CONSTRUCTION LAND & BUILDING">UNDER CONSTRUCTION LAND & BUILDING</option>
                         <option value="FLAT">FLAT</option>
                         <option value="UNDER CONSTRUCTION FLAT">UNDER CONSTRUCTION FLAT</option>
-                        <option value="COMMERCIAL LAND BILDING">COMMERCIAL LAND BILDING</option>
+                        <option value="COMMERCIAL LAND BUILDING">COMMERCIAL LAND BUILDING</option>
                         <option value="INDUSTRIAL LAND & BUILDING">INDUSTRIAL LAND & BUILDING</option>
                         <option value="AGRICULTURAL LAND">AGRICULTURAL LAND</option>
                         <option value="AGRICULTURAL LAND & BUILDING">AGRICULTURAL LAND & BUILDING</option>
@@ -84,16 +84,28 @@
                         const mainPurpose = document.getElementById('mainPurpose').value;
                         const subPurpose = document.getElementById('subPurpose');
 
-                        // Clear current selection
-                        subPurpose.value = "";
+                        const ownPurposeOptions = ["CAPITAL GAINS", "NETWORTH", "TO KNOW THE FMV"];
+                        const bankPurposeOptions = ["PURCHASE", "CONSTRUCTION", "MORTGAGE", "REVALUATION", "COLLATERAL"];
 
-                        // Enable/disable sub-purpose dropdown based on main purpose selection
-                        if (mainPurpose === "") {
-                            subPurpose.disabled = true;
-                        } else {
-                            subPurpose.disabled = false;
+                        subPurpose.innerHTML = "<option value=''>Select Sub Purpose</option>";
+
+                        let optionsToAdd = [];
+                        if (mainPurpose === "Own Purpose") {
+                            optionsToAdd = ownPurposeOptions;
+                        } else if (mainPurpose === "Bank's Purpose") {
+                            optionsToAdd = bankPurposeOptions;
                         }
+
+                        optionsToAdd.forEach(optionText => {
+                            const option = document.createElement("option");
+                            option.value = optionText;
+                            option.textContent = optionText;
+                            subPurpose.appendChild(option);
+                        });
+
+                        subPurpose.disabled = optionsToAdd.length === 0;
                     }
+
 
                     // Initialize the sub-purpose dropdown state
                     document.addEventListener('DOMContentLoaded', function () {
@@ -103,7 +115,7 @@
 
                 <div class="form-group">
                     <label>Persons Accompanying / Contact No<span class="required">*</span></label>
-                    <input type="text" id="customer_details_b" required>
+                    <input type="text" id="person_accompanying_contact_no" required>
                 </div>
 
                 <h3 style="color:#4169E1"><b> Customer Details</b></h3>
@@ -119,12 +131,12 @@
 
                     <div class="form-group">
                         <label>Name of Purchaser<span class="required">*</span></label>
-                        <input type="text" id="customer_details_c" required>
+                        <input type="text" id="name_of_purchaser" required>
                     </div>
 
                     <div class="form-group">
                         <label>Application No<span class="required">*</span></label>
-                        <input type="text" id="customer_details_d" required>
+                        <input type="text" id="application_no" required>
                     </div>
                 </div>
 
@@ -132,13 +144,13 @@
                 <div>
                     <div class="form-group">
                         <label>Address<span class="required">*</span></label>
-                        <input type="text" id="property_a" required>
+                        <input type="text" id="address" required>
                     </div>
 
                     <div class="form-group">
                         <label>Nearby Landmark/Google Map /
                             Independent access to the property <span class="required">*</span></label>
-                        <input type="text" id="property_b" required>
+                        <input type="text" id="nearby_landmark" required>
                     </div>
 
                 </div>
@@ -147,22 +159,22 @@
                 <div>
                     <div class="form-group">
                         <label>Building Plan<span class="required">*</span></label>
-                        <input type="text" id="document_a" required>
+                        <input type="text" id="building_plan" required>
                     </div>
 
                     <div class="form-group">
                         <label>Name of Approving Authority<span class="required">*</span></label>
-                        <input type="text" id="document_b" required>
+                        <input type="text" id="name_of_approving_authority" required>
                     </div>
 
                     <div class="form-group">
                         <label>Approval No / Date / Details<span class="required">*</span></label>
-                        <input type="text" id="document_c" required>
+                        <input type="text" id="approval_no_details" required>
                     </div>
 
                     <div class="form-group">
                         <label>Legal & Other Documents<span class="required">*</span></label>
-                        <input type="text" id="document_d" required>
+                        <input type="text" id="legal_documents" required>
                     </div>
 
                     <div class="form-group">
@@ -170,22 +182,27 @@
                         <div class="boundaries-grid">
                             <div class="form-group">
                                 <label>East<span class="required">*</span></label>
-                                <input type="text" id="eastBoundary" required>
+                                <input type="text" id="eastBoundaryDoc" placeholder="As per Document" required>
+                                <input type="text" id="eastBoundaryActual" placeholder="As per Actuals" required>
                             </div>
                             <div class="form-group">
                                 <label>West<span class="required">*</span></label>
-                                <input type="text" id="westBoundary" required>
+                                <input type="text" id="westBoundaryDoc" placeholder="As per Document" required>
+                                <input type="text" id="westBoundaryActual" placeholder="As per Actuals" required>
                             </div>
                             <div class="form-group">
                                 <label>North<span class="required">*</span></label>
-                                <input type="text" id="northBoundary" required>
+                                <input type="text" id="northBoundaryDoc" placeholder="As per Document" required>
+                                <input type="text" id="northBoundaryActual" placeholder="As per Actuals" required>
                             </div>
                             <div class="form-group">
                                 <label>South<span class="required">*</span></label>
-                                <input type="text" id="southBoundary" required>
+                                <input type="text" id="southBoundaryDoc" placeholder="As per Document" required>
+                                <input type="text" id="southBoundaryActual" placeholder="As per Actuals" required>
                             </div>
                         </div>
                     </div>
+                    
     
                     <div class="form-group">
                         <label>Matching of Boundaries<span class="required">*</span></label>
@@ -204,12 +221,14 @@
     
                     <div class="form-group">
                         <label>Types of property<span class="required">*</span></label>
-                        <input type="text" id="propertyType" required>
+                        <input type="text" id="typeOfProperty" required>
                     </div>
 
                 </div>
 
                 <button type="button" onclick="nextSection(1)">Next</button>
+
+                <button id="generatePdfBtn" type="submit" >Gnerate Pdf</button>
             </div>
         </form>
     </div>
@@ -228,7 +247,7 @@
                     isValid = false;
                     field.style.borderColor = 'red';
                     // Get the field label
-                    const label = field.previousElementSibling.textContent.replace('*', '').trim();
+                    const label = field.previousElementSibling ? field.previousElementSibling.textContent.replace('*', '').trim() : field.id;
                     missingFields.push(label);
                 } else {
                     field.style.borderColor = '#ddd';
@@ -240,26 +259,21 @@
                 return;
             }
 
-            // If validation passes, proceed to next section
-            document.getElementById(`section${currentSection}`).style.display = 'none';
-            document.getElementById(`section${currentSection + 1}`).style.display = 'block';
+            // If validation passes, load the next section page
+            window.location.href = 'section2.html';
         }
 
-        function prevSection(currentSection) {
-            // Hide current section and show previous section
-            document.getElementById(`section${currentSection}`).style.display = 'none';
-            document.getElementById(`section${currentSection - 1}`).style.display = 'block';
-        }
+        
 
     </script>
    
-    <script src="index.js"></script>
+    <script src="page_1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    
     <script>
-
         // Form submission handler
-        document.getElementById('valuationForm').addEventListener('submit', async function (e) {
+        document.getElementById('valuationFormSection1').addEventListener('submit', function (e) {
             e.preventDefault();
 
             // Validate all required fields
@@ -267,7 +281,7 @@
             let isValid = true;
 
             requiredFields.forEach(field => {
-                if (!field.value) {
+                if (!field.value.trim()) {
                     isValid = false;
                     field.style.borderColor = 'red';
                 } else {
@@ -280,44 +294,84 @@
                 return;
             }
 
-            const bank_info = {
-                managerTitle: document.getElementById('managerTitle').value,
-                managerDesignation: document.getElementById('managerDesignation').value,
-                bankName: document.getElementById('bankName').value,
-                branchLocation: document.getElementById('branchLocation').value
-            }
-            // Capture form data
+            // Capture form data correctly
             const Container_1 = {
-                purpose: 'TEST',
-                customerName: document.getElementById('customerName').value,
-                customerDetailsB: document.getElementById('customer_details_b').value,
-                customerDetailsC: document.getElementById('customer_details_c').value,
-                customerDetailsD: document.getElementById('customer_details_d').value,
-                propertyA: document.getElementById('property_a').value,
-                propertyB: document.getElementById('property_b').value,
-                documentA: document.getElementById('document_a').value,
-                documentB: document.getElementById('document_b').value,
-                documentC: document.getElementById('document_c').value,
-                documentD: document.getElementById('document_d').value,
-                // Add more fields as needed
-
+                bankInfo: {
+                    managerDesignation: document.getElementById('managerDesignation').value,
+                    bankName: document.getElementById('bankName').value,
+                    branchLocation: document.getElementById('branchLocation').value,
+                },
+                propertyDetails: {
+                    propertyType: document.getElementById('propertyType').value,
+                    mainPurpose: document.getElementById('mainPurpose').value,
+                    subPurpose: document.getElementById('subPurpose').value,
+                },
+                customerDetails: {
+                    customerName: document.getElementById('customerName').value,
+                    personAccompanyingContactNo: document.getElementById('person_accompanying_contact_no').value,
+                    nameOfPurchaser: document.getElementById('name_of_purchaser').value,
+                    applicationNo: document.getElementById('application_no').value,
+                },
+                propertyLocation: {
+                    address: document.getElementById('address').value,
+                    nearbyLandmark: document.getElementById('nearby_landmark').value,
+                },
+                documentDetails: {
+                    buildingPlan: document.getElementById('building_plan').value,
+                    nameOfApprovingAuthority: document.getElementById('name_of_approving_authority').value,
+                    approvalNoDetails: document.getElementById('approval_no_details').value,
+                    legalDocuments: document.getElementById('legal_documents').value,
+                },
+                boundaries: {
+                    east: {
+                        doc: document.getElementById('eastBoundaryDoc').value,
+                        actual: document.getElementById('eastBoundaryActual').value,
+                    },
+                    west: {
+                        doc: document.getElementById('westBoundaryDoc').value,
+                        actual: document.getElementById('westBoundaryActual').value,
+                    },
+                    north: {
+                        doc: document.getElementById('northBoundaryDoc').value,
+                        actual: document.getElementById('northBoundaryActual').value,
+                    },
+                    south: {
+                        doc: document.getElementById('southBoundaryDoc').value,
+                        actual: document.getElementById('southBoundaryActual').value,
+                    }
+                },
+                otherDetails: {
+                    boundaryMatch: document.getElementById('boundaryMatch').value,
+                    plotDemarcation: document.getElementById('plotDemarcation').value,
+                    landUse: document.getElementById('landUse').value,
+                    typeOfProperty: document.getElementById('typeOfProperty').value,
+                }
             };
+            localStorage.removeItem('Container_1');
 
- 
-            console.log(Container_1)
-            // Call the function to generate the PDF
-            try {
-                // Wait for the PDF to be generated
-                const doc = await generatePDF(bank_info, Container_1, Container_2, Container_3, Container_4);
 
-                // Save the generated PDF
-                doc.save('valuation_report.pdf');
-            } catch (error) {
-                console.error('Error generating PDF:', error);
-                alert('There was an error generating the PDF. Please try again.');
-            }
+            // Save data to localStorage
+            localStorage.setItem('Container_1', JSON.stringify(Container_1));
+            console.log("Captured Data:", Container_1);
+       
         });
+
     </script>
+
+    <script>
+         const Container_1 = JSON.parse(localStorage.getItem('Container_1'));
+         console.log(Container_1);
+             // Assuming your Container1 function is in 'yourPdfGenerationFile.js'
+             document.getElementById("generatePdfBtn").addEventListener("click", function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                Container1(doc).then(() => {
+                    doc.save("generated_report.pdf");
+                });
+            });
+    </script>
+
 
 </body>
 

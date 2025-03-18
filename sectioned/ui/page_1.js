@@ -1,6 +1,9 @@
 
 
 function Container1(doc) {
+
+    const Container_1 = JSON.parse(localStorage.getItem('Container_1'));
+    console.log(Container_1);
     // Initial settings
     const margin = 18;
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -18,19 +21,16 @@ function Container1(doc) {
             const logoHeight = 30;
             const logoX = pageWidth - margin - logoWidth - 3;
             doc.addImage(img, 'PNG', logoX + 8, yPosition - 2, logoWidth, logoHeight);
-
-            // Draw the main outer box
-            const pageHeight = doc.internal.pageSize.getHeight() - 30;
-            doc.rect(margin, yPosition, tableWidth, pageHeight - yPosition - 188);
-
+                       
             // Company header
             doc.setFontSize(16);
             doc.setTextColor(65, 105, 225);
             doc.setFont('helvetica', 'bold');
-            doc.text('TRUE PEAK HOUSE LLP', pageWidth / 9, yPosition + 10);
+            doc.text('TRUE PEAK HOUSE LLP', pageWidth / 5, yPosition + 10);
 
             // Company details
             yPosition += 15;
+            doc.setTextColor(55, 65, 81);
             doc.setFontSize(8);
             doc.setFont('helvetica', 'normal');
             const address = 'GSTIN: 29AAUFT3926A1ZW, #240/C, FIRST FLOOR, 3RD BLOCK, NAGARABHAVI 2ND STAGE,';
@@ -39,83 +39,101 @@ function Container1(doc) {
             // Contact details
             yPosition += 5;
             const contact = 'Bengaluru: 560072. MOB: +91 9743142447 | balakrishna@truepeak.in | www.truepeak.in';
-            doc.text(contact, pageWidth / 9, yPosition);
+            doc.text(contact, pageWidth / 9, yPosition);  
+            doc.setTextColor(0, 0, 255); // Blue #0000FF
 
-            // Title section
-            yPosition += 6;
-            doc.setTextColor(0, 0, 0);
-            doc.rect(margin, yPosition, tableWidth, 8);
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(9);
-            doc.text('VALUATION REPORT - IMMOVABLE PROPERTY', pageWidth / 2, yPosition + 5.5, { align: 'center' });
+            // Draw a line below the title
+            doc.setLineWidth(0.5);
+            yPosition += 4; 
+            doc.line(margin, yPosition, margin + tableWidth, yPosition);          
 
             // Bank details
-            yPosition += 10;
+            // Reset color for lines
+            doc.setTextColor(0, 0, 0);
+            yPosition += 2;
             doc.setFont('helvetica', 'normal');
             doc.text('To,', margin + 5, yPosition + 5);
+            doc.setFont('times', 'bold');
+            doc.text(Container_1.bankInfo.managerDesignation.toUpperCase(), margin + 5, yPosition + 12);
+            doc.text(Container_1.bankInfo.bankName.toUpperCase(), margin + 5, yPosition + 19);
+            doc.text(Container_1.bankInfo.branchLocation.toUpperCase(), margin + 5, yPosition + 26);
+        
+            // Title section
+            yPosition += 28;
+            doc.setTextColor(0, 0, 0);
             doc.setFont('helvetica', 'bold');
-            doc.text('THE MANAGER (Branch Head),', margin + 5, yPosition + 12);
-            doc.text('THE JANATHA CO-OPERATIVE BANK Ltd,', margin + 5, yPosition + 19);
-            doc.text('MALLESHWARAM,', margin + 5, yPosition + 26);
+            doc.setFontSize(9);
+
+            // Centered title
+            doc.text('VALUATION REPORT - IMMOVABLE PROPERTY', pageWidth / 2, yPosition + 5.5, { align: 'center' });
+
+            // Get text width to align underline properly
+            let textWidth = doc.getTextWidth('VALUATION REPORT - IMMOVABLE PROPERTY');
+            let textX = (pageWidth - textWidth) / 2; // Centering the underline
+
+            // Draw underline
+            doc.line(textX, yPosition + 6, textX + textWidth, yPosition + 6); // Adjust `+7` for spacing
 
             // Create table instance
-             yPosition += 28;
+            yPosition += 5;
             let table = createTable(doc, yPosition, null, 'Type of Property – Under Construction Residential Land & Building');
             let yPos = table.getPosition();
-            
+
             doc.setFontSize(8);
-            
+
             // Purpose of Valuation
-            yPos = table.addSplitColumnRow('1', 'Purpose of Valution', [
+            yPos = table.addSplitColumnRow('1', 'Purpose of Valuation', [
                 'Purpose',
                 'Type',
                 'Banks Purpose',
-                'Constrution Loan'
+                'Construction Loan'
             ]);
 
             // Accompanying Person
-            yPos = table.addRow('2', 'Persons Accompanying / Contact No.', 'visited independently');
+            yPos = table.addRow('2', 'Persons Accompanying / Contact No.', Container_1.customerDetails.personAccompanyingContactNo);
 
             // Customer Details
             yPos = table.addRow('3', 'Customer Details', '', null, true);
-            yPos = table.addRow('a', 'Name of Owner', 'Mrs RIZWANA.A.PATEL & Mr ALTAF.D.PATEL');
-            yPos = table.addRow('b', 'Name of Purchaser', 'NA');
-            yPos = table.addRow('c', 'Application No', 'Not Available');
+            yPos = table.addRow('a', 'Name of Owner', Container_1.customerDetails.customerName);
+            yPos = table.addRow('b', 'Name of Purchaser', Container_1.customerDetails.nameOfPurchaser);
+            yPos = table.addRow('c', 'Application No', Container_1.customerDetails.applicationNo);
 
             // Property Details with Address Array
             yPos = table.addRow('4', 'Property Details', '', null, true);
-            const addressData = {
-                row1: ['PLOT/ SITE NO', 'testtesttesttesttesttesttest', 'Survey.No', 'test'],
-                row2: ['LOCALITY', 'test', 'DISTRICT', 'test'],
-                row3: ['LAND MARK NEAR', 'test', 'DISTANCE ', 'testtesttesttesttesttesttesttest'],
-                row4: ['LEGAL ADDRESS', 'ttes test test test sdf test ttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest ']
+           /* const addressData = {
+                row1: ['PLOT/ SITE NO', Container_1.propertyDetails.propertyType, 'Survey.No', Container_1.propertyDetails.mainPurpose],
+                row2: ['LOCALITY', Container_1.propertyLocation.address, 'DISTRICT', Container_1.propertyLocation.nearbyLandmark],
+                row3: ['LAND MARK NEAR', Container_1.propertyDetails.subPurpose, 'DISTANCE ', 'N/A'],
+                row4: ['LEGAL ADDRESS', Container_1.documentDetails.legalDocuments]
             };
-            yPos = table.addAddressRow('a', 'Address', addressData);
+            */
+            yPos = table.addAddressRow('a', 'Address', Container_1.propertyLocation.address);
 
-            yPos = table.addRow('b', 'Nearby Landmark/Google Map /\nIndependent access to the property', 
-                'Located near to R T Nagar Police Station on 80 ft Main Road, R T Nagar. Road, R T Nagar. It is about 09 kms from Bangalore City Bus Stand & Railway Station/ Google Map enclosed/ Yes it is Independently accessible.');
+            yPos = table.addRow('b', 'Nearby Landmark/Google Map / Independent access to the property', Container_1.propertyLocation.nearbyLandmark);
 
             // Document Details
             yPos = table.addRow('5', 'Document Details', '', null, true);
-            yPos = table.addRow('a', 'Building Plan', '', null, true);
+            yPos = table.addRow('a', 'Building Plan', Container_1.documentDetails.buildingPlan);
             yPos = table.addRow('i)', 'Yes/No', 'Yes');
-            yPos = table.addRow('ii)', 'Name of Approving Authority', 'Approved by ADTP (East), BBMP');
-            yPos = table.addRow('iii)', 'Approval No / Date / Details', 'BBMP/Ad.com/EST/0101/24-25');
-            yPos = table.addRow('b', 'Legal & Other Documents', 
-                'Photo Copies of Sale Deed dated 12/04/2001, Katha dated  /04/2001, Katha dated /04/2001, Katha dated /04/2001, Katha dated /04/2001, Katha dated /04/2001, Katha dated /04/2001, Katha dated //04/2001, Katha dated/04/2001, Katha dated/04/2001, Katha dated/04/2001, Katha dated/04/2001, Katha dated/04/2001, Katha dated/04/2001, Katha dated04/2001, Katha dated30/03/2024, Tax paid receipt dated 03/04/2024 & Sanction Plan', 16);
-            
+            yPos = table.addRow('ii)', 'Name of Approving Authority', Container_1.documentDetails.nameOfApprovingAuthority);
+            yPos = table.addRow('iii)', 'Approval No / Date / Details', Container_1.documentDetails.approvalNoDetails);
+            yPos = table.addRow('b', 'Legal & Other Documents', Container_1.documentDetails.legalDocuments);
+
             // Add Physical Details section
             yPos = table.addRow('6', 'Physical Details', '', null, true);
-            
 
             // Add header row
             yPos = table.addAdjoiningPropertiesRow('a', 'Adjoining Properties:', 'As per Document', 'As per Actuals');
             
             // Add direction rows
-            yPos = table.addAdjoiningPropertiesRow('i', 'East', 'Road', '30 feet Road');
-            yPos = table.addAdjoiningPropertiesRow('ii', 'West', 'Site No.161', 'RCC Building');
-            yPos = table.addAdjoiningPropertiesRow('iii', 'North', 'Site No.197', 'RCC Building');
-            yPos = table.addAdjoiningPropertiesRow('iv', 'South', 'Site No.199', 'RCC Building');
+            yPos = table.addAdjoiningPropertiesRow('i', 'East', Container_1.boundaries.east.doc, Container_1.boundaries.east.actual);
+            yPos = table.addAdjoiningPropertiesRow('ii', 'West', Container_1.boundaries.west.doc, Container_1.boundaries.west.actual);
+            yPos = table.addAdjoiningPropertiesRow('iii', 'North', Container_1.boundaries.north.doc, Container_1.boundaries.north.actual);
+            yPos = table.addAdjoiningPropertiesRow('iv', 'South', Container_1.boundaries.south.doc, Container_1.boundaries.south.actual);
+            yPos = table.addRow('b', 'Matching of Boundaries', Container_1.otherDetails.boundaryMatch);
+            yPos = table.addRow('c', 'Plot Demarcated', Container_1.otherDetails.plotDemarcation);
+            yPos = table.addRow('d)', 'Approved and Land Use', Container_1.otherDetails.landUse);
+            yPos = table.addRow('e)', 'Types of property', Container_1.otherDetails.typeOfProperty);
 
             resolve(yPos);
         };
@@ -127,29 +145,18 @@ function Container1(doc) {
     });
 }
 
+
 // Update the createTable function to accept null title/subtitle
 function createTable(doc, startY, title, subtitle = null) {
     let yPosition = startY;
     const pageWidth = doc.internal.pageSize.getWidth();
-    const leftMargin = 18;  // Changed to 10
-    const rightMargin = 10; // Kept as 20
-    const tableWidth = pageWidth - (leftMargin + rightMargin); // Updated calculation
-    
-    // Only add title and subtitle if they are provided
-    // if (title) {
-    //     doc.setFont('helvetica', 'bold');
-    //     doc.setFontSize(12);
-    //     doc.text(title, pageWidth / 2, yPosition, { align: 'center' });
-        
-    //     // Add underline for title
-    //     const lineWidth = doc.getStringUnitWidth(title) * doc.getFontSize() / doc.internal.scaleFactor;
-    //     const lineStart = (pageWidth - lineWidth) / 2;
-    //     doc.line(lineStart, yPosition + 1, lineStart + lineWidth, yPosition + 1);
-    // }
+    const leftMargin = 18;  
+    const rightMargin = 10; 
+    const tableWidth = pageWidth - (leftMargin + rightMargin); 
     
     if (subtitle) {
         yPosition += 5;
-        doc.rect(leftMargin, yPosition, tableWidth, 8);  // Updated to use leftMargin
+        doc.rect(leftMargin, yPosition, tableWidth, 8);  
         doc.setFontSize(9);
         doc.text(subtitle, pageWidth / 2, yPosition + 5.5, { align: 'center' });
         yPosition += 8;
@@ -158,128 +165,39 @@ function createTable(doc, startY, title, subtitle = null) {
     const col1Width = 7;
     const col2Width = 85;
     const col3Width = tableWidth - col1Width - col2Width;
+
+
+function addAddressRow(number, description, address) {
+    const lineHeight = 3.1;
+    const padding = 4; // Extra padding for readability
+
+    // Split text for wrapping within column widths
+    const splitAddress = doc.splitTextToSize(address, col3Width - 6);
+    const splitDescription = doc.splitTextToSize(description, col2Width - 6);
     
-function addAddressRow(number, description, addressData) {
-    // Set consistent font size and calculate widths
-    
-    const col1Width = 7;
-    const col2Width = 45;
-    const col3Width = tableWidth - col1Width - col2Width;
-    const col3SplitWidth = col3Width / 4;  // Split into 4 equal columns
-    
-    const calculateRow4Height = (texts) => {
-        const lineHeight = 3.;
-        let basePadding = 2;
-        let maxLines = 1;
-        
-        // Special handling for legal address
-        if (texts[0] === 'LEGAL ADDRESS') {
-            const legalAddressText = texts[1] || '';
-            const splitText = doc.splitTextToSize(legalAddressText, (col3Width - col3SplitWidth) - 6);
-            
-            // Increase padding if text is longer than threshold (adjust threshold as needed)
-            if (legalAddressText.length > 30) {  // you can adjust this threshold
-                basePadding = 6;  // triple the padding
-            }
-            
-            maxLines = Math.max(maxLines, splitText.length);
-        } else {
-            // Original calculation for non-legal address rows
-            texts.forEach(text => {
-                if (text) {
-                    const splitText = doc.splitTextToSize(text, col3SplitWidth - 6);
-                    maxLines = Math.max(maxLines, splitText.length);
-                }
-            });
-        }
-        
-        return (maxLines * lineHeight) + basePadding - 2;
-    };
-    
-    
-    // Calculate max text length for each row to determine height
-    const calculateRowHeight = (texts) => {
-        const lineHeight = 3.1;
-        const padding = 2;
-        let maxLines = 1;
-        
-        texts.forEach(text => {
-            if (text) {
-                // Add extra padding to ensure text stays within cell
-                const splitText = doc.splitTextToSize(text, col3SplitWidth - 6); 
-                maxLines = Math.max(maxLines, splitText.length);
-            }
-        });
-        
-        return (maxLines * lineHeight) + padding * 2; // Added extra padding
-    };
-    
-    // Calculate heights for each row
-    const row1Height = calculateRowHeight(addressData.row1);
-    const row2Height = calculateRowHeight(addressData.row2);
-    const row3Height = calculateRowHeight(addressData.row3);
-    const row4Height = calculateRow4Height([addressData.row4[0], addressData.row4[1]]);
-    
-    const totalHeight = row1Height + row2Height + row3Height + row4Height;
-    
-    // Draw main columns
-    doc.rect(leftMargin, yPosition, col1Width, totalHeight);
-    doc.rect(leftMargin + col1Width, yPosition, col2Width, totalHeight);
-    
-    // Starting position for third column
-    const col3Start = leftMargin + col1Width + col2Width;
-    
-    // Current Y position tracker
-    let currentY = yPosition;
-    
-    // Draw and fill first three rows
-    const drawRow = (rowData, rowHeight, rowIndex) => {
-        for (let j = 0; j < 4; j++) {
-            doc.rect(
-                col3Start + (j * col3SplitWidth),
-                currentY,
-                col3SplitWidth,
-                rowHeight
-            );
-            
-            // Add text with proper wrapping
-            if (rowData[j]) {
-                const splitText = doc.splitTextToSize(rowData[j], col3SplitWidth - 6);
-                doc.text(splitText, col3Start + (j * col3SplitWidth) + 2, currentY + 4);
-            }
-        }
-        currentY += rowHeight;
-    };
-    
-    // Draw first three rows
-    drawRow(addressData.row1, row1Height, 0);
-    drawRow(addressData.row2, row2Height, 1);
-    drawRow(addressData.row3, row3Height, 2);
-    
-    // Draw last row with two columns
-    const lastRowCol1Width = col3Width / 4;
-    doc.rect(col3Start, currentY, lastRowCol1Width, row4Height);
-    doc.rect(col3Start + lastRowCol1Width, currentY, col3Width - lastRowCol1Width, row4Height);
-    
-    // Add text for last row with proper wrapping
-    if (addressData.row4[0]) {
-        const splitText = doc.splitTextToSize(addressData.row4[0], lastRowCol1Width - 6);
-        doc.text(splitText, col3Start + 2, currentY + 4);
-    }
-    if (addressData.row4[1]) {
-        const splitText = doc.splitTextToSize(addressData.row4[1], (col3Width - lastRowCol1Width) - 6);
-        doc.text(splitText, col3Start + lastRowCol1Width + 2, currentY + 4);
-    }
-    
-    // Add number and description
+    // Find the max number of lines needed for any column
+    const maxLines = Math.max(splitAddress.length, splitDescription.length, 1);
+
+    // Calculate dynamic row height
+    const rowHeight = (maxLines * lineHeight) + padding;
+
+    // Draw table row with dynamic height
+    doc.rect(leftMargin, yPosition, col1Width, rowHeight); // Column 1 (Number)
+    doc.rect(leftMargin + col1Width, yPosition, col2Width, rowHeight); // Column 2 (Description)
+    doc.rect(leftMargin + col1Width + col2Width, yPosition, col3Width, rowHeight); // Column 3 (Address)
+
+    // Add text to each column
     doc.setFont('helvetica', 'normal');
     doc.text(number.toString(), leftMargin + 2, yPosition + 4);
-    const descriptionSplit = doc.splitTextToSize(description, col2Width - 4);
-    doc.text(descriptionSplit, leftMargin + col1Width + 2, yPosition + 4);
-    
-    yPosition += totalHeight;
-    return yPosition;
+    doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 4);
+    doc.text(splitAddress, leftMargin + col1Width + col2Width + 2, yPosition + 4);
+
+    // Move Y position for the next row
+    yPosition += rowHeight;
 }
+
+
+
 
 function addAdjoiningPropertiesRow(number, description, docValue, actualValue) {
     // Set font size consistently and calculate widths
@@ -519,7 +437,7 @@ async function generatePDF() {
    const { jsPDF } = window.jspdf;
    const doc = new jsPDF();
    
-  await Container1(doc)
+  await Container1(doc, Container_1)
   addFooter(doc)
    
    doc.addPage()
