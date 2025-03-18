@@ -437,12 +437,7 @@ async function generatePDF() {
    const { jsPDF } = window.jspdf;
    const doc = new jsPDF();
    
-  await Container1(doc, Container_1)
-  addFooter(doc)
-   
-   doc.addPage()
-   header(doc,2)
-   Container2(doc)
+   await Container1(doc, Container_1)
    addFooter(doc)
    doc.save('auto-adjustment-pg-2.pdf');
    return doc;

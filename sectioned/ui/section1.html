@@ -358,19 +358,47 @@
 
     </script>
 
-    <script>
-         const Container_1 = JSON.parse(localStorage.getItem('Container_1'));
-         console.log(Container_1);
-             // Assuming your Container1 function is in 'yourPdfGenerationFile.js'
-             document.getElementById("generatePdfBtn").addEventListener("click", function() {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
+<script>
+    const Container_1 = JSON.parse(localStorage.getItem('Container_1'));
+    console.log(Container_1);
 
-                Container1(doc).then(() => {
-                    doc.save("generated_report.pdf");
-                });
-            });
-    </script>
+    document.getElementById("generatePdfBtn").addEventListener("click", function() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        Container1(doc).then(() => {
+            addFooter(doc); // Ensure footer is added after content is placed
+            doc.save("generated_report.pdf");
+        }).catch(error => console.error("Error generating PDF:", error));
+    });
+
+    function addFooter(doc) {
+    const margin = 10;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    
+    // Add horizontal line at the bottom
+    const footerY = pageHeight - 20;
+    doc.setLineWidth(0.1);
+    doc.line(margin, footerY + 4, pageWidth - margin, footerY + 4);
+    
+    // Add the chartered engineers text
+    doc.setFontSize(9);
+    doc.setTextColor(55, 65, 81);
+    doc.setFont('helvetica', 'bold');
+    doc.text('CHARTERED ENGINEERS | STRUCTURAL CONSULTANTS | N.D.T | R&R | VALUATION OF IMMOVABLE PROPERTIES.', 
+        pageWidth / 2, footerY + 9, { align: 'center' });
+    
+    // Add reference number and page number on next line
+    doc.setFontSize(9);
+    doc.setTextColor(0, 0, 0); // Reset back to black for subsequent text
+    // Reference number on left
+    doc.text('TP/JCB/K-BKR/R-09/12/2024-25', margin + 5, footerY + 15);
+    // Page number on right
+    doc.text('Page 1', pageWidth - margin - 20, footerY + 15);
+ }
+</script>
+
 
 
 </body>
