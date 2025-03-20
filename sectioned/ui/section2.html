@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valuation Report Generator Section 2</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
@@ -15,49 +15,7 @@
 
             <!-- Container 2 -->
             <div class="form-section" id="section2" >
-                <h3 style="color:#4169E1"><b>Physical Details</b></h3>
-
-                <div class="form-group">
-                    <label>Adjoining Properties</label>
-                    <div class="boundaries-grid">
-                        <div class="form-group">
-                            <label>East<span class="required">*</span></label>
-                            <input type="text" id="eastBoundary" required>
-                        </div>
-                        <div class="form-group">
-                            <label>West<span class="required">*</span></label>
-                            <input type="text" id="westBoundary" required>
-                        </div>
-                        <div class="form-group">
-                            <label>North<span class="required">*</span></label>
-                            <input type="text" id="northBoundary" required>
-                        </div>
-                        <div class="form-group">
-                            <label>South<span class="required">*</span></label>
-                            <input type="text" id="southBoundary" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Matching of Boundaries<span class="required">*</span></label>
-                    <input type="text" id="boundaryMatch" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Plot Demarcated<span class="required">*</span></label>
-                    <input type="text" id="plotDemarcation" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Approved and Land Use<span class="required">*</span></label>
-                    <input type="text" id="landUse" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Types of property<span class="required">*</span></label>
-                    <input type="text" id="propertyType" required>
-                </div>
+                <h3 style="color:#4169E1"><b>Physical Details</b></h3>        
 
                 <div class="form-group">
                     <label>Details of Accommodations</label>
@@ -116,8 +74,62 @@
                     <input type="text" id="amenities" required>
                 </div>
 
+                <h3 style="color:#4169E1"><b>Building Status & Valuation</b></h3>
+
+                <div class="form-group">
+                    <label>Existing building<span class="required">*</span></label>
+                    <input type="text" id="existingBuilding" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Stage of construction<span class="required">*</span></label>
+                    <input type="text" id="constructionStage" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Work completion<span class="required">*</span></label>
+                    <input type="text" id="workCompletion" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nature and extent of violations<span class="required">*</span></label>
+                    <textarea id="violations" required></textarea>
+                </div>
+
+                <h4>Area Details</h4>
+                <div class="form-group">
+                    <label>Site Area<span class="required">*</span></label>
+                    <label>East to West<span class="required">*</span></label>
+                    <input type="text" id="eastToWest" required>
+                    <label>North to South<span class="required">*</span></label>
+                    <input type="text" id="northToSouth" required>
+                    <label>Totally measuring <span class="required">*</span></label>
+                    <input type="text" id="totallyMeasuring" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Carpet area<span class="required">*</span></label>
+                    <input type="text" id="carpetArea" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Saleable area<span class="required">*</span></label>
+                    <input type="text" id="saleableArea" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Remarks<span class="required">*</span></label>
+                    <input type="text" id="remarks" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Plinth area<span class="required">*</span></label>
+                    <input type="text" id="plinthArea" required>
+                </div>
+
                 <button type="button" onclick="prevSection(2)">Previous</button>
                 <button type="button" onclick="nextSection(2)">Next</button>
+                <button id="generatePdfBtn" type="submit" >Gnerate Pdf</button>
             </div>                    
         </form>
     </div>
@@ -162,7 +174,7 @@
 
     </script>
 
-    <script src="index.js"></script>
+    <script src="page_2.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
@@ -191,127 +203,81 @@
                 return;
             }
 
-            const bank_info = {
-                managerTitle: document.getElementById('managerTitle').value,
-                managerDesignation: document.getElementById('managerDesignation').value,
-                bankName: document.getElementById('bankName').value,
-                branchLocation: document.getElementById('branchLocation').value
-            }
-            // Capture form data
-            const Container_1 = {
-                purpose: 'TEST',
-                customerName: document.getElementById('customerName').value,
-                customerDetailsB: document.getElementById('customer_details_b').value,
-                customerDetailsC: document.getElementById('customer_details_c').value,
-                customerDetailsD: document.getElementById('customer_details_d').value,
-                propertyA: document.getElementById('property_a').value,
-                propertyB: document.getElementById('property_b').value,
-                documentA: document.getElementById('document_a').value,
-                documentB: document.getElementById('document_b').value,
-                documentC: document.getElementById('document_c').value,
-                documentD: document.getElementById('document_d').value,
-                // Add more fields as needed
-
-            };
-
             const Container_2 = {
-                eastBoundary: document.getElementById('eastBoundary').value,
-                westBoundary: document.getElementById('westBoundary').value,
-                northBoundary: document.getElementById('northBoundary').value,
-                southBoundary: document.getElementById('southBoundary').value,
-                boundaryMatch: document.getElementById('boundaryMatch').value,
-                plotDemarcation: document.getElementById('plotDemarcation').value,
-                landUse: document.getElementById('landUse').value,
-                propertyType: document.getElementById('propertyType').value,
-                livingStatus: document.getElementById('livingStatus').value,
-                bedroomStatus: document.getElementById('bedroomStatus').value,
-                toiletStatus: document.getElementById('toiletStatus').value,
-                kitchenStatus: document.getElementById('kitchenStatus').value,
+            livingStatus: document.getElementById('livingStatus').value,
+            bedroomStatus: document.getElementById('bedroomStatus').value,
+            toiletStatus: document.getElementById('toiletStatus').value,
+            kitchenStatus: document.getElementById('kitchenStatus').value,
+            totalFloors: document.getElementById('totalFloors').value,
+            propertyFloor: document.getElementById('propertyFloor').value,
+            constructionYear: document.getElementById('constructionYear').value,
+            propertyAge: document.getElementById('propertyAge').value,
+            residualAge: document.getElementById('residualAge').value,
+            structureType: document.getElementById('structureType').value,
+            amenities: document.getElementById('amenities').value,
+            existingBuilding: document.getElementById('existingBuilding').value,
+            constructionStage: document.getElementById('constructionStage').value,
+            workCompletion: document.getElementById('workCompletion').value,
+            violations: document.getElementById('violations').value,
+            siteArea: document.getElementById('eastToWest').value,
+            siteArea: document.getElementById('northToSouth').value,
+            siteArea: document.getElementById('totallyMeasuring').value,
+            plinthArea: document.getElementById('plinthArea').value,
+            carpetArea: document.getElementById('carpetArea').value,  
+            saleableArea: document.getElementById('saleableArea').value,  
+            Remarks: document.getElementById('remarks').value 
+        };
 
-                totalFloors: document.getElementById('totalFloors').value,
-                propertyFloor: document.getElementById('propertyFloor').value,
-                constructionYear: document.getElementById('constructionYear').value,
-                propertyAge: document.getElementById('propertyAge').value,
-                residualAge: document.getElementById('residualAge').value,
-                structureType: document.getElementById('structureType').value,
-                amenities: document.getElementById('amenities').value
-
-            };
-
-
-            const Container_3 = {
-                existingBuilding: document.getElementById('existingBuilding').value,
-                constructionStage: document.getElementById('constructionStage').value,
-                workCompletion: document.getElementById('workCompletion').value,
-                violations: document.getElementById('violations').value,
-                siteArea: document.getElementById('siteArea').value,
-                plinthArea: document.getElementById('plinthArea').value,
-                govtValue: document.getElementById('govtValue').value,
-                variationJustification: document.getElementById('variationJustification').value,
-                guidelineRate: document.getElementById('guidelineRate').value,
-                marketRate: document.getElementById('marketRate').value,
-                landValue: document.getElementById('landValue').value,
-                buildingValue: document.getElementById('buildingValue').value,
-                extraItems: document.getElementById('extraItems').value,
-                fairMarketValue: document.getElementById('fairMarketValue').value,
-                rentalValue: document.getElementById('rentalValue').value
-            };
-
-            const Container_4 = {
-                // As Per Actuals
-                stiltFloorRoof: document.getElementById('stiltFloorRoof').value,
-                stiltFloorArea: document.getElementById('stiltFloorArea').value,
-                stiltFloorRate: document.getElementById('stiltFloorRate').value,
-                stiltFloorAmount: document.getElementById('stiltFloorAmount').value,
-                stiltFloorDeprn: document.getElementById('stiltFloorDeprn').value,
-                stiltFloorDeprnAmount: document.getElementById('stiltFloorDeprnAmount').value,
-                stiltFloorNetAmount: document.getElementById('stiltFloorNetAmount').value,
-
-                // Ground Floor
-                groundFloorRoof: document.getElementById('groundFloorRoof').value,
-                groundFloorArea: document.getElementById('groundFloorArea').value,
-                groundFloorRate: document.getElementById('groundFloorRate').value,
-                groundFloorAmount: document.getElementById('groundFloorAmount').value,
-                groundFloorDeprn: document.getElementById('groundFloorDeprn').value,
-                groundFloorDeprnAmount: document.getElementById('groundFloorDeprnAmount').value,
-                groundFloorNetAmount: document.getElementById('groundFloorNetAmount').value,
-
-                // Extra Items
-                porticoStatus: document.getElementById('porticoStatus').value,
-                frontDoorStatus: document.getElementById('frontDoorStatus').value,
-                verandahStatus: document.getElementById('verandahStatus').value,
-                boreWellStatus: document.getElementById('boreWellStatus').value,
-                gatesStatus: document.getElementById('gatesStatus').value,
-                extraItemsTotal: document.getElementById('extraItemsTotal').value,
-
-                // Amenities
-                wardrobesStatus: document.getElementById('wardrobesStatus').value,
-                glazedTilesStatus: document.getElementById('glazedTilesStatus').value,
-                bathTubsStatus: document.getElementById('bathTubsStatus').value,
-                marbleFlooringStatus: document.getElementById('marbleFlooringStatus').value,
-                interiorStatus: document.getElementById('interiorStatus').value,
-                architecturalStatus: document.getElementById('architecturalStatus').value,
-                panelingStatus: document.getElementById('panelingStatus').value,
-                aluminiumStatus: document.getElementById('aluminiumStatus').value,
-                handRailsStatus: document.getElementById('handRailsStatus').value,
-                falseCeilingStatus: document.getElementById('falseCeilingStatus').value,
-                amenitiesTotal: document.getElementById('amenitiesTotal').value
-            };
-
-            console.log(Container_1, Container_2, Container_3)
-            // Call the function to generate the PDF
-            try {
-                // Wait for the PDF to be generated
-                const doc = await generatePDF(bank_info, Container_1, Container_2, Container_3, Container_4);
-
-                // Save the generated PDF
-                doc.save('valuation_report.pdf');
-            } catch (error) {
-                console.error('Error generating PDF:', error);
-                alert('There was an error generating the PDF. Please try again.');
-            }
+        localStorage.removeItem('Container_2');
+            // Save data to localStorage
+            localStorage.setItem('Container_2', JSON.stringify(Container_2));
+            console.log("Captured Data:", Container_2);
+            alert('Data captured successfully!');
+          
         });
     </script>
+
+<script>
+    const Container_2 = JSON.parse(localStorage.getItem('Container_2'));
+    console.log(Container_2);
+
+    document.getElementById("generatePdfBtn").addEventListener("click", function() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        Container2(doc).then(() => {
+            addFooter(doc); 
+            doc.save("generated_report_Page2.pdf");
+        }).catch(error => console.error("Error generating PDF:", error));
+    });
+
+
+    function addFooter(doc) {
+    const margin = 10;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    
+    // Add horizontal line at the bottom
+    const footerY = pageHeight - 20;
+    doc.setLineWidth(0.1);
+    doc.line(margin, footerY + 4, pageWidth - margin, footerY + 4);
+    
+    // Add the chartered engineers text
+    doc.setFontSize(9);
+    doc.setTextColor(55, 65, 81);
+    doc.setFont('helvetica', 'bold');
+    doc.text('CHARTERED ENGINEERS | STRUCTURAL CONSULTANTS | N.D.T | R&R | VALUATION OF IMMOVABLE PROPERTIES.', 
+        pageWidth / 2, footerY + 9, { align: 'center' });
+    
+    // Add reference number and page number on next line
+    doc.setFontSize(9);
+    doc.setTextColor(0, 0, 0); // Reset back to black for subsequent text
+    // Reference number on left
+    doc.text('TP/JCB/K-BKR/R-09/12/2024-25', margin + 5, footerY + 15);
+    // Page number on right
+    doc.text('Page 1', pageWidth - margin - 20, footerY + 15);
+ }
+</script>
 
 </body>
 
