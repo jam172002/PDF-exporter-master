@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valuation Report Generator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
@@ -64,6 +64,238 @@
                     <input type="text" id="rentalValue" required>
                 </div>
 
+                <div class="form-section" id="section4">
+                    <h3 style="color:#4169E1"><b>Building Value</b></h3>
+    
+                    <div class="table-container">
+                        <table id="buildingValueTable" class="building-value-table">
+                            <thead>
+                                <tr>                                    
+                                    <th>Particulars</th>
+                                    <th>Roof Type</th>
+                                    <th>Area (sf)</th>
+                                    <th>Rate (Rs)</th>
+                                    <th>Amount (Rs)</th>
+                                    <th>Deprin. (%)</th>
+                                    <th>Deprin. Amount</th>
+                                    <th>Net Amount</th>                                    
+                                </tr>
+                            </thead>
+                            <tbody id="buildingValueTableBody">
+                                <!-- Rows will be added here -->
+                            </tbody>
+                        </table>
+                        
+                    
+    
+                        <!-- As Per Actuals Section -->
+                        <!-- Stilt Floor Inputs in a Single Row -->
+                        <h4>As Per Actuals</h4>
+                        <!-- APA Stilt Floor -->
+                            <div class="row">
+                                <div class="form-group">                                
+                                    <select id="APA_Floor" required>
+                                        <option value="" disabled selected>Select Floor</option>
+                                        <option value="Stilt Floor">Stilt Floor</option>
+                                        <option value="Ground Floor">Ground Floor</option>
+                                        <option value="First Floor">First Floor</option>
+                                        <option value="Second Floor">Second Floor</option>
+                                        <option value="Third Floor">Third Floor</option>
+                                        <option value="Fourth Floor">Fourth Floor</option>
+                                        <option value="Fifth Floor">Fifth Floor</option>
+                                        <option value="Sixth Floor">Sixth Floor</option>
+                                        <option value="Seventh Floor">Seventh Floor</option>
+                                        <option value="Eighth Floor">Eighth Floor</option>
+                                        <option value="Ninth Floor">Ninth Floor</option>
+                                        <option value="Tenth Floor">Tenth Floor</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="APA_stiltFloorRoofType" placeholder="Roof Type" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_stiltFloorArea" placeholder="Area (SFT)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_stiltFloorRate" placeholder="Rate (Rs)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_stiltFloorAmount" placeholder="Amount (Rs)" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_stiltFloorDeprn" placeholder="Depreciation (%)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_stiltFloorDeprnAmount" placeholder="Depreciation Amount" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_stiltFloorNetAmount" placeholder="Net Amount" required readonly>
+                                </div>
+                            </div>
+
+                            <!-- APA Ground Floor -->
+                            <div class="row">
+                                <div class="form-group">                                
+                                    <select id="APA_Floor" required>
+                                        <option value="" disabled selected>Select Floor</option>
+                                        <option value="Stilt Floor">Stilt Floor</option>
+                                        <option value="Ground Floor">Ground Floor</option>
+                                        <option value="First Floor">First Floor</option>
+                                        <option value="Second Floor">Second Floor</option>
+                                        <option value="Third Floor">Third Floor</option>
+                                        <option value="Fourth Floor">Fourth Floor</option>
+                                        <option value="Fifth Floor">Fifth Floor</option>
+                                        <option value="Sixth Floor">Sixth Floor</option>
+                                        <option value="Seventh Floor">Seventh Floor</option>
+                                        <option value="Eighth Floor">Eighth Floor</option>
+                                        <option value="Ninth Floor">Ninth Floor</option>
+                                        <option value="Tenth Floor">Tenth Floor</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="APA_groundFloorRoofType" placeholder="Roof Type" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_groundFloorArea" placeholder="Area (SFT)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_groundFloorRate" placeholder="Rate (Rs)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_groundFloorAmount" placeholder="Amount (Rs)" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_groundFloorDeprn" placeholder="Depreciation (%)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_groundFloorDeprnAmount" placeholder="Depreciation Amount" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APA_groundFloorNetAmount" placeholder="Net Amount" required readonly>
+                                </div>
+                            </div>
+
+                            <!-- APP Stilt Floor -->
+                            <h4>AS PER PLAN - For Present Stage Considered</h4>
+                            <div class="row">
+                                <div class="form-group">                                
+                                    <select id="APP_Floor" required>
+                                        <option value="" disabled selected>Select Floor</option>
+                                        <option value="Stilt Floor">Stilt Floor</option>
+                                        <option value="Ground Floor">Ground Floor</option>
+                                        <option value="First Floor">First Floor</option>
+                                        <option value="Second Floor">Second Floor</option>
+                                        <option value="Third Floor">Third Floor</option>
+                                        <option value="Fourth Floor">Fourth Floor</option>
+                                        <option value="Fifth Floor">Fifth Floor</option>
+                                        <option value="Sixth Floor">Sixth Floor</option>
+                                        <option value="Seventh Floor">Seventh Floor</option>
+                                        <option value="Eighth Floor">Eighth Floor</option>
+                                        <option value="Ninth Floor">Ninth Floor</option>
+                                        <option value="Tenth Floor">Tenth Floor</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="APP_stiltFloorRoofType" placeholder="Roof Type" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_stiltFloorArea" placeholder="Area (SFT)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_stiltFloorRate" placeholder="Rate (Rs)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_stiltFloorAmount" placeholder="Amount (Rs)" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_stiltFloorDeprn" placeholder="Depreciation (%)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_stiltFloorDeprnAmount" placeholder="Depreciation Amount" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_stiltFloorNetAmount" placeholder="Net Amount" required readonly>
+                                </div>
+                            </div>
+
+                            <!-- APP Ground Floor -->
+                            <div class="row">
+                                <div class="form-group">                                
+                                    <select id="APP_Floor" required>
+                                        <option value="" disabled selected>Select Floor</option>
+                                        <option value="Stilt Floor">Stilt Floor</option>
+                                        <option value="Ground Floor">Ground Floor</option>
+                                        <option value="First Floor">First Floor</option>
+                                        <option value="Second Floor">Second Floor</option>
+                                        <option value="Third Floor">Third Floor</option>
+                                        <option value="Fourth Floor">Fourth Floor</option>
+                                        <option value="Fifth Floor">Fifth Floor</option>
+                                        <option value="Sixth Floor">Sixth Floor</option>
+                                        <option value="Seventh Floor">Seventh Floor</option>
+                                        <option value="Eighth Floor">Eighth Floor</option>
+                                        <option value="Ninth Floor">Ninth Floor</option>
+                                        <option value="Tenth Floor">Tenth Floor</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="APP_groundFloorRoofType" placeholder="Roof Type" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_groundFloorArea" placeholder="Area (SFT)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_groundFloorRate" placeholder="Rate (Rs)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_groundFloorAmount" placeholder="Amount (Rs)" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_groundFloorDeprn" placeholder="Depreciation (%)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_groundFloorDeprnAmount" placeholder="Depreciation Amount" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="APP_groundFloorNetAmount" placeholder="Net Amount" required readonly>
+                                </div>
+                            </div>
+                            <script>
+                                function calculateAmount(prefix) {
+                                    let area = parseFloat(document.getElementById(prefix + "Area").value) || 0;
+                                    let rate = parseFloat(document.getElementById(prefix + "Rate").value) || 0;
+                                
+                                    let amount = area * rate;
+                                    document.getElementById(prefix + "Amount").value = amount.toFixed(2);
+                                
+                                    // Recalculate depreciation when amount updates
+                                    calculateDepreciation(prefix);
+                                }
+                                
+                                function calculateDepreciation(prefix) {
+                                    let amount = parseFloat(document.getElementById(prefix + "Amount").value) || 0;
+                                    let deprnPercent = parseFloat(document.getElementById(prefix + "Deprn").value) || 0;
+                                
+                                    let deprnAmount = (amount * deprnPercent) / 100;
+                                    document.getElementById(prefix + "DeprnAmount").value = deprnAmount.toFixed(2);
+                                
+                                    let netAmount = amount - deprnAmount;
+                                    document.getElementById(prefix + "NetAmount").value = netAmount.toFixed(2);
+                                }
+                                
+                                // Attach event listeners dynamically
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    const sections = ["APA_stiltFloor", "APA_groundFloor", "APP_stiltFloor", "APP_groundFloor"];
+                                
+                                    sections.forEach(prefix => {
+                                        document.getElementById(prefix + "Area").addEventListener("input", () => calculateAmount(prefix));
+                                        document.getElementById(prefix + "Rate").addEventListener("input", () => calculateAmount(prefix));
+                                        document.getElementById(prefix + "Deprn").addEventListener("input", () => calculateDepreciation(prefix));
+                                    });
+                                });
+                                </script>
+                        </div>
+                        <button type="button" onclick="addNewRow()" class="add-row-btn">Add Row</button>
+                    </div>
                 <button type="button" onclick="prevSection(3)">Previous</button>
                 <button type="button" onclick="nextSection(3)">Next</button>
             </div>

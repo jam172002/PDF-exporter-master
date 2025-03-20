@@ -146,26 +146,8 @@ function Container3(doc) {
    );
    
    let yPos = table.getPosition();
-   
-   
-    yPos = table.addRow('8', 'Building Status', '', 8, true);
 
-   // Add first and second rows (existing)
-   yPos = table.addRow('i', 'Existing building','UC');
-   yPos = table.addRow('ii', 'Stage of construction','Foundation work, Stilt floor roof work completed & Ground floor roof slab yet to be done.', 16);
-   yPos = table.addRow('iii', 'Existing building','Overall below 25% of work completed');
-   
-    yPos = table.addRow('9', 'Violations if any observed', '', 8, true);
-    yPos = table.addRow('i', 'Nature and extent of violations','Deviation observed in floor area. Sanction Plan area considered in our report', 16);
-
-    yPos = table.addRow('10', 'Area Details of the Property', '', 8, true);
-
-    yPos = table.addRow('i', 'Site Area','60 ft');
-    yPos = table.addRow('ii', 'Plinth area','Refer Table below');
-    yPos = table.addRow('iii', 'Carpet area','NA');
-    yPos = table.addRow('iv', 'Saleable area','NA');
-    yPos = table.addRow('v', 'Remarks','No');
-   
+   // Add first and second rows (existing) 
     yPos = table.addRow('11', 'Valuation Note', '', 8, true);
     yPos = table.addRow('a (i) ', 'Mention the value as per Government Approved Rates also', 'Rs. 1,90,03,717.47/- (Land only)', 16);
 
