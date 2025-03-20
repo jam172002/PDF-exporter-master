@@ -298,6 +298,7 @@
                     </div>
                 <button type="button" onclick="prevSection(3)">Previous</button>
                 <button type="button" onclick="nextSection(3)">Next</button>
+                <button id="generatePdfBtn" type="submit" >Gnerate Pdf</button>
             </div>
             
         </form>
@@ -360,7 +361,7 @@
             margin-bottom: 20px;
         }
     </style>
-    <script src="index.js"></script>
+    <script src="page_3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
@@ -387,75 +388,9 @@
             if (!isValid) {
                 alert('Please fill in all required fields');
                 return;
-            }
-
-            const bank_info = {
-                managerTitle: document.getElementById('managerTitle').value,
-                managerDesignation: document.getElementById('managerDesignation').value,
-                bankName: document.getElementById('bankName').value,
-                branchLocation: document.getElementById('branchLocation').value
-            }
-            // Capture form data
-            const Container_1 = {
-                purpose: 'TEST',
-                customerName: document.getElementById('customerName').value,
-                customerDetailsB: document.getElementById('customer_details_b').value,
-                customerDetailsC: document.getElementById('customer_details_c').value,
-                customerDetailsD: document.getElementById('customer_details_d').value,
-                propertyA: document.getElementById('property_a').value,
-                propertyB: document.getElementById('property_b').value,
-                documentA: document.getElementById('document_a').value,
-                documentB: document.getElementById('document_b').value,
-                documentC: document.getElementById('document_c').value,
-                documentD: document.getElementById('document_d').value,
-                // Add more fields as needed
-
-            };
-
-            const Container_2 = {
-                eastBoundary: document.getElementById('eastBoundary').value,
-                westBoundary: document.getElementById('westBoundary').value,
-                northBoundary: document.getElementById('northBoundary').value,
-                southBoundary: document.getElementById('southBoundary').value,
-                boundaryMatch: document.getElementById('boundaryMatch').value,
-                plotDemarcation: document.getElementById('plotDemarcation').value,
-                landUse: document.getElementById('landUse').value,
-                propertyType: document.getElementById('propertyType').value,
-                livingStatus: document.getElementById('livingStatus').value,
-                bedroomStatus: document.getElementById('bedroomStatus').value,
-                toiletStatus: document.getElementById('toiletStatus').value,
-                kitchenStatus: document.getElementById('kitchenStatus').value,
-
-                totalFloors: document.getElementById('totalFloors').value,
-                propertyFloor: document.getElementById('propertyFloor').value,
-                constructionYear: document.getElementById('constructionYear').value,
-                propertyAge: document.getElementById('propertyAge').value,
-                residualAge: document.getElementById('residualAge').value,
-                structureType: document.getElementById('structureType').value,
-                amenities: document.getElementById('amenities').value
-
-            };
-
+            }            
 
             const Container_3 = {
-                existingBuilding: document.getElementById('existingBuilding').value,
-                constructionStage: document.getElementById('constructionStage').value,
-                workCompletion: document.getElementById('workCompletion').value,
-                violations: document.getElementById('violations').value,
-                siteArea: document.getElementById('siteArea').value,
-                plinthArea: document.getElementById('plinthArea').value,
-                govtValue: document.getElementById('govtValue').value,
-                variationJustification: document.getElementById('variationJustification').value,
-                guidelineRate: document.getElementById('guidelineRate').value,
-                marketRate: document.getElementById('marketRate').value,
-                landValue: document.getElementById('landValue').value,
-                buildingValue: document.getElementById('buildingValue').value,
-                extraItems: document.getElementById('extraItems').value,
-                fairMarketValue: document.getElementById('fairMarketValue').value,
-                rentalValue: document.getElementById('rentalValue').value
-            };
-
-            const Container_4 = {
                 // As Per Actuals
                 stiltFloorRoof: document.getElementById('stiltFloorRoof').value,
                 stiltFloorArea: document.getElementById('stiltFloorArea').value,
@@ -495,22 +430,51 @@
                 falseCeilingStatus: document.getElementById('falseCeilingStatus').value,
                 amenitiesTotal: document.getElementById('amenitiesTotal').value
             };
-
-            console.log(Container_1, Container_2, Container_3)
-            // Call the function to generate the PDF
-            try {
-                // Wait for the PDF to be generated
-                const doc = await generatePDF(bank_info, Container_1, Container_2, Container_3, Container_4);
-
-                // Save the generated PDF
-                doc.save('valuation_report.pdf');
-            } catch (error) {
-                console.error('Error generating PDF:', error);
-                alert('There was an error generating the PDF. Please try again.');
-            }
+          
         });
     </script>
 
+    <script>
+        const Container_3 = JSON.parse(localStorage.getItem('Container_3'));
+        console.log(Container_3);
+
+        document.getElementById("generatePdfBtn").addEventListener("click", function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            Container3(doc).then(() => {
+                addFooter(doc); 
+                doc.save("generated_report_Page3.pdf");
+            }).catch(error => console.error("Error generating PDF:", error));
+        });
+
+
+        function addFooter(doc) {
+        const margin = 10;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        
+        // Add horizontal line at the bottom
+        const footerY = pageHeight - 20;
+        doc.setLineWidth(0.1);
+        doc.line(margin, footerY + 4, pageWidth - margin, footerY + 4);
+        
+        // Add the chartered engineers text
+        doc.setFontSize(9);
+        doc.setTextColor(55, 65, 81);
+        doc.setFont('helvetica', 'bold');
+        doc.text('CHARTERED ENGINEERS | STRUCTURAL CONSULTANTS | N.D.T | R&R | VALUATION OF IMMOVABLE PROPERTIES.', 
+            pageWidth / 2, footerY + 9, { align: 'center' });
+        
+        // Add reference number and page number on next line
+        doc.setFontSize(9);
+        doc.setTextColor(0, 0, 0); // Reset back to black for subsequent text
+        // Reference number on left
+        doc.text('TP/JCB/K-BKR/R-09/12/2024-25', margin + 5, footerY + 15);
+        // Page number on right
+        doc.text('Page 1', pageWidth - margin - 20, footerY + 15);
+    }
+    </script>
 </body>
 
 </html>

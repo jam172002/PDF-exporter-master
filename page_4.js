@@ -241,6 +241,7 @@ function buildingValueTable(doc) {
 
     return yPosition;
 }
+
 function createTable(doc, startY, title, subtitle = null) {
     let yPosition = startY;
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -318,6 +319,7 @@ function createTable(doc, startY, title, subtitle = null) {
         getPosition: () => yPosition
     };
  }
+ 
  function addFooter(doc) {
     const margin = 10;
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -347,17 +349,6 @@ function createTable(doc, startY, title, subtitle = null) {
 function generatePDF(formData) {
    const { jsPDF } = window.jspdf;
    const doc = new jsPDF();
-   
-//   header(doc)
-//   Container1(doc)
-//   addFooter(doc)
-   
-//   doc.addPage()
-//   header(doc,2)
-//   Container2(doc)
-//   addFooter(doc)
-   
-//   doc.addPage()
    header(doc,2)
    Container4(doc)
    addFooter(doc)
