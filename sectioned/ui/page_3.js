@@ -1,6 +1,9 @@
 function Container3(doc) {
-    const Container_2 = JSON.parse(localStorage.getItem('Container_2'));
-    console.log(Container_2);
+    const Container_3 = JSON.parse(localStorage.getItem('Container_3'));
+    console.log(Container_3);
+    const actualsData = JSON.parse(localStorage.getItem('actualsData')) || [];
+    const planData = JSON.parse(localStorage.getItem('planData')) || [];
+
 
     // Initial settings
     const margin = 18;
@@ -45,21 +48,35 @@ function Container3(doc) {
             yPost = table.addRow('c(vii)', ' Expected Rental Value ', 'Expected Rent Rs.20,000/- per month for 2BHK')
 
             // Add data rows with all columns        
-            yPost = table.addTableHeader();            
-            yPos = table.addRow('', 'AS PER ACTUALS', '', 8, true);
-            yPost = table.addRowT('1', 'Stilt Floor', 'RCC', '2,000.00', '500.00', '10,00,000.00', '0.00', '0.00', '10,00,000.00');
-            yPost = table.addRowT('2', 'Ground Floor', 'RCC', '2,000.00', '300.00', '6,00,000.00', '0.00', '0.00', '6,00,000.00');
-            yPost = table.addRowT('', 'Total', '', '4,000.00', '', '16,00,000.00', '', '0.00', '16,00,000.00');
-            
-            yPos = table.addRow('', 'AS PER PLAN- For Present Stage Considered', '', 8, true);
-            yPost = table.addRowT('1', 'Stilt Floor', 'RCC', '1,371.79', '500.00', '6,85,896.20', '0.00', '0.00', '6,85,896.20');
-            yPost = table.addRowT('2', 'Ground Floor', 'RCC', '1,371.79', '300.00', '4,11,537.72', '0.00', '0.00', '4,11,537.72');
-            yPost = table.addRowT('3', 'First Floor', 'RCC', '1,371.79', '0.00', '0.00', '0.00', '0.00', '0.00');
-            yPost = table.addRowT('4', 'Second Floor', 'RCC', '1,371.79', '0.00', '0.00', '0.00', '0.00', '0.00');
-            yPost = table.addRowT('5', 'Third Floor', 'RCC', '1,371.79', '0.00', '0.00', '0.00', '0.00', '0.00');
-            yPost = table.addRowT('6', 'Terrace Floor', 'RCC', '265.56', '0.00', '0.00', '0.00', '0.00', '0.00');
-            yPost = table.addRowT('', 'Total', '', '7,124.52', '', '10,97,433.92', '', '0.00', '10,97,433.92');
+            yPost = table.addTableHeader();   
 
+            yPos = table.addRow('', 'AS PER ACTUALS', '', 8, true);
+            actualsData.forEach((row, index) => {
+                const floor = row[Object.keys(row).find(key => key.includes('Floor'))];
+                const roofType = row[Object.keys(row).find(key => key.includes('RoofType'))];
+                const area = row[Object.keys(row).find(key => key.includes('Area'))];
+                const rate = row[Object.keys(row).find(key => key.includes('Rate'))];
+                const amount = row[Object.keys(row).find(key => key.includes('Amount'))];
+                const deprn = row[Object.keys(row).find(key => key.includes('Deprn'))];
+                const deprnAmount = row[Object.keys(row).find(key => key.includes('DeprnAmount'))];
+                const netAmount = row[Object.keys(row).find(key => key.includes('NetAmount'))];
+
+                yPos = table.addRowT(index + 1, floor, roofType, area, rate, amount, deprn, deprnAmount, netAmount);
+            });
+
+            yPos = table.addRow('', 'AS PER PLAN', '', 8, true);
+            planData.forEach((row, index) => {
+                const floor = row[Object.keys(row).find(key => key.includes('Floor'))];
+                const roofType = row[Object.keys(row).find(key => key.includes('RoofType'))];
+                const area = row[Object.keys(row).find(key => key.includes('Area'))];
+                const rate = row[Object.keys(row).find(key => key.includes('Rate'))];
+                const amount = row[Object.keys(row).find(key => key.includes('Amount'))];
+                const deprn = row[Object.keys(row).find(key => key.includes('Deprn'))];
+                const deprnAmount = row[Object.keys(row).find(key => key.includes('DeprnAmount'))];
+                const netAmount = row[Object.keys(row).find(key => key.includes('NetAmount'))];
+
+                yPos = table.addRowT(index + 1, floor, roofType, area, rate, amount, deprn, deprnAmount, netAmount);
+            });
               // Resolve the promise after the table is completed
               resolve(yPos);
             };
