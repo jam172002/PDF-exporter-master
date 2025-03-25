@@ -88,219 +88,130 @@
                         
                     
     
-                        <!-- As Per Actuals Section -->
-                        <!-- Stilt Floor Inputs in a Single Row -->
                         <h4>As Per Actuals</h4>
-                        <!-- APA Stilt Floor -->
-                            <div class="row">
-                                <div class="form-group">                                
-                                    <select id="APA_Floor" required>
-                                        <option value="" disabled selected>Select Floor</option>
-                                        <option value="Stilt Floor">Stilt Floor</option>
-                                        <option value="Ground Floor">Ground Floor</option>
-                                        <option value="First Floor">First Floor</option>
-                                        <option value="Second Floor">Second Floor</option>
-                                        <option value="Third Floor">Third Floor</option>
-                                        <option value="Fourth Floor">Fourth Floor</option>
-                                        <option value="Fifth Floor">Fifth Floor</option>
-                                        <option value="Sixth Floor">Sixth Floor</option>
-                                        <option value="Seventh Floor">Seventh Floor</option>
-                                        <option value="Eighth Floor">Eighth Floor</option>
-                                        <option value="Ninth Floor">Ninth Floor</option>
-                                        <option value="Tenth Floor">Tenth Floor</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" id="APA_stiltFloorRoofType" placeholder="Roof Type" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_stiltFloorArea" placeholder="Area (SFT)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_stiltFloorRate" placeholder="Rate (Rs)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_stiltFloorAmount" placeholder="Amount (Rs)" required readonly>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_stiltFloorDeprn" placeholder="Depreciation (%)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_stiltFloorDeprnAmount" placeholder="Depreciation Amount" required readonly>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_stiltFloorNetAmount" placeholder="Net Amount" required readonly>
-                                </div>
-                            </div>
+                        <div id="actuals-container"></div>
+                        <button onclick="addRow('actuals-container', 'APA')">Add Row (As Per Actuals)</button>
+                        
+                        <h4>As Per Plan</h4>
+                        <div id="plan-container"></div>
+                        <button onclick="addRow('plan-container', 'APP')">Add Row (As Per Plan)</button>
+                        
+                        <script>
+                                const floors = ["Stilt Floor", "Ground Floor", "First Floor", "Second Floor", "Third Floor", "Fourth Floor", "Fifth Floor", "Sixth Floor", "Seventh Floor", "Eighth Floor", "Ninth Floor", "Tenth Floor"];
 
-                            <!-- APA Ground Floor -->
-                            <div class="row">
-                                <div class="form-group">                                
-                                    <select id="APA_Floor" required>
-                                        <option value="" disabled selected>Select Floor</option>
-                                        <option value="Stilt Floor">Stilt Floor</option>
-                                        <option value="Ground Floor">Ground Floor</option>
-                                        <option value="First Floor">First Floor</option>
-                                        <option value="Second Floor">Second Floor</option>
-                                        <option value="Third Floor">Third Floor</option>
-                                        <option value="Fourth Floor">Fourth Floor</option>
-                                        <option value="Fifth Floor">Fifth Floor</option>
-                                        <option value="Sixth Floor">Sixth Floor</option>
-                                        <option value="Seventh Floor">Seventh Floor</option>
-                                        <option value="Eighth Floor">Eighth Floor</option>
-                                        <option value="Ninth Floor">Ninth Floor</option>
-                                        <option value="Tenth Floor">Tenth Floor</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" id="APA_groundFloorRoofType" placeholder="Roof Type" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_groundFloorArea" placeholder="Area (SFT)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_groundFloorRate" placeholder="Rate (Rs)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_groundFloorAmount" placeholder="Amount (Rs)" required readonly>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_groundFloorDeprn" placeholder="Depreciation (%)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_groundFloorDeprnAmount" placeholder="Depreciation Amount" required readonly>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APA_groundFloorNetAmount" placeholder="Net Amount" required readonly>
-                                </div>
-                            </div>
-
-                            <!-- APP Stilt Floor -->
-                            <h4>AS PER PLAN - For Present Stage Considered</h4>
-                            <div class="row">
-                                <div class="form-group">                                
-                                    <select id="APP_Floor" required>
-                                        <option value="" disabled selected>Select Floor</option>
-                                        <option value="Stilt Floor">Stilt Floor</option>
-                                        <option value="Ground Floor">Ground Floor</option>
-                                        <option value="First Floor">First Floor</option>
-                                        <option value="Second Floor">Second Floor</option>
-                                        <option value="Third Floor">Third Floor</option>
-                                        <option value="Fourth Floor">Fourth Floor</option>
-                                        <option value="Fifth Floor">Fifth Floor</option>
-                                        <option value="Sixth Floor">Sixth Floor</option>
-                                        <option value="Seventh Floor">Seventh Floor</option>
-                                        <option value="Eighth Floor">Eighth Floor</option>
-                                        <option value="Ninth Floor">Ninth Floor</option>
-                                        <option value="Tenth Floor">Tenth Floor</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" id="APP_stiltFloorRoofType" placeholder="Roof Type" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_stiltFloorArea" placeholder="Area (SFT)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_stiltFloorRate" placeholder="Rate (Rs)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_stiltFloorAmount" placeholder="Amount (Rs)" required readonly>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_stiltFloorDeprn" placeholder="Depreciation (%)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_stiltFloorDeprnAmount" placeholder="Depreciation Amount" required readonly>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_stiltFloorNetAmount" placeholder="Net Amount" required readonly>
-                                </div>
-                            </div>
-
-                            <!-- APP Ground Floor -->
-                            <div class="row">
-                                <div class="form-group">                                
-                                    <select id="APP_Floor" required>
-                                        <option value="" disabled selected>Select Floor</option>
-                                        <option value="Stilt Floor">Stilt Floor</option>
-                                        <option value="Ground Floor">Ground Floor</option>
-                                        <option value="First Floor">First Floor</option>
-                                        <option value="Second Floor">Second Floor</option>
-                                        <option value="Third Floor">Third Floor</option>
-                                        <option value="Fourth Floor">Fourth Floor</option>
-                                        <option value="Fifth Floor">Fifth Floor</option>
-                                        <option value="Sixth Floor">Sixth Floor</option>
-                                        <option value="Seventh Floor">Seventh Floor</option>
-                                        <option value="Eighth Floor">Eighth Floor</option>
-                                        <option value="Ninth Floor">Ninth Floor</option>
-                                        <option value="Tenth Floor">Tenth Floor</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" id="APP_groundFloorRoofType" placeholder="Roof Type" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_groundFloorArea" placeholder="Area (SFT)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_groundFloorRate" placeholder="Rate (Rs)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_groundFloorAmount" placeholder="Amount (Rs)" required readonly>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_groundFloorDeprn" placeholder="Depreciation (%)" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_groundFloorDeprnAmount" placeholder="Depreciation Amount" required readonly>
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" id="APP_groundFloorNetAmount" placeholder="Net Amount" required readonly>
-                                </div>
-                            </div>
-                            <script>
-                                function calculateAmount(prefix) {
-                                    let area = parseFloat(document.getElementById(prefix + "Area").value) || 0;
-                                    let rate = parseFloat(document.getElementById(prefix + "Rate").value) || 0;
-                                
-                                    let amount = area * rate;
-                                    document.getElementById(prefix + "Amount").value = amount.toFixed(2);
-                                
-                                    // Recalculate depreciation when amount updates
-                                    calculateDepreciation(prefix);
+                                function addRow(containerId, prefix) {
+                                    const container = document.getElementById(containerId);
+                                    const rowId = Date.now();
+                                    
+                                    let row = document.createElement("div");
+                                    row.classList.add("row");
+                                    row.setAttribute("data-id", rowId);
+                                    row.innerHTML = `
+                                        <div class="form-group">
+                                            <select name="${prefix}_Floor" onchange="updateNames(${rowId}, '${prefix}')">
+                                                <option value="" disabled selected>Select Floor</option>
+                                                ${floors.map(floor => `<option value="${floor}">${floor}</option>`).join('')}
+                                            </select>
+                                        </div>
+                                        <div class="form-group"><input type="text" name="${prefix}_RoofType" placeholder="Roof Type" required></div>
+                                        <div class="form-group"><input type="number" name="${prefix}_Area" placeholder="Area (SFT)" required></div>
+                                        <div class="form-group"><input type="number" name="${prefix}_Rate" placeholder="Rate (Rs)" required></div>
+                                        <div class="form-group"><input type="number" name="${prefix}_Amount" placeholder="Amount (Rs)" readonly></div>
+                                        <div class="form-group"><input type="number" name="${prefix}_Deprn" placeholder="Depreciation (%)" required></div>
+                                        <div class="form-group"><input type="number" name="${prefix}_DeprnAmount" placeholder="Depreciation Amount" readonly></div>
+                                        <div class="form-group"><input type="number" name="${prefix}_NetAmount" placeholder="Net Amount" readonly></div>
+                                        <div class="form-group"><button onclick="removeRow(${rowId}, '${containerId}')">Remove</button></div>
+                                    `;
+                                    container.appendChild(row);
+                                    saveData();
                                 }
-                                
-                                function calculateDepreciation(prefix) {
-                                    let amount = parseFloat(document.getElementById(prefix + "Amount").value) || 0;
-                                    let deprnPercent = parseFloat(document.getElementById(prefix + "Deprn").value) || 0;
-                                
-                                    let deprnAmount = (amount * deprnPercent) / 100;
-                                    document.getElementById(prefix + "DeprnAmount").value = deprnAmount.toFixed(2);
-                                
-                                    let netAmount = amount - deprnAmount;
-                                    document.getElementById(prefix + "NetAmount").value = netAmount.toFixed(2);
+
+                                function removeRow(rowId, containerId) {
+                                    document.querySelector(`[data-id='${rowId}']`).remove();
+                                    saveData();
                                 }
-                                
-                                // Attach event listeners dynamically
-                                document.addEventListener("DOMContentLoaded", function () {
-                                    const sections = ["APA_stiltFloor", "APA_groundFloor", "APP_stiltFloor", "APP_groundFloor"];
-                                
-                                    sections.forEach(prefix => {
-                                        document.getElementById(prefix + "Area").addEventListener("input", () => calculateAmount(prefix));
-                                        document.getElementById(prefix + "Rate").addEventListener("input", () => calculateAmount(prefix));
-                                        document.getElementById(prefix + "Deprn").addEventListener("input", () => calculateDepreciation(prefix));
+
+                                function updateNames(rowId, prefix) {
+                                    const row = document.querySelector(`[data-id='${rowId}']`);
+                                    const floorName = row.querySelector(`select[name='${prefix}_Floor']`).value.replace(/\s+/g, '').toLowerCase();
+                                    if (!floorName) return;
+
+                                    row.querySelectorAll("input").forEach(input => {
+                                        let baseName = input.name.split('_').slice(-1)[0]; 
+                                        input.name = `${prefix}_${floorName}_${baseName}`;
                                     });
+
+                                    saveData();
+                                }
+
+                                document.addEventListener('input', function(e) {
+                                    if (e.target.matches('input[name$="_Rate"], input[name$="_Area"]')) {
+                                        const row = e.target.closest('.row');
+                                        calculateAmount(row);
+                                        saveData();
+                                    }
+                                    if (e.target.matches('input[name$="_Deprn"]')) {
+                                        const row = e.target.closest('.row');
+                                        calculateDepreciation(row);
+                                        saveData();
+                                    }
                                 });
-                                </script>
-                        </div>
-                        <button type="button" onclick="addNewRow()" class="add-row-btn">Add Row</button>
+
+                                function calculateAmount(row) {
+                                    const rate = parseFloat(row.querySelector('input[name$="_Rate"]').value);
+                                    const area = parseFloat(row.querySelector('input[name$="_Area"]').value);
+                                    if (!isNaN(rate) && !isNaN(area)) {
+                                        const amount = rate * area;
+                                        row.querySelector('input[name$="_Amount"]').value = amount.toFixed(2);
+                                        calculateDepreciation(row);
+                                    }
+                                }
+
+                                function calculateDepreciation(row) {
+                                    const amount = parseFloat(row.querySelector('input[name$="_Amount"]').value);
+                                    const deprnPercent = parseFloat(row.querySelector('input[name$="_Deprn"]').value);
+                                    if (!isNaN(amount) && !isNaN(deprnPercent)) {
+                                        const deprnAmount = (amount * (deprnPercent / 100)).toFixed(2);
+                                        const netAmount = (amount - deprnAmount).toFixed(2);
+                                        row.querySelector('input[name$="_DeprnAmount"]').value = deprnAmount;
+                                        row.querySelector('input[name$="_NetAmount"]').value = netAmount;
+                                    }
+                                }
+
+                                function saveData() {
+                                    let actualsData = [];
+                                    let planData = [];
+
+                                    document.querySelectorAll("#actuals-container .row").forEach(row => {
+                                        let rowData = {};
+                                        row.querySelectorAll("input, select").forEach(input => {
+                                            rowData[input.name] = input.value;
+                                        });
+                                        actualsData.push(rowData);
+                                    });
+
+                                    document.querySelectorAll("#plan-container .row").forEach(row => {
+                                        let rowData = {};
+                                        row.querySelectorAll("input, select").forEach(input => {
+                                            rowData[input.name] = input.value;
+                                        });
+                                        planData.push(rowData);
+                                    });
+
+                                    localStorage.setItem("actualsData", JSON.stringify(actualsData));
+                                    localStorage.setItem("planData", JSON.stringify(planData));
+
+                                    console.log(actualsData);
+                                    console.log(planData);
+                                }
+                            </script>
+                               
                     </div>
-                <button type="button" onclick="prevSection(3)">Previous</button>
-                <button type="button" onclick="nextSection(3)">Next</button>
-                <button id="generatePdfBtn" type="submit" >Gnerate Pdf</button>
-            </div>
-            
+                        <button type="button" onclick="prevSection(3)">Previous</button>
+                        <button type="button" onclick="nextSection(3)">Next</button>
+                        <button id="generatePdfBtn" type="submit" >Gnerate Pdf</button>
+                </div>
+                    
         </form>
     </div>
 
@@ -344,23 +255,6 @@
 
     </script>
 
-    <style>
-        /* Add these new styles while keeping all existing CSS */
-        .form-section button {
-            width: auto;
-            margin-right: 10px;
-            padding: 10px 20px;
-        }
-
-        .form-section button[type="submit"] {
-            width: auto;
-        }
-
-        /* Style for the buttons container */
-        .form-section {
-            margin-bottom: 20px;
-        }
-    </style>
     <script src="page_3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -391,45 +285,21 @@
             }            
 
             const Container_3 = {
-                // As Per Actuals
-                stiltFloorRoof: document.getElementById('stiltFloorRoof').value,
-                stiltFloorArea: document.getElementById('stiltFloorArea').value,
-                stiltFloorRate: document.getElementById('stiltFloorRate').value,
-                stiltFloorAmount: document.getElementById('stiltFloorAmount').value,
-                stiltFloorDeprn: document.getElementById('stiltFloorDeprn').value,
-                stiltFloorDeprnAmount: document.getElementById('stiltFloorDeprnAmount').value,
-                stiltFloorNetAmount: document.getElementById('stiltFloorNetAmount').value,
+                govtValue: document.getElementById('govtValue').value,
+                variationJustification: document.getElementById('variationJustification').value,
+                guidelineRate: document.getElementById('guidelineRate').value,
+                marketRate: document.getElementById('marketRate').value,
+                landValue: document.getElementById('landValue').value,
+                buildingValue: document.getElementById('buildingValue').value,
+                extraItems: document.getElementById('extraItems').value,
+                fairMarketValue: document.getElementById('fairMarketValue').value,
+                rentalValue: document.getElementById('rentalValue').value,
 
-                // Ground Floor
-                groundFloorRoof: document.getElementById('groundFloorRoof').value,
-                groundFloorArea: document.getElementById('groundFloorArea').value,
-                groundFloorRate: document.getElementById('groundFloorRate').value,
-                groundFloorAmount: document.getElementById('groundFloorAmount').value,
-                groundFloorDeprn: document.getElementById('groundFloorDeprn').value,
-                groundFloorDeprnAmount: document.getElementById('groundFloorDeprnAmount').value,
-                groundFloorNetAmount: document.getElementById('groundFloorNetAmount').value,
-
-                // Extra Items
-                porticoStatus: document.getElementById('porticoStatus').value,
-                frontDoorStatus: document.getElementById('frontDoorStatus').value,
-                verandahStatus: document.getElementById('verandahStatus').value,
-                boreWellStatus: document.getElementById('boreWellStatus').value,
-                gatesStatus: document.getElementById('gatesStatus').value,
-                extraItemsTotal: document.getElementById('extraItemsTotal').value,
-
-                // Amenities
-                wardrobesStatus: document.getElementById('wardrobesStatus').value,
-                glazedTilesStatus: document.getElementById('glazedTilesStatus').value,
-                bathTubsStatus: document.getElementById('bathTubsStatus').value,
-                marbleFlooringStatus: document.getElementById('marbleFlooringStatus').value,
-                interiorStatus: document.getElementById('interiorStatus').value,
-                architecturalStatus: document.getElementById('architecturalStatus').value,
-                panelingStatus: document.getElementById('panelingStatus').value,
-                aluminiumStatus: document.getElementById('aluminiumStatus').value,
-                handRailsStatus: document.getElementById('handRailsStatus').value,
-                falseCeilingStatus: document.getElementById('falseCeilingStatus').value,
-                amenitiesTotal: document.getElementById('amenitiesTotal').value
+                actualsData: JSON.parse(localStorage.getItem("actualsData")),
+                planData: JSON.parse(localStorage.getItem("planData")),
             };
+            localStorage.setItem('Container_3', JSON.stringify(Container_3));
+            console.log("Captured Data:", Container_3);
           
         });
     </script>
