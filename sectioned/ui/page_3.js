@@ -3,12 +3,10 @@ function Container3(doc) {
     console.log(Container_3);
     const actualsData = JSON.parse(localStorage.getItem('actualsData')) || [];
     const planData = JSON.parse(localStorage.getItem('planData')) || [];
-
-
     // Initial settings
-    const margin = 18;
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const tableWidth = pageWidth - (margin * 1.55);
+    const leftMargin = 25.7;  
+    const rightMargin = 17.5; 
+    const pageWidth = doc.internal.pageSize.getWidth();    
     let yPosition = 0;
 
     // Add logo on the right side
@@ -20,11 +18,13 @@ function Container3(doc) {
             // Logo dimensions
             const logoWidth = 30;
             const logoHeight = 30;
-            const logoX = pageWidth - margin - logoWidth - 3;
-            doc.addImage(img, 'PNG', logoX + 8, yPosition, logoWidth, logoHeight);
+            const logoX = pageWidth - rightMargin - logoWidth - 6;
+            yPosition += 2; 
+            doc.addImage(img, 'PNG', logoX , yPosition, logoWidth, logoHeight);
 
             // Move yPosition downward to prevent overlap
             yPosition += logoHeight + 2;  
+
 
             const font_size = 8;
             doc.setFontSize(font_size);
@@ -34,18 +34,18 @@ function Container3(doc) {
 
         // Add first and second rows (existing) 
             yPos = table.addRow('11', 'Valuation Note', '', 8, true);
-            yPos = table.addRow('a (i) ', 'Mention the value as per Government Approved Rates also', 'Rs. 1,90,03,717.47/- (Land only)', 16);
+            yPos = table.addRow('a (i) ', 'Mention the value as per Government Approved Rates also', Container_3.govtValue);
 
-            yPos = table.addRow('ii', 'In case of variation of 20 % or more in the valuation proposed by the valuer and the Guideline value provided in the State Govt. notification or Income Tax Gazette justification on variation has to be given','60 ft', 30);
+            yPos = table.addRow('ii', 'In case of variation of 20 % or more in the valuation proposed by the valuer and the Guideline value provided in the State Govt. notification or Income Tax Gazette justification on variation has to be given',Container_3.variationJustification);
             yPos = table.addRow('b', 'Summary of Valuation', '', 8, true);
-            yPos = table.addRow('i', 'Guideline Rate ','Rs.85,200/- per Sqm or Rs.7,918.21/- per Sft');
-            yPos = table.addRow('ii', 'Market Rate','Rs.15,000/- per Sft to Rs.17,000/- per Sft for Standard size types of properties in the locality, we have considered Rs.15,000/- per Sft as the fair market rate.', 20);
+            yPos = table.addRow('i', 'Guideline Rate ',Container_3.guidelineRate);
+            yPos = table.addRow('ii', 'Market Rate',Container_3.marketRate);
 
-            yPos = table.addRow('iii', 'Land Value ','Rs.3,60,00,000-00');
-            yPos = table.addRow('iv', 'Building Value ','Rs. 10,97,433-92 (At the Present Stage)');
-            yPos = table.addRow('v', 'Extra items, Amenities & Services','Rs. 2,50,000-00 ');
-            yPost = table.addRow('vi', 'Fair Market Value (SAY)', 'Say Rs. 3,73,00,000-00')
-            yPost = table.addRow('c(vii)', ' Expected Rental Value ', 'Expected Rent Rs.20,000/- per month for 2BHK')
+            yPos = table.addRow('iii', 'Land Value ',Container_3.landValue);
+            yPos = table.addRow('iv', 'Building Value ',Container_3.buildingValue);
+            yPos = table.addRow('v', 'Extra items, Amenities & Services',Container_3.extraItems);
+            yPost = table.addRow('vi', 'Fair Market Value (SAY)', Container_3.fairMarketValue);
+            yPost = table.addRow('c(vii)', ' Expected Rental Value ', Container_3.rentalValue);
 
             // Add data rows with all columns        
             yPost = table.addTableHeader();   
@@ -92,28 +92,45 @@ function Container3(doc) {
 function createTable(doc, startY, title, subtitle = null) {
         let yPosition = startY;
         const pageWidth = doc.internal.pageSize.getWidth();
-        const leftMargin = 18;  // Changed to 10
-        const rightMargin = 10; // Kept as 20
-        const tableWidth = pageWidth - (leftMargin + rightMargin);
+        const leftMargin = 25.7;  
+        const rightMargin = 17.5; 
+        const tableWidth = pageWidth - (leftMargin + rightMargin); 
         const col1Width = 10;
-        const col2Width = 85;
+        const col2Width = 80;
         const col3Width = tableWidth - col1Width - col2Width;
     
-        function addRow(number, description, value, height = 8, no_column = false) {
+        function addRow(number, description, value, no_column = false) {
+            // Set line height and padding
+            const lineHeight = 3.1;
+            const padding = 2;
+        
+            // Calculate the height based on the content
+            const splitDescription = doc.splitTextToSize(description, col2Width - 4);
+            const splitValue = value ? doc.splitTextToSize(value, col3Width - 4) : [''];
+        
+            // Determine the number of lines for each piece of content
+            const descriptionLines = splitDescription.length;
+            const valueLines = splitValue.length;
+        
+            // Calculate the maximum number of lines
+            const maxLines = Math.max(descriptionLines, valueLines);
+            
+            // Calculate the row height based on the maximum number of lines
+            const height = (maxLines * lineHeight) + padding * 2; // Add padding for spacing
+        
             if (no_column) {
                 // Draw only two columns when no_column is true
-                doc.rect(leftMargin, yPosition, col1Width, height);  // Updated to use leftMargin
-                doc.rect(leftMargin + col1Width, yPosition, col2Width + col3Width, height);  // Updated to use leftMargin
+                doc.rect(leftMargin, yPosition, col1Width, height);  
+                doc.rect(leftMargin + col1Width, yPosition, col2Width + col3Width, height);  
                 
                 if (number) {
                     doc.setFont('helvetica', 'normal');
-                    doc.text(number.toString(), leftMargin + 1, yPosition + 5);  // Updated to use leftMargin
+                    doc.text(number.toString(), leftMargin + 1, yPosition + 5); 
                 }
                 
                 // Set bold font for description when no_column is true
                 doc.setFont('helvetica', 'bold');
-                const splitDescription = doc.splitTextToSize(description, (col2Width + col3Width) - 4);
-                doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 5);  // Updated to use leftMargin
+                doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 5);  
             } else {
                 // Original three-column layout
                 doc.rect(leftMargin, yPosition, col1Width, height);  // Updated to use leftMargin
@@ -126,33 +143,30 @@ function createTable(doc, startY, title, subtitle = null) {
                 }
                 
                 doc.setFont('helvetica', 'normal');
-                const splitDescription = doc.splitTextToSize(description, col2Width - 4);
                 doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 5);  // Updated to use leftMargin
                 
-                const splitValue = doc.splitTextToSize(value, col3Width - 4);
                 if (value.includes('Mrs')) {
                     doc.setFont('helvetica', 'bold');
                 }
                 doc.text(splitValue, leftMargin + col1Width + col2Width + 2, yPosition + 5);  // Updated to use leftMargin
             }
             
+            // Move the yPosition down for the next row
             yPosition += height;
             return yPosition;
         }
-    
-        
-
+            
         // Define column widths (adjusted for 9 columns)
         const colWidths = {
             slNo: 10,
-            particulars: 28,
+            particulars: 24,
             roof: 10,
-            area: 18,
-            rate: 18,
-            amountIn: 30,
+            area: 15,
+            rate: 16,
+            amountIn: 26,
             deprnIn: 18,
             deprnAmount: 25,
-            netAmount: 25
+            netAmount: 23
         };
 
         function addTableHeader(){
