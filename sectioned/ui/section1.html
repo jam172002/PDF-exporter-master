@@ -364,6 +364,10 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
+        //const pageWidth = doc.internal.pageSize.getWidth();
+        //const pageHeight = doc.internal.pageSize.getHeight();
+        //console.log("Page Width in Points:", pageWidth);
+        //console.log("Page Height in Points:", pageHeight);
         Container1(doc).then(() => {
             addFooter(doc); // Ensure footer is added after content is placed
             doc.save("generated_report.pdf");
@@ -371,30 +375,20 @@
     });
 
     function addFooter(doc) {
-    const margin = 10;
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    
-    // Add horizontal line at the bottom
-    const footerY = pageHeight - 20;
-    doc.setLineWidth(0.1);
-    doc.line(margin, footerY + 4, pageWidth - margin, footerY + 4);
-    
-    // Add the chartered engineers text
-    doc.setFontSize(9);
-    doc.setTextColor(55, 65, 81);
-    doc.setFont('helvetica', 'bold');
-    doc.text('CHARTERED ENGINEERS | STRUCTURAL CONSULTANTS | N.D.T | R&R | VALUATION OF IMMOVABLE PROPERTIES.', 
-        pageWidth / 2, footerY + 9, { align: 'center' });
-    
-    // Add reference number and page number on next line
-    doc.setFontSize(9);
-    doc.setTextColor(0, 0, 0); // Reset back to black for subsequent text
-    // Reference number on left
-    doc.text('TP/JCB/K-BKR/R-09/12/2024-25', margin + 5, footerY + 15);
-    // Page number on right
-    doc.text('Page 1', pageWidth - margin - 20, footerY + 15);
- }
+        const leftMargin = 25.7;  
+        const rightMargin = 17.5; 
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        
+        // Add horizontal line at the bottom
+        const footerY = pageHeight - 25.7 ;
+        doc.setLineWidth(0.1);
+        doc.line(leftMargin, footerY, pageWidth - rightMargin, footerY);    
+        // Reference number on left
+        doc.text('TP/JCB/K-BKR/R-09/12/2024-25', leftMargin + 2, footerY + 4);
+        // Page number on right
+        doc.text('Page 1', pageWidth - rightMargin - 20, footerY + 4);
+    }
 </script>
 
 

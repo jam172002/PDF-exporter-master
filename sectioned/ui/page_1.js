@@ -3,9 +3,10 @@ function Container1(doc) {
     const Container_1 = JSON.parse(localStorage.getItem('Container_1'));
     console.log(Container_1);
     // Initial settings
-    const margin = 18;
+    const leftMargin = 25.7;  
+    const rightMargin = 17.5; 
     const pageWidth = doc.internal.pageSize.getWidth();
-    const tableWidth = pageWidth - (margin * 1.55);
+    const tableWidth = pageWidth - (leftMargin + rightMargin); 
     let yPosition = 10;
 
     // Add logo on the right side
@@ -17,14 +18,19 @@ function Container1(doc) {
             // Logo dimensions
             const logoWidth = 30;
             const logoHeight = 30;
-            const logoX = pageWidth - margin - logoWidth - 3;
-            doc.addImage(img, 'PNG', logoX + 8, yPosition - 2, logoWidth, logoHeight);
-                       
+            const logoX = pageWidth - rightMargin - logoWidth - 6;
+            yPosition += 2; 
+            doc.addImage(img, 'PNG', logoX , yPosition, logoWidth, logoHeight);
+                    
+             // Draw the main outer box
+             const pageHeight = doc.internal.pageSize.getHeight();
+             doc.rect(leftMargin, yPosition, tableWidth, pageHeight - 39 );
+
             // Company header
             doc.setFontSize(16);
             doc.setTextColor(65, 105, 225);
             doc.setFont('helvetica', 'bold');
-            doc.text('TRUE PEAK HOUSE LLP', pageWidth / 5, yPosition + 10);
+            doc.text('TRUE PEAK HOUSE LLP', leftMargin + 2, yPosition + 10);
 
             // Company details
             yPosition += 15;
@@ -32,32 +38,32 @@ function Container1(doc) {
             doc.setFontSize(8);
             doc.setFont('helvetica', 'normal');
             const address = 'GSTIN: 29AAUFT3926A1ZW, #240/C, FIRST FLOOR, 3RD BLOCK, NAGARABHAVI 2ND STAGE,';
-            doc.text(address, pageWidth / 9, yPosition);
+            doc.text(address, leftMargin + 2, yPosition);
 
             // Contact details
             yPosition += 5;
             const contact = 'Bengaluru: 560072. MOB: +91 9743142447 | balakrishna@truepeak.in | www.truepeak.in';
-            doc.text(contact, pageWidth / 9, yPosition);  
+            doc.text(contact, leftMargin + 2, yPosition);  
             doc.setTextColor(0, 0, 255); // Blue #0000FF
 
             // Draw a line below the title
             doc.setLineWidth(0.5);
-            yPosition += 4; 
-            doc.line(margin, yPosition, margin + tableWidth, yPosition);          
+            yPosition += 8; 
+            doc.line(leftMargin, yPosition, pageWidth - rightMargin, yPosition);          
 
             // Bank details
             // Reset color for lines
             doc.setTextColor(0, 0, 0);
             yPosition += 2;
             doc.setFont('helvetica', 'normal');
-            doc.text('To,', margin + 5, yPosition + 5);
+            doc.text('To,', leftMargin + 2, yPosition + 4);
             doc.setFont('times', 'bold');
-            doc.text(Container_1.bankInfo.managerDesignation.toUpperCase(), margin + 5, yPosition + 12);
-            doc.text(Container_1.bankInfo.bankName.toUpperCase(), margin + 5, yPosition + 19);
-            doc.text(Container_1.bankInfo.branchLocation.toUpperCase(), margin + 5, yPosition + 26);
+            doc.text(Container_1.bankInfo.managerDesignation.toUpperCase(), leftMargin + 2, yPosition + 8);
+            doc.text(Container_1.bankInfo.bankName.toUpperCase(), leftMargin + 2, yPosition + 12);
+            doc.text(Container_1.bankInfo.branchLocation.toUpperCase(), leftMargin + 2, yPosition + 16);
         
             // Title section
-            yPosition += 28;
+            yPosition += 20;
             doc.setTextColor(0, 0, 0);
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(9);
@@ -132,6 +138,11 @@ function Container1(doc) {
             yPos = table.addRow('c', 'Plot Demarcated', Container_1.otherDetails.plotDemarcation);
             yPos = table.addRow('d)', 'Approved and Land Use', Container_1.otherDetails.landUse);
             yPos = table.addRow('e)', 'Types of property', Container_1.otherDetails.typeOfProperty);
+            yPos = table.addRow('f)', 'Details of Accommodations', 'As per Actual');
+            yPos = table.addRow('i', 'Living/ Dinning', 'UC');
+            yPos = table.addRow('ii', 'Bed Room & Pooja Room', 'UC');
+            
+                        
 
             resolve(yPos);
         };
@@ -148,8 +159,8 @@ function Container1(doc) {
 function createTable(doc, startY, title, subtitle = null) {
     let yPosition = startY;
     const pageWidth = doc.internal.pageSize.getWidth();
-    const leftMargin = 18;  
-    const rightMargin = 10; 
+    const leftMargin = 25.7;  
+    const rightMargin = 17.5; 
     const tableWidth = pageWidth - (leftMargin + rightMargin); 
     
     if (subtitle) {
@@ -411,7 +422,7 @@ function createTable(doc, startY, title, subtitle = null) {
     const pageHeight = doc.internal.pageSize.getHeight();
     
     // Add horizontal line at the bottom
-    const footerY = pageHeight - 20;
+    const footerY = pageHeight - (2.57 * 28.35);
     doc.setLineWidth(0.1);
     doc.line(margin, footerY + 4, pageWidth - margin, footerY + 4);
     

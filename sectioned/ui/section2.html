@@ -74,6 +74,24 @@
                     <input type="text" id="amenities" required>
                 </div>
 
+                <h3 style="color:#4169E1"><b>Tenure / Occupancy Details </b></h3>
+                <h3 style="color:#4169E1"><b>Status of Tenure </b></h3>                
+
+                <div class="form-group">
+                    <label>Owned /Rented<span class="required">*</span></label>
+                    <input type="text" id="ownedOrRented" required>
+                </div>
+
+                <div class="form-group">
+                    <label>No. of years of Occupancy<span class="required">*</span></label>
+                    <input type="text" id="occupancyYears" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Relationship of tenant or owner<span class="required">*</span></label>
+                    <input type="text" id="relationOfTenant" required>
+                </div>
+
                 <h3 style="color:#4169E1"><b>Building Status & Valuation</b></h3>
 
                 <div class="form-group">
@@ -215,20 +233,23 @@
             residualAge: document.getElementById('residualAge').value,
             structureType: document.getElementById('structureType').value,
             amenities: document.getElementById('amenities').value,
+            ownedOrRented: document.getElementById('ownedOrRented').value,
+            occupancyYears: document.getElementById('occupancyYears').value,
+            relationOfTenant: document.getElementById('relationOfTenant').value,
             existingBuilding: document.getElementById('existingBuilding').value,
             constructionStage: document.getElementById('constructionStage').value,
             workCompletion: document.getElementById('workCompletion').value,
             violations: document.getElementById('violations').value,
-            siteArea: document.getElementById('eastToWest').value,
-            siteArea: document.getElementById('northToSouth').value,
-            siteArea: document.getElementById('totallyMeasuring').value,
+            eastToWest: document.getElementById('eastToWest').value,
+            northToSouth: document.getElementById('northToSouth').value,
+            totallyMeasuring: document.getElementById('totallyMeasuring').value,
             plinthArea: document.getElementById('plinthArea').value,
             carpetArea: document.getElementById('carpetArea').value,  
             saleableArea: document.getElementById('saleableArea').value,  
-            Remarks: document.getElementById('remarks').value 
+            remarks: document.getElementById('remarks').value 
         };
 
-        localStorage.removeItem('Container_2');
+        //localStorage.removeItem('Container_2');
             // Save data to localStorage
             localStorage.setItem('Container_2', JSON.stringify(Container_2));
             console.log("Captured Data:", Container_2);
@@ -251,32 +272,21 @@
         }).catch(error => console.error("Error generating PDF:", error));
     });
 
-
     function addFooter(doc) {
-    const margin = 10;
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    
-    // Add horizontal line at the bottom
-    const footerY = pageHeight - 20;
-    doc.setLineWidth(0.1);
-    doc.line(margin, footerY + 4, pageWidth - margin, footerY + 4);
-    
-    // Add the chartered engineers text
-    doc.setFontSize(9);
-    doc.setTextColor(55, 65, 81);
-    doc.setFont('helvetica', 'bold');
-    doc.text('CHARTERED ENGINEERS | STRUCTURAL CONSULTANTS | N.D.T | R&R | VALUATION OF IMMOVABLE PROPERTIES.', 
-        pageWidth / 2, footerY + 9, { align: 'center' });
-    
-    // Add reference number and page number on next line
-    doc.setFontSize(9);
-    doc.setTextColor(0, 0, 0); // Reset back to black for subsequent text
-    // Reference number on left
-    doc.text('TP/JCB/K-BKR/R-09/12/2024-25', margin + 5, footerY + 15);
-    // Page number on right
-    doc.text('Page 1', pageWidth - margin - 20, footerY + 15);
- }
+        const leftMargin = 25.7;  
+        const rightMargin = 17.5; 
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        
+        // Add horizontal line at the bottom
+        const footerY = pageHeight - 25.7 ;
+        doc.setLineWidth(0.1);
+        doc.line(leftMargin, footerY, pageWidth - rightMargin, footerY);    
+        // Reference number on left
+        doc.text('TP/JCB/K-BKR/R-09/12/2024-25', leftMargin + 2, footerY + 4);
+        // Page number on right
+        doc.text('Page 1', pageWidth - rightMargin - 20, footerY + 4);
+    }
 </script>
 
 </body>
