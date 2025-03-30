@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valuation Report Generator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
@@ -16,10 +16,10 @@
             <!-- Container 4 -->
             
 
-                <h4>Extra Items</h4>
+                <h4>B) Extra Items</h4>
                 <!-- Extra Items Section -->
                 <div class="form-group">
-                    <label>Portico Status<span class="required">*</span></label>
+                    <label>Portico<span class="required">*</span></label>
                     <input type="text" id="porticoStatus" required>
                 </div>
                 <div class="form-group">
@@ -27,15 +27,15 @@
                     <input type="text" id="frontDoorStatus" required>
                 </div>
                 <div class="form-group">
-                    <label>Verandah Status<span class="required">*</span></label>
+                    <label>Sit out / Verandah with steel grills <span class="required">*</span></label>
                     <input type="text" id="verandahStatus" required>
                 </div>
                 <div class="form-group">
-                    <label>Bore Well Status<span class="required">*</span></label>
+                    <label>Bore well / Overhead Tank / Sump / Solar <span class="required">*</span></label>
                     <input type="text" id="boreWellStatus" required>
                 </div>
                 <div class="form-group">
-                    <label>Gates Status<span class="required">*</span></label>
+                    <label>Extra Steel / Collapsible Gates <span class="required">*</span></label>
                     <input type="text" id="gatesStatus" required>
                 </div>
                 <div class="form-group">
@@ -43,7 +43,7 @@
                     <input type="number" id="extraItemsTotal" required>
                 </div>
 
-                <h4>Amenities</h4>
+                <h4> C) Amenities</h4>
                 <!-- Amenities Section -->
                 <div class="form-group">
                     <label>Wardrobes Status<span class="required">*</span></label>
@@ -90,11 +90,9 @@
                     <input type="number" id="amenitiesTotal" required>
                 </div>
 
-
-
                 <button type="button" onclick="prevSection(4)">Previous</button>
                 <!-- <button type="button" onclick="nextSection(5)">Next</button> -->
-                <button type="submit">Generate Report</button>
+                <button id="generatePdfBtn" type="submit" >Generate Pdf</button>
             </div>
 
         
@@ -141,24 +139,7 @@
 
     </script>
 
-    <style>
-        /* Add these new styles while keeping all existing CSS */
-        .form-section button {
-            width: auto;
-            margin-right: 10px;
-            padding: 10px 20px;
-        }
-
-        .form-section button[type="submit"] {
-            width: auto;
-        }
-
-        /* Style for the buttons container */
-        .form-section {
-            margin-bottom: 20px;
-        }
-    </style>
-    <script src="index.js"></script>
+    <script src="page_4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
@@ -187,91 +168,7 @@
                 return;
             }
 
-            const bank_info = {
-                managerTitle: document.getElementById('managerTitle').value,
-                managerDesignation: document.getElementById('managerDesignation').value,
-                bankName: document.getElementById('bankName').value,
-                branchLocation: document.getElementById('branchLocation').value
-            }
-            // Capture form data
-            const Container_1 = {
-                purpose: 'TEST',
-                customerName: document.getElementById('customerName').value,
-                customerDetailsB: document.getElementById('customer_details_b').value,
-                customerDetailsC: document.getElementById('customer_details_c').value,
-                customerDetailsD: document.getElementById('customer_details_d').value,
-                propertyA: document.getElementById('property_a').value,
-                propertyB: document.getElementById('property_b').value,
-                documentA: document.getElementById('document_a').value,
-                documentB: document.getElementById('document_b').value,
-                documentC: document.getElementById('document_c').value,
-                documentD: document.getElementById('document_d').value,
-                // Add more fields as needed
-
-            };
-
-            const Container_2 = {
-                eastBoundary: document.getElementById('eastBoundary').value,
-                westBoundary: document.getElementById('westBoundary').value,
-                northBoundary: document.getElementById('northBoundary').value,
-                southBoundary: document.getElementById('southBoundary').value,
-                boundaryMatch: document.getElementById('boundaryMatch').value,
-                plotDemarcation: document.getElementById('plotDemarcation').value,
-                landUse: document.getElementById('landUse').value,
-                propertyType: document.getElementById('propertyType').value,
-                livingStatus: document.getElementById('livingStatus').value,
-                bedroomStatus: document.getElementById('bedroomStatus').value,
-                toiletStatus: document.getElementById('toiletStatus').value,
-                kitchenStatus: document.getElementById('kitchenStatus').value,
-
-                totalFloors: document.getElementById('totalFloors').value,
-                propertyFloor: document.getElementById('propertyFloor').value,
-                constructionYear: document.getElementById('constructionYear').value,
-                propertyAge: document.getElementById('propertyAge').value,
-                residualAge: document.getElementById('residualAge').value,
-                structureType: document.getElementById('structureType').value,
-                amenities: document.getElementById('amenities').value
-
-            };
-
-
-            const Container_3 = {
-                existingBuilding: document.getElementById('existingBuilding').value,
-                constructionStage: document.getElementById('constructionStage').value,
-                workCompletion: document.getElementById('workCompletion').value,
-                violations: document.getElementById('violations').value,
-                siteArea: document.getElementById('siteArea').value,
-                plinthArea: document.getElementById('plinthArea').value,
-                govtValue: document.getElementById('govtValue').value,
-                variationJustification: document.getElementById('variationJustification').value,
-                guidelineRate: document.getElementById('guidelineRate').value,
-                marketRate: document.getElementById('marketRate').value,
-                landValue: document.getElementById('landValue').value,
-                buildingValue: document.getElementById('buildingValue').value,
-                extraItems: document.getElementById('extraItems').value,
-                fairMarketValue: document.getElementById('fairMarketValue').value,
-                rentalValue: document.getElementById('rentalValue').value
-            };
-
-            const Container_4 = {
-                // As Per Actuals
-                stiltFloorRoof: document.getElementById('stiltFloorRoof').value,
-                stiltFloorArea: document.getElementById('stiltFloorArea').value,
-                stiltFloorRate: document.getElementById('stiltFloorRate').value,
-                stiltFloorAmount: document.getElementById('stiltFloorAmount').value,
-                stiltFloorDeprn: document.getElementById('stiltFloorDeprn').value,
-                stiltFloorDeprnAmount: document.getElementById('stiltFloorDeprnAmount').value,
-                stiltFloorNetAmount: document.getElementById('stiltFloorNetAmount').value,
-
-                // Ground Floor
-                groundFloorRoof: document.getElementById('groundFloorRoof').value,
-                groundFloorArea: document.getElementById('groundFloorArea').value,
-                groundFloorRate: document.getElementById('groundFloorRate').value,
-                groundFloorAmount: document.getElementById('groundFloorAmount').value,
-                groundFloorDeprn: document.getElementById('groundFloorDeprn').value,
-                groundFloorDeprnAmount: document.getElementById('groundFloorDeprnAmount').value,
-                groundFloorNetAmount: document.getElementById('groundFloorNetAmount').value,
-
+            const Container_4 = {                
                 // Extra Items
                 porticoStatus: document.getElementById('porticoStatus').value,
                 frontDoorStatus: document.getElementById('frontDoorStatus').value,
@@ -294,19 +191,50 @@
                 amenitiesTotal: document.getElementById('amenitiesTotal').value
             };
 
-            console.log(Container_1, Container_2, Container_3)
-            // Call the function to generate the PDF
-            try {
-                // Wait for the PDF to be generated
-                const doc = await generatePDF(bank_info, Container_1, Container_2, Container_3, Container_4);
-
-                // Save the generated PDF
-                doc.save('valuation_report.pdf');
-            } catch (error) {
-                console.error('Error generating PDF:', error);
-                alert('There was an error generating the PDF. Please try again.');
-            }
+            localStorage.setItem('Container_4', JSON.stringify(Container_4));
+            console.log("Captured Data:", Container_4);
+        
         });
+    </script>
+
+    <script>
+       document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("generatePdfBtn").addEventListener("click", async function() {
+        const Container_4 = JSON.parse(localStorage.getItem('Container_4'));
+        console.log("Container_4 Data:", Container_4); // Check if data is available
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        try {
+            await Container4(doc); // Ensure this function is defined and returns a promise
+            addFooter(doc);
+            doc.save("generated_report_Page4.pdf");
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+        }
+    });
+});
+
+
+        function addFooter(doc) {
+        const leftMargin = 25.7;  
+        const rightMargin = 17.5; 
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        
+        // Add horizontal line at the bottom
+        const footerY = pageHeight - 28.7 ;
+        doc.setLineWidth(0.1);
+        //doc.line(leftMargin, footerY, pageWidth - rightMargin, footerY);    
+        
+        // Page number on right
+        doc.text('Page 4', pageWidth - rightMargin - 40, footerY);
+        doc.text('Ref No.', pageWidth - rightMargin - 40, footerY + 3);
+        // Reference number 
+        doc.text('TP/JCB/K-BKR/R-09/12/2024-25', pageWidth - rightMargin - 40, footerY + 6);
+    }
+
     </script>
 
 </body>

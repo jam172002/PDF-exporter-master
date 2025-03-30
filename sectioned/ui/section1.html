@@ -379,15 +379,16 @@
         const rightMargin = 17.5; 
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
-        
-        // Add horizontal line at the bottom
-        const footerY = pageHeight - 25.7 ;
+         // Add horizontal line at the bottom
+         const footerY = pageHeight - 28.7 ;
         doc.setLineWidth(0.1);
-        doc.line(leftMargin, footerY, pageWidth - rightMargin, footerY);    
-        // Reference number on left
-        doc.text('TP/JCB/K-BKR/R-09/12/2024-25', leftMargin + 2, footerY + 4);
+        //doc.line(leftMargin, footerY, pageWidth - rightMargin, footerY);    
+        
         // Page number on right
-        doc.text('Page 1', pageWidth - rightMargin - 20, footerY + 4);
+        doc.text('Page 1', pageWidth - rightMargin - 40, footerY);
+        doc.text('Ref No.', pageWidth - rightMargin - 40, footerY + 3);
+        // Reference number 
+        doc.text('TP/JCB/K-BKR/R-09/12/2024-25', pageWidth - rightMargin - 40, footerY + 6);
     }
 </script>
 

@@ -155,3 +155,14 @@ button:hover {
 .form-section {
     margin-bottom: 20px;
 }
+
+.total-row {
+    display: flex; /* Use flexbox for equal width distribution */
+    justify-content: space-between; /* Space out the items evenly */
+    align-items: center; /* Center items vertically */
+    margin-top: 20px; /* Add some space above the total row */
+    padding: 10px; /* Add padding for better spacing */
+    gap: 10px;
+    border: 1px solid #ddd; /* Optional: Add a border around the total row */
+    background-color: #f9f9f9; /* Optional: Light background color for visibility */
+}
