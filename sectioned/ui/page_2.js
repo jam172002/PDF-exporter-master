@@ -80,225 +80,129 @@ function Container2(doc) {
 }
 
 
-function createTable(doc, startY, title, subtitle = null, font_size = 8) {
-    let yPosition = startY;
-    const leftMargin = 25.7;  
-    const rightMargin = 17.5; 
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const tableWidth = pageWidth - (leftMargin + rightMargin); 
+        // Update the createTable function to accept null title/subtitle
+    function createTable(doc, startY, title, subtitle = null) {
+            let yPosition = startY;
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const leftMargin = 25.7;  
+            const rightMargin = 17.5; 
+            const tableWidth = pageWidth - (leftMargin + rightMargin); 
+            
+            if (subtitle) {
+                yPosition += 5;
+                doc.rect(leftMargin, yPosition, tableWidth, 8);  
+                doc.setFontSize(9);
+                doc.text(subtitle, pageWidth / 2, yPosition + 5.5, { align: 'center' });
+                yPosition += 8;
+            }
+            
+            const col1Width = 7;
+            const col2Width = 85;
+            const col3Width = tableWidth - col1Width - col2Width;
 
-    const lineHeightMultiplier = 0.2; // Adjust this to change line height ratio
-    const paddingMultiplier = 0.25;   // Adjust this to change padding ratio
-    const baseOffset = font_size * 0.375; // Vertical text position offset
-    
-    const lineHeight = font_size * lineHeightMultiplier;
-    const padding = font_size * paddingMultiplier;
-   
-        if (subtitle) {
-            yPosition += 5;
-            doc.rect(leftMargin, yPosition, tableWidth, 8);  // Updated to use leftMargin
-            doc.setFontSize(9);
-            doc.text(subtitle, pageWidth / 2, yPosition + 5.5, { align: 'center' });
-            yPosition += 8;
-        }
-        
-        const col1Width = 7;
-        const col2Width = 80;
-        const col3Width = tableWidth - col1Width - col2Width;
-    
-        function addAddressRow(number, description, addressData) {
-           // Set consistent font size and calculate widths
-            const col1Width = 7; // First column for serial number
-            const col2Width = 80; // Set to the same width as in addRow method
-            const remainingWidth = tableWidth - col1Width - col2Width; // Remaining width for the other two columns
-            const col3Width = remainingWidth / 2; // Third column occupies half of the remaining width
-            const col4Width = remainingWidth / 2; // Fourth column occupies the other half of the remaining width
 
-            // Calculate max text length for each row to determine height
-            const calculateRowHeight = (texts) => {
-                const lineHeight = 3.1;
-                const padding = 2;
-                let maxLines = 1;
-        
-                texts.forEach(text => {
-                    if (text) {
-                        // Add extra padding to ensure text stays within cell
-                        const splitText = doc.splitTextToSize(text, col3Width - 6); 
-                        maxLines = Math.max(maxLines, splitText.length);
-                    }
-                });
-        
-                return (maxLines * lineHeight) + padding * 2; // Added extra padding
-            };
-        
-            // Calculate heights for each row
-            const row1Height = calculateRowHeight(addressData.row1);
-            const row2Height = calculateRowHeight(addressData.row2);
-            const row3Height = calculateRowHeight(addressData.row3);
-        
-            const totalHeight = row1Height + row2Height + row3Height;
-        
-            // Draw main columns
-            doc.rect(leftMargin, yPosition, col1Width, totalHeight);
-            doc.rect(leftMargin + col1Width, yPosition, col2Width, totalHeight);
-            doc.rect(leftMargin + col1Width + col2Width, yPosition, col3Width, totalHeight);
-            doc.rect(leftMargin + col1Width + col2Width + col3Width, yPosition, col4Width, totalHeight);
-        
-            // Starting position for third column
-            const col3Start = leftMargin + col1Width + col2Width;
-        
-            // Current Y position tracker
-            let currentY = yPosition;
-        
-            // Draw and fill first three rows
-            const drawRow = (rowData, rowHeight) => {
-                for (let j = 0; j < 2; j++) {
-                    doc.rect(
-                        col3Start + (j * col3Width),
-                        currentY,
-                        col3Width,
-                        rowHeight
-                    );
-        
-                    // Add text with proper wrapping
-                    if (rowData[j]) {
-                        const splitText = doc.splitTextToSize(rowData[j], col3Width - 6);
-                        doc.text(splitText, col3Start + (j * col3Width) + 2, currentY + 4);
-                    }
-                }
-                currentY += rowHeight;
-            };
-        
-            // Draw first three rows
-            drawRow(addressData.row1, row1Height);
-            drawRow(addressData.row2, row2Height);
-            drawRow(addressData.row3, row3Height);
-        
-            // Add number and description
+        function addAddressRow(number, description, address) {
+            const lineHeight = 3.1;
+            const padding = 4; // Extra padding for readability
+
+            // Split text for wrapping within column widths
+            const splitAddress = doc.splitTextToSize(address, col3Width - 6);
+            const splitDescription = doc.splitTextToSize(description, col2Width - 6);
+            
+            // Find the max number of lines needed for any column
+            const maxLines = Math.max(splitAddress.length, splitDescription.length, 1);
+
+            // Calculate dynamic row height
+            const rowHeight = (maxLines * lineHeight) + padding;
+
+            // Draw table row with dynamic height
+            doc.rect(leftMargin, yPosition, col1Width, rowHeight); // Column 1 (Number)
+            doc.rect(leftMargin + col1Width, yPosition, col2Width, rowHeight); // Column 2 (Description)
+            doc.rect(leftMargin + col1Width + col2Width, yPosition, col3Width, rowHeight); // Column 3 (Address)
+
+            // Add text to each column
             doc.setFont('helvetica', 'normal');
             doc.text(number.toString(), leftMargin + 2, yPosition + 4);
-            const descriptionSplit = doc.splitTextToSize(description, col2Width - 4);
-            doc.text(descriptionSplit, leftMargin + col1Width + 2, yPosition + 4);
-        
-            yPosition += totalHeight;
-            return yPosition;
-        }
-
-        function addAdjoiningPropertiesRow(number, description, docValue, actualValue) {
-            // Set font size consistently and calculate widths
-            const col1Width = 7;
-            const col2Width = 80;
-            const remainingWidth = tableWidth - col1Width - col2Width;
-            const col3Width = remainingWidth / 2;  // Split remaining width into two equal parts
-            const col4Width = remainingWidth / 2;
-
-            // Calculate text heights for auto-adjustment
-            const splitDescription = doc.splitTextToSize(description, col2Width - 4);
-            const splitDocValue = doc.splitTextToSize(docValue, col3Width - 4);
-            const splitActualValue = doc.splitTextToSize(actualValue, col4Width - 4);
-
-            // Calculate max lines for height
-            const descriptionLines = splitDescription.length;
-            const docValueLines = splitDocValue.length;
-            const actualValueLines = splitActualValue.length;
-            const maxLines = Math.max(descriptionLines, docValueLines, actualValueLines);
-
-            // Calculate height
-            const lineHeight = 3.1;
-            const padding = 2;
-            const rowHeight = (maxLines * lineHeight) + padding * 2;
-
-            // Draw columns
-            doc.rect(leftMargin, yPosition, col1Width, rowHeight);
-            doc.rect(leftMargin + col1Width, yPosition, col2Width, rowHeight);
-            doc.rect(leftMargin + col1Width + col2Width, yPosition, col3Width, rowHeight);
-            doc.rect(leftMargin + col1Width + col2Width + col3Width, yPosition, col4Width, rowHeight);
-
-            // Add text
-            doc.setFont('helvetica', 'normal');
-            if (number) {
-                doc.text(number.toString(), leftMargin + 2, yPosition + 4);
-            }
-
-            // Add description
             doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 4);
+            doc.text(splitAddress, leftMargin + col1Width + col2Width + 2, yPosition + 4);
 
-            // Add document value and actual value with conditional bold
-            if (docValue === 'As per Document' && actualValue === 'As per Actuals') {
-                // Make headers bold
-                doc.setFont('helvetica', 'bold');
-                doc.text(splitDocValue, leftMargin + col1Width + col2Width + 2, yPosition + 4);
-                doc.text(splitActualValue, leftMargin + col1Width + col2Width + col3Width + 2, yPosition + 4);
-            } else {
-                // Normal text for other rows
-                doc.setFont('helvetica', 'normal');
-                doc.text(splitDocValue, leftMargin + col1Width + col2Width + 2, yPosition + 4);
-                doc.text(splitActualValue, leftMargin + col1Width + col2Width + col3Width + 2, yPosition + 4);
-            }
-
+            // Move Y position for the next row
             yPosition += rowHeight;
-            return yPosition;
         }
-
-
-
 
         function addRow(number, description, value, height = null, no_column = false) {
-            // Split text for measurement
-            const splitDescription = doc.splitTextToSize(description, col2Width - 4);
-            const splitValue = value ? doc.splitTextToSize(value, col3Width - 4) : [''];
-            
-            // Calculate height based on content
-            const maxLines = Math.max(splitDescription.length, splitValue.length);
-            const calculatedHeight = (maxLines * lineHeight) + padding * 2;
-            
-            // If height parameter is provided, use it as minimum height
-            const rowHeight = height ? Math.max(calculatedHeight, height) : calculatedHeight;
+            // Calculate text length
+           const textLength = description.length + (value ? value.length : 0);
+           
+           // Split text for measurement
+           const splitDescription = doc.splitTextToSize(description, col2Width - 4);
+           const splitValue = value ? doc.splitTextToSize(value, col3Width - 4) : [''];
+           
+           // Get number of lines for both description and value
+           const descriptionLines = splitDescription.length;
+           const valueLines = splitValue.length;
+           
+           // Use the maximum number of lines to determine height
+           const maxLines = Math.max(descriptionLines, valueLines);
+           const lineHeight = 3.5; // Reduced base height per line
+           const padding = 1; // Minimum padding
+           
+           // Calculate height based on content
+           let calculatedHeight;
+           if (maxLines === 1) {
+               calculatedHeight = lineHeight + padding; // Minimum height for single line
+           } else {
+               calculatedHeight = (maxLines * lineHeight) + padding; // Height for multiple lines
+           }
+           
+           
+           // If height parameter is provided, use it as minimum height
+           const rowHeight = height ? Math.max(calculatedHeight, height) : calculatedHeight;
 
-            if (no_column) {
-                // Draw only two columns when no_column is true
-                doc.rect(leftMargin, yPosition, col1Width, rowHeight);
-                
-                if (number) {
-                    doc.setFont('helvetica', 'normal');
-                    doc.text(number.toString(), leftMargin + 1, yPosition + baseOffset);
-                    doc.rect(leftMargin + col1Width, yPosition, col2Width + col3Width, rowHeight);
-                }
-                
-                // Set bold font for description
-                doc.setFont('helvetica', 'bold');
-                doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + baseOffset);
-            } else {
-                // Original three-column layout
-                doc.rect(leftMargin, yPosition, col1Width, rowHeight);
-                doc.rect(leftMargin + col1Width, yPosition, col2Width, rowHeight);
-                doc.rect(leftMargin + col1Width + col2Width, yPosition, col3Width, rowHeight);
-                
-                if (number) {
-                    doc.setFont('helvetica', 'normal');
-                    doc.text(number.toString(), leftMargin + 2, yPosition + baseOffset);
-                }
-                
-                doc.setFont('helvetica', 'normal');
-                doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + baseOffset);
-                
-                if (value) {
-                    doc.text(splitValue, leftMargin + col1Width + col2Width + 2, yPosition + baseOffset);
-                }
-            }
-            
-            yPosition += rowHeight;
-            return yPosition;
+           if (no_column) {
+               // Draw only two columns when no_column is true
+               doc.rect(leftMargin , yPosition, col1Width, rowHeight);
+               
+               if (number) {
+                   doc.setFont('helvetica', 'normal');
+                   doc.text(number.toString(), leftMargin + 1, yPosition + 4);
+                   doc.rect(leftMargin + col1Width, yPosition, col2Width + col3Width, rowHeight);
+
+               }
+               
+               // Set bold font for description when no_column is true
+               doc.setFont('helvetica', 'bold');
+               doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 4);
+           } else {
+               // Original three-column layout
+               doc.rect(leftMargin, yPosition, col1Width, rowHeight);
+               doc.rect(leftMargin + col1Width, yPosition, col2Width, rowHeight);
+               doc.rect(leftMargin + col1Width + col2Width, yPosition, col3Width, rowHeight);
+               
+               if (number) {
+                   doc.setFont('helvetica', 'normal');
+                   doc.text(number.toString(), leftMargin + 2, yPosition + 3);
+               }
+               
+               doc.setFont('helvetica', 'normal');
+               doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 3);
+               
+               
+               doc.text(splitValue, leftMargin + col1Width + col2Width + 2, yPosition + 3);
+           }
+           
+           yPosition += rowHeight;
+           return yPosition;
         }
     
-    return {
-        addRow,       
-        addAddressRow,
-        addAdjoiningPropertiesRow,
-        getPosition: () => yPosition
-    };
- }
- 
+        return {
+            addRow,
+            addSplitColumnRow,
+            addAddressRow,
+            addAdjoiningPropertiesRow,
+            getPosition: () => yPosition
+        };
+    }
 function addFooter(doc) {
    const margin = 10;
    const pageWidth = doc.internal.pageSize.getWidth();

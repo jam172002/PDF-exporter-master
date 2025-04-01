@@ -24,7 +24,7 @@ function Container1(doc) {
                     
              // Draw the main outer box
              const pageHeight = doc.internal.pageSize.getHeight();
-             doc.rect(leftMargin, yPosition, tableWidth, pageHeight - 39 );
+             doc.rect(leftMargin, yPosition, tableWidth, pageHeight - 45 );
 
             // Company header
             doc.setFontSize(16);
@@ -48,7 +48,7 @@ function Container1(doc) {
 
             // Draw a line below the title
             doc.setLineWidth(0.5);
-            yPosition += 8; 
+            yPosition += 9; 
             doc.line(leftMargin, yPosition, pageWidth - rightMargin, yPosition);          
 
             // Bank details
@@ -155,58 +155,55 @@ function Container1(doc) {
 }
 
 
-// Update the createTable function to accept null title/subtitle
-function createTable(doc, startY, title, subtitle = null) {
-    let yPosition = startY;
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const leftMargin = 25.7;  
-    const rightMargin = 17.5; 
-    const tableWidth = pageWidth - (leftMargin + rightMargin); 
-    
-    if (subtitle) {
-        yPosition += 5;
-        doc.rect(leftMargin, yPosition, tableWidth, 8);  
-        doc.setFontSize(9);
-        doc.text(subtitle, pageWidth / 2, yPosition + 5.5, { align: 'center' });
-        yPosition += 8;
-    }
-    
-    const col1Width = 7;
-    const col2Width = 85;
-    const col3Width = tableWidth - col1Width - col2Width;
+    // Update the createTable function to accept null title/subtitle
+    function createTable(doc, startY, title, subtitle = null) {
+            let yPosition = startY;
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const leftMargin = 25.7;  
+            const rightMargin = 17.5; 
+            const tableWidth = pageWidth - (leftMargin + rightMargin); 
+            
+            if (subtitle) {
+                yPosition += 5;
+                doc.rect(leftMargin, yPosition, tableWidth, 8);  
+                doc.setFontSize(9);
+                doc.text(subtitle, pageWidth / 2, yPosition + 5.5, { align: 'center' });
+                yPosition += 8;
+            }
+            
+            const col1Width = 7;
+            const col2Width = 85;
+            const col3Width = tableWidth - col1Width - col2Width;
 
 
-    function addAddressRow(number, description, address) {
-        const lineHeight = 3.1;
-        const padding = 4; // Extra padding for readability
+        function addAddressRow(number, description, address) {
+            const lineHeight = 3.1;
+            const padding = 4; // Extra padding for readability
 
-        // Split text for wrapping within column widths
-        const splitAddress = doc.splitTextToSize(address, col3Width - 6);
-        const splitDescription = doc.splitTextToSize(description, col2Width - 6);
-        
-        // Find the max number of lines needed for any column
-        const maxLines = Math.max(splitAddress.length, splitDescription.length, 1);
+            // Split text for wrapping within column widths
+            const splitAddress = doc.splitTextToSize(address, col3Width - 6);
+            const splitDescription = doc.splitTextToSize(description, col2Width - 6);
+            
+            // Find the max number of lines needed for any column
+            const maxLines = Math.max(splitAddress.length, splitDescription.length, 1);
 
-        // Calculate dynamic row height
-        const rowHeight = (maxLines * lineHeight) + padding;
+            // Calculate dynamic row height
+            const rowHeight = (maxLines * lineHeight) + padding;
 
-        // Draw table row with dynamic height
-        doc.rect(leftMargin, yPosition, col1Width, rowHeight); // Column 1 (Number)
-        doc.rect(leftMargin + col1Width, yPosition, col2Width, rowHeight); // Column 2 (Description)
-        doc.rect(leftMargin + col1Width + col2Width, yPosition, col3Width, rowHeight); // Column 3 (Address)
+            // Draw table row with dynamic height
+            doc.rect(leftMargin, yPosition, col1Width, rowHeight); // Column 1 (Number)
+            doc.rect(leftMargin + col1Width, yPosition, col2Width, rowHeight); // Column 2 (Description)
+            doc.rect(leftMargin + col1Width + col2Width, yPosition, col3Width, rowHeight); // Column 3 (Address)
 
-        // Add text to each column
-        doc.setFont('helvetica', 'normal');
-        doc.text(number.toString(), leftMargin + 2, yPosition + 4);
-        doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 4);
-        doc.text(splitAddress, leftMargin + col1Width + col2Width + 2, yPosition + 4);
+            // Add text to each column
+            doc.setFont('helvetica', 'normal');
+            doc.text(number.toString(), leftMargin + 2, yPosition + 4);
+            doc.text(splitDescription, leftMargin + col1Width + 2, yPosition + 4);
+            doc.text(splitAddress, leftMargin + col1Width + col2Width + 2, yPosition + 4);
 
-        // Move Y position for the next row
-        yPosition += rowHeight;
-    }
-
-
-
+            // Move Y position for the next row
+            yPosition += rowHeight;
+        }
 
         function addAdjoiningPropertiesRow(number, description, docValue, actualValue) {
             // Set font size consistently and calculate widths
@@ -264,7 +261,6 @@ function createTable(doc, startY, title, subtitle = null) {
             yPosition += rowHeight;
             return yPosition;
         }
-
 
         function addSplitColumnRow(number, description, col3Texts = ['Own Purpose', 'CAPITAL GAINS', 'Banks Purpose', 'Construction Loan']) {
             // Set font size consistently and calculate widths
@@ -337,7 +333,7 @@ function createTable(doc, startY, title, subtitle = null) {
             return yPosition;
         }
 
-            function addRow(number, description, value, height = null, no_column = false) {
+        function addRow(number, description, value, height = null, no_column = false) {
             // Set font size consistently
             
             

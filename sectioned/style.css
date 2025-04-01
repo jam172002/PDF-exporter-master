@@ -166,3 +166,9 @@ button:hover {
     border: 1px solid #ddd; /* Optional: Add a border around the total row */
     background-color: #f9f9f9; /* Optional: Light background color for visibility */
 }
+
+#previewContainer img {
+    width: 1000px; /* Adjust the width as needed */
+    height: 1000px;
+    margin: 10px;
+}
