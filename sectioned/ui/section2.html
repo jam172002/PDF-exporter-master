@@ -10,7 +10,7 @@
 
 <body>
     <div class="container">
-        <h1>Valuation Report Generator</h1>
+        <h1>Valuation Report Generator Section 2</h1>
         <form id="valuationForm">
 
             <!-- Container 2 -->
@@ -179,14 +179,13 @@
             }
 
             // If validation passes, proceed to next section
-            document.getElementById(`section${currentSection}`).style.display = 'none';
-            document.getElementById(`section${currentSection + 1}`).style.display = 'block';
+            // If validation passes, load the next section page
+            window.location.href = 'section3.html';
         }
 
-        function prevSection(currentSection) {
-            // Hide current section and show previous section
-            document.getElementById(`section${currentSection}`).style.display = 'none';
-            document.getElementById(`section${currentSection - 1}`).style.display = 'block';
+        function prevSection() {
+             // If validation passes, load the previous section page
+             window.location.href = 'section1.html';
         }
 
 

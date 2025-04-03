@@ -18,7 +18,8 @@
 <body>
     <div class="container">
         <h1>Valuation Report Generator Section 6</h1>
-        <form id="valuationForm">          
+        <form id="valuationForm">    
+            <div class="form-section" id="section6">
             <div class="form-group">
                 <label>Upload Image of Google Map of Land<span class="required">*</span></label>
                 <input type="file" id="googleMap" accept="image/*" required>
@@ -26,7 +27,7 @@
                     <label for="googleMapWidth">Width (px):</label>
                     <input type="number" id="googleMapWidth" placeholder="Suggested: 100" value="100">
                     <label for="googleMapHeight">Height (px):</label>
-                    <input type="number" id="googleMapHeight" placeholder="Suggested: 100" value="60">
+                    <input type="number" id="googleMapHeight" placeholder="Suggested: 60" value="60">
                 </div>
                 <div id="previewContainer"></div>
             </div>
@@ -36,18 +37,56 @@
                 <input type="file" id="glImage" accept="image/*" required>
                 <div>
                     <label for="glImageWidth">Width (px):</label>
-                    <input type="number" id="glImageWidth" placeholder="Suggested: 300" value="300">
+                    <input type="number" id="glImageWidth" placeholder="Suggested: 100" value="100">
                     <label for="glImageHeight">Height (px):</label>
-                    <input type="number" id="glImageHeight" placeholder="Suggested: 200" value="200">
+                    <input type="number" id="glImageHeight" placeholder="Suggested: 60" value="60">
                 </div>
                 <div id="glPreviewContainer"></div>
             </div>
-            <button type="button" onclick="prevSection(4)">Previous</button>
+            <button type="button" onclick="prevSection(6)">Previous</button>
+            <button type="button" onclick="nextSection(6)">Next</button> 
             <button id="generatePdfBtn" type="submit">Generate Pdf</button>
+        </div>
         </form>
     </div>
 
     <script>
+
+        function nextSection(currentSection) {
+            // Validate current section
+            const currentDiv = document.getElementById(`section${currentSection}`);
+            const requiredFields = currentDiv.querySelectorAll('[required]');
+            let isValid = true;
+            let missingFields = [];
+
+            // Check all required fields
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                    // Get the field label
+                    const label = field.previousElementSibling.textContent.replace('*', '').trim();
+                    missingFields.push(label);
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in the following fields:\n\n' + missingFields.join('\n'));
+                return;
+            }
+
+            // If validation passes, proceed to next section             
+             window.location.href = 'section7.html';
+        }
+
+        function prevSection(currentSection) {
+            // Hide current section and show previous section
+            window.location.href = 'section5.html';
+        }
+
+
         // Function to preview the uploaded image and store its data
         function previewImage(input, previewContainerId, widthInputId, heightInputId, storageKey) {
             const file = input.files[0];
@@ -114,51 +153,22 @@ document.getElementById('glImage').addEventListener('change', function() {
             console.log("Captured Data:", Container_6);
         });
 
-      // PDF generation
-document.getElementById("generatePdfBtn").addEventListener("click", async function () {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+        // PDF generation
+        document.getElementById("generatePdfBtn").addEventListener("click", async function() {
+            const Container_6 = JSON.parse(localStorage.getItem('Container_6'));
+            console.log("Container_6 Data:", Container_6); // Check if data is available
 
-    try {
-        // Load and parse data for each container from localStorage
-        const Container_1 = JSON.parse(localStorage.getItem('Container_1'));
-        const Container_2 = JSON.parse(localStorage.getItem('Container_2'));
-        const Container_3 = JSON.parse(localStorage.getItem('Container_3'));
-        const Container_4 = JSON.parse(localStorage.getItem('Container_4'));
-        const Container_5 = JSON.parse(localStorage.getItem('Container_5'));
-        const Container_6 = JSON.parse(localStorage.getItem('Container_6'));
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
 
-        console.log("Loaded Data:", { Container_1, Container_2, Container_3, Container_4, Container_5, Container_6 });
-
-        // Ensure each container function runs sequentially and starts at the correct position
-        await Container1(doc, Container_1);
-        doc.addPage();  // Add new page after each section
-
-        await Container2(doc, Container_2);
-        doc.addPage();
-
-        await Container3(doc, Container_3);
-        doc.addPage();
-
-        await Container4(doc, Container_4);
-        doc.addPage();
-
-        await Container5(doc, Container_5);
-        doc.addPage();
-
-        await Container6(doc, Container_6);
-
-        // Add footer on the last page
-        addFooter(doc);
-
-        // Save the PDF as a single file
-        doc.save("Full_Report.pdf");
-
-    } catch (error) {
-        console.error("Error generating PDF:", error);
-    }
-});
-
+            try {
+                await Container6(doc, Container_6); // Ensure this function is defined and returns a promise
+                addFooter(doc);
+                doc.save("generated_report_Page6.pdf");
+            } catch (error) {
+                console.error("Error generating PDF:", error);
+            }
+        });
 
         function addFooter(doc) {
             const leftMargin = 25.7;  

@@ -343,15 +343,13 @@
                 return;
             }
 
-            // If validation passes, proceed to next section
-            document.getElementById(`section${currentSection}`).style.display = 'none';
-            document.getElementById(`section${currentSection + 1}`).style.display = 'block';
+            // If validation passes, proceed to next section             
+             window.location.href = 'section4.html';
         }
 
         function prevSection(currentSection) {
             // Hide current section and show previous section
-            document.getElementById(`section${currentSection}`).style.display = 'none';
-            document.getElementById(`section${currentSection - 1}`).style.display = 'block';
+            window.location.href = 'section2.html';
         }
 
 

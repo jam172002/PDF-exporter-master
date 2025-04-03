@@ -14,6 +14,7 @@
         <form id="valuationForm">          
 
             <!-- Container 5 -->
+        <div class="form-section" id="section5">
             <h4>TOTAL ABSTRACT OF THE ENTIRE PROPERTY</h4>
             <h4>I- MARKET VALUE OF THE PROPERTY</h4>
             <!-- I- MARKET VALUE OF THE PROPERTY -->
@@ -119,12 +120,49 @@
                 <label>Declaration Line 8<span class="required">*</span></label>           
                 <textarea id="declaration8" name="valuationCertificate" rows="1" cols="50">viii) The validity of the report is only for 3 months and is to be used purpose intended for and not for any other purpose </textarea><br>
             </div>
-            <button type="button" onclick="prevSection(4)">Previous</button>
+            <button type="button" onclick="prevSection(5)">Previous</button>
+            <button type="button" onclick="nextSection(5)">Next</button> 
             <button id="generatePdfBtn" type="submit">Generate Pdf</button>
+
+        </div>
         </form>
     </div>
 
     <script>
+        function nextSection(currentSection) {
+            // Validate current section
+            const currentDiv = document.getElementById(`section${currentSection}`);
+            const requiredFields = currentDiv.querySelectorAll('[required]');
+            let isValid = true;
+            let missingFields = [];
+
+            // Check all required fields
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                    // Get the field label
+                    const label = field.previousElementSibling.textContent.replace('*', '').trim();
+                    missingFields.push(label);
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in the following fields:\n\n' + missingFields.join('\n'));
+                return;
+            }
+
+            // If validation passes, proceed to next section             
+             window.location.href = 'section6.html';
+        }
+
+        function prevSection(currentSection) {
+            // Hide current section and show previous section
+            window.location.href = 'section4.html';
+        }
+
         // Function to calculate total market value and guidance values
         function calculateValues() {
             const Container_4 = JSON.parse(localStorage.getItem('Container_4'));

@@ -10,12 +10,11 @@
 
 <body>
     <div class="container">
-        <h1>Valuation Report Generator</h1>
+        <h1>Valuation Report Generator Section 4</h1>
         <form id="valuationForm">          
 
-            <!-- Container 4 -->
-            
-
+            <!-- Container 4 -->            
+            <div class="form-section" id="section4">
                 <h4>B) Extra Items</h4>
                 <!-- Extra Items Section -->
                 <div class="form-group">
@@ -140,11 +139,11 @@
                 </div>              
 
                 <button type="button" onclick="prevSection(4)">Previous</button>
-                <!-- <button type="button" onclick="nextSection(5)">Next</button> -->
+                <button type="button" onclick="nextSection(4)">Next</button> 
                 <button id="generatePdfBtn" type="submit" >Generate Pdf</button>
             </div>
 
-        
+        </div>
         </form>
     </div>
 
@@ -174,15 +173,13 @@
                 return;
             }
 
-            // If validation passes, proceed to next section
-            document.getElementById(`section${currentSection}`).style.display = 'none';
-            document.getElementById(`section${currentSection + 1}`).style.display = 'block';
+            // If validation passes, proceed to next section             
+             window.location.href = 'section5.html';
         }
 
         function prevSection(currentSection) {
             // Hide current section and show previous section
-            document.getElementById(`section${currentSection}`).style.display = 'none';
-            document.getElementById(`section${currentSection - 1}`).style.display = 'block';
+            window.location.href = 'section3.html';
         }
 
 

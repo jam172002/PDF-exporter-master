@@ -141,9 +141,7 @@ function Container1(doc) {
             yPos = table.addRow('f)', 'Details of Accommodations', 'As per Actual');
             yPos = table.addRow('i', 'Living/ Dinning', 'UC');
             yPos = table.addRow('ii', 'Bed Room & Pooja Room', 'UC');
-            
-                        
-
+            addFooter(doc);                        
             resolve(yPos);
         };
 
@@ -412,31 +410,22 @@ function Container1(doc) {
         };
     }
  
- function addFooter(doc) {
-    const margin = 10;
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    
-    // Add horizontal line at the bottom
-    const footerY = pageHeight - (2.57 * 28.35);
-    doc.setLineWidth(0.1);
-    doc.line(margin, footerY + 4, pageWidth - margin, footerY + 4);
-    
-    // Add the chartered engineers text
-    doc.setFontSize(9);
-    doc.setTextColor(65, 105, 225); // Blue color
-    doc.setFont('helvetica', 'bold');
-    doc.text('CHARTERED ENGINEERS | STRUCTURAL CONSULTANTS | N.D.T | R&R | VALUATION OF IMMOVABLE PROPERTIES.', 
-        pageWidth / 2, footerY + 9, { align: 'center' });
-    
-    // Add reference number and page number on next line
-    doc.setFontSize(9);
-    doc.setTextColor(0, 0, 0); // Reset back to black for subsequent text
-    // Reference number on left
-    doc.text('TP/JCB/K-BKR/R-09/12/2024-25', margin + 5, footerY + 15);
-    // Page number on right
-    doc.text('Page 1', pageWidth - margin - 20, footerY + 15);
- }
+    function addFooter(doc) {
+        const leftMargin = 25.7;  
+        const rightMargin = 17.5; 
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+         // Add horizontal line at the bottom
+         const footerY = pageHeight - 28.7 ;
+        doc.setLineWidth(0.1);
+        //doc.line(leftMargin, footerY, pageWidth - rightMargin, footerY);    
+        
+        // Page number on right
+        doc.text('Page 2', pageWidth - rightMargin - 40, footerY);
+        doc.text('Ref No.', pageWidth - rightMargin - 40, footerY + 3);
+        // Reference number 
+        doc.text('TP/JCB/K-BKR/R-09/12/2024-25', pageWidth - rightMargin - 40, footerY + 6);
+    }
  
 async function generatePDF() {
    const { jsPDF } = window.jspdf;

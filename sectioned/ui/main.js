@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 { func: Container3, data: JSON.parse(localStorage.getItem('Container_3')) },
                 { func: Container4, data: JSON.parse(localStorage.getItem('Container_4')) },
                 { func: Container5, data: JSON.parse(localStorage.getItem('Container_5')) },
-                { func: Container6, data: JSON.parse(localStorage.getItem('Container_6')) }
+                { func: Container6, data: JSON.parse(localStorage.getItem('Container_6')) },
+                { func: Container7, data: JSON.parse(localStorage.getItem('imagesData')) }
             ];
 
             // Generate each section and add a page after each (except the last one)
@@ -27,6 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.warn(`Skipping Page ${i + 1}, no data found.`);
                 }
 
+                // Add footer for the current page
+                addFooter(doc);
                 if (i < containers.length - 1) {
                     doc.addPage(); // Add new page except after the last one
                 }
@@ -1162,4 +1165,92 @@ async function Container6(doc) {
     }
 }
 
+async function Container7(doc) {
+    // Retrieve imagesData from local storage
+    const imagesData = JSON.parse(localStorage.getItem('imagesData'));
+    console.log(imagesData);
 
+    // Check if imagesData is valid
+    if (!imagesData || !Array.isArray(imagesData)) {
+        console.error('No valid images data found in local storage.');
+        return;
+    }
+
+    // Initial settings
+    const leftMargin = 25.7;  
+    const rightMargin = 17.5; 
+    const pageWidth = doc.internal.pageSize.getWidth();    
+    let yPosition = 0;
+
+    // Add logo on the right side
+    const img = new Image();
+    img.src = 'images/logo.png';
+
+    const logoWidth = 30;
+    const logoHeight = 30;
+    const logoX = pageWidth - rightMargin - logoWidth - 6;
+    yPosition += 2; 
+    doc.addImage(img, 'PNG', logoX , yPosition, logoWidth, logoHeight);
+
+    // Move yPosition downward to prevent overlap
+    yPosition += logoHeight + 2;  
+
+    // Set the position for the image grid
+    const gridStartY = yPosition + 10; // Start position for the image grid
+    const imageWidth = (pageWidth - leftMargin - rightMargin - 20) / 3; // Width for each image
+    const imageHeight = imageWidth; // Maintain aspect ratio (square images)
+
+    // Loop through the images and add them to the PDF in a 3x3 grid
+    for (let i = 0; i < imagesData.length; i++) {
+        const imgData = imagesData[i].src; // Get the image source
+        const col = i % 3; // Column index (0, 1, 2)
+        const row = Math.floor(i / 3); // Row index (0, 1, 2)
+        const xPosition = leftMargin + col * (imageWidth + 10); // X position for the image
+        const yPositionForImage = gridStartY + row * (imageHeight + 10); // Y position for the image
+
+        // Add the image to the PDF
+        await addImageToPDF(doc, imgData, 'JPEG', imageWidth, imageHeight, xPosition, yPositionForImage);
+    }
+
+    // Move yPosition down to just above the footer
+    yPosition = gridStartY + Math.ceil(imagesData.length / 3) * (imageHeight + 10) + 10; // Adjust yPosition for footer
+
+    return { getPosition: () => yPosition };
+}
+   
+
+// Modify the addImageToPDF function to accept x and y positions
+async function addImageToPDF(doc, imagePath, type, imageWidth, imageHeight, x, y) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.src = imagePath;
+
+        img.onload = function() {
+            // Add the image to the PDF at the specified position
+            doc.addImage(img, type, x, y, imageWidth, imageHeight);
+            resolve(); // Resolve the promise when done
+        };
+
+        img.onerror = function() {
+            console.error(`Error loading image: ${imagePath}`);
+            resolve(); // Resolve even if there's an error
+        };
+    });
+}
+
+function addFooter(doc) {
+        const leftMargin = 25.7;  
+        const rightMargin = 17.5; 
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+         // Add horizontal line at the bottom
+         const footerY = pageHeight - 28.7 ;
+        doc.setLineWidth(0.1);
+        //doc.line(leftMargin, footerY, pageWidth - rightMargin, footerY);    
+        
+        // Page number on right
+        doc.text('Page 2', pageWidth - rightMargin - 40, footerY);
+        doc.text('Ref No.', pageWidth - rightMargin - 40, footerY + 3.5);
+        // Reference number 
+        doc.text('TP/JCB/K-BKR/R-09/12/2024-25', pageWidth - rightMargin - 40, footerY + 7);
+    }
